@@ -4,25 +4,30 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #f0f0f0;
-  --muted: #888888;
-  --border: rgba(255, 255, 255, 0.08);
-}
-
-.light {
-  --background: #f5f5f3;
-  --foreground: #111111;
-  --muted: #666666;
-  --border: rgba(0, 0, 0, 0.08);
+  --background: #131313;
+  --surface-lowest: #0E0E0E;
+  --surface-low: #1B1B1B;
+  --surface-high: #2A2A2A;
+  --surface-highest: #333333;
+  --foreground: #FFFFFF;
+  --muted: rgba(255, 255, 255, 0.5);
+  --accent: #B8FF00;
+  --border: rgba(255, 255, 255, 0.15);
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface-lowest: var(--surface-lowest);
+  --color-surface-low: var(--surface-low);
+  --color-surface-high: var(--surface-high);
+  --color-surface-highest: var(--surface-highest);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
+  --color-accent: var(--accent);
   --color-border: var(--border);
   --font-sans: var(--font-inter);
+  --font-display: var(--font-display);
+  --font-meta: var(--font-meta);
 }
 
 body {

@@ -103,17 +103,31 @@ Everything else stays as a Server Component.
 
 ---
 
-## Design Principles — Immersive Cinematic
+## Design Context
 
-This is a high-end director portfolio. The design must feel like cinema.
+### Users
+Film industry clients, production companies, brands, and collaborators evaluating a director. They arrive to be convinced by the work — not sold to. The site's job is **validation through atmosphere**.
 
-- **Dark-first** — dark backgrounds, light typography
-- **Full-screen** — sections take full viewport height
-- **Typography-driven** — weight and scale do the work
-- **Slow, inevitable animations** — GSAP power2/power3, stagger reveals. Never bouncy or eager.
-- **Whitespace is silence** — generous spacing signals confidence
-- **No buzzwords, no aggressive CTAs** — the work speaks
-- **Video is the hero** — let it breathe
+### Brand Personality
+**The Digital Auteur** — Cinematic · Atmospheric · Uncompromising
+
+### Aesthetic Direction
+- **Total Black philosophy** — depth through light and texture, not color
+- Background `#131313`, surfaces layered via `#0E0E0E` / `#1B1B1B` / `#2A2A2A`
+- **Lime accent** `#B8FF00` used surgically — interaction states only, never dominant
+- **Intentional asymmetry** — no 50/50 splits, vast breathing voids
+- **Typography as structure** — Alfa Slab One (`--font-display`) for display, Inter (`--font-sans`) for body, Space Grotesk (`--font-meta`) for metadata
+- **Glassmorphism** on nav — 70% opacity, 32px backdrop blur
+- **No 1px borders ever** — section boundaries via bg color shifts only
+- Ghost borders max `outline-variant` at 15% opacity
+- Ambient shadows: `on-surface` at 4% opacity, 40px blur, 0px offset
+
+### Design Principles
+1. **Imagery first** — visuals take 80–100% viewport width, UI gets out of the way
+2. **No lines** — space and background shifts define hierarchy, never borders
+3. **Editorial tension** — extreme typographic scale contrast between massive headings and small metadata
+4. **Atmospheric depth** — layered surfaces simulate studio lighting falloff
+5. **Restraint is power** — lime accent earns impact by being rare; clutter is the enemy of mood
 
 ### Easing reference (`config/cubic-beziers.js`)
 - `cinematic` — [0.76, 0, 0.24, 1] — slow in, slow out
