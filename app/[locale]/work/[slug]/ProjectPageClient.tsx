@@ -12,6 +12,7 @@ import { ScrollProgressButton } from '@/components/scroll-progress-button';
 export default function ProjectPageClient({ project }: { project: any }) {
   const [playerOpen, setPlayerOpen] = useState(false);
 
+
   useEffect(() => {
     document.body.classList.add('project-page');
     return () => document.body.classList.remove('project-page');

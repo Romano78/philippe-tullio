@@ -47,7 +47,7 @@ export default function HomeSwiper({ projects }) {
     // Step 2 — Lenis scroll tick: once pendingSnap is set AND velocity is low, fire the snap
     const onScroll = ({ velocity }) => {
       if (!pendingSnap.current || isSnapping.current) return;
-      if (Math.abs(velocity) > 0.3) return;
+      if (Math.abs(velocity) > 0.2) return;
 
       pendingSnap.current = false;
 

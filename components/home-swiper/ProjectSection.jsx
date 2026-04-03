@@ -119,7 +119,7 @@ export default function ProjectSection({
             playsInline
             className='absolute inset-0 w-full h-full object-cover'
           />
-        ) : (
+        ) : project.image ? (
           <Image
             src={project.image}
             alt={project.title}
@@ -127,6 +127,8 @@ export default function ProjectSection({
             className='object-cover'
             priority={index === 0}
           />
+        ) : (
+          <div className='absolute inset-0 bg-surface-lowest' />
         )}
 
         {/* Cinematic gradient */}

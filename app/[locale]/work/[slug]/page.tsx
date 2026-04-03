@@ -14,7 +14,6 @@ export default async function ProjectPage({
 
   const assets = await getWorkAssets(slug);
 
-
   const project = {
     ...meta,
     // Hero — work thumb (project detail still)

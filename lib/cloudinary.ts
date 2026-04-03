@@ -1,10 +1,12 @@
 import 'server-only';
 import { v2 as cloudinary } from 'cloudinary';
+import { unstable_cache } from 'next/cache';
 import { cldImage, cldVideo, cldVideoPoster } from './cloudinary-url';
 
 // URL builders are in ./cloudinary-url — import from there in client components
 
 const CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+
 if (!CLOUD)
   throw new Error('Missing env var: NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME');
 
@@ -39,19 +41,8 @@ export interface WorkAssets {
 }
 
 // ─── Work assets ──────────────────────────────────────────────────────────────
-// Folder convention: tullio-philippe/work/[slug]/
-//   featured/
-//     thumb     → video poster / homepage placeholder
-//     video     → autoplay background video
-//   project/
-//     thumb     → video poster / detail page placeholder
-//     video     → full video with controls
-//     gallery/
-//       01_*    → stills (prefix controls order)
-//       02_*
-//       03_*
 
-export async function getWorkAssets(slug: string): Promise<WorkAssets | null> {
+async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
   try {
     const base = `work/${slug}`;
 
@@ -115,8 +106,6 @@ export async function getWorkAssets(slug: string): Promise<WorkAssets | null> {
         ? projectGalleryImgRes.value.resources
         : [];
 
-    // Each folder holds exactly one intended asset — folder scoping in the search
-    // expression already ensures we get the right type. [0] is intentional.
     const featuredThumb = featuredThumbImage[0];
     const featuredVideo = featuredVideos[0];
     const projectThumb = projectImages[0];
@@ -139,7 +128,7 @@ export async function getWorkAssets(slug: string): Promise<WorkAssets | null> {
       work: {
         thumb: projectThumb
           ? cldImage(`${projectThumb.public_id}.${projectThumb.format}`)
-          : cldVideoPoster(featuredThumb.public_id), // fallback to featured thumb if project thumb is missing
+          : cldVideoPoster(featuredThumb.public_id),
         ...(projectVideo && {
           video: cldVideo(`${projectVideo.public_id}.${projectVideo.format}`),
           videoPoster: cldVideoPoster(projectVideo.public_id),
@@ -149,7 +138,15 @@ export async function getWorkAssets(slug: string): Promise<WorkAssets | null> {
         ),
       },
     };
-  } catch {
+  } catch (err) {
+    console.error(`[cloudinary] getWorkAssets(${slug}) failed:`, err);
     return null;
   }
 }
+
+// Cache per slug — 1 hour revalidation, avoids hammering the Search API
+export const getWorkAssets = unstable_cache(
+  _getWorkAssets,
+  ['cloudinary-work-assets'],
+  { revalidate: 3600 },
+);

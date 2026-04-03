@@ -24,7 +24,6 @@ export default async function Home() {
       : {}),
   }));
 
-
   return (
     <main>
       <HomeSwiper projects={projects} />
