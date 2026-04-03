@@ -1,7 +1,13 @@
+import HomeSwiper from "@/components/home-swiper";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <p className="text-foreground">Tullio Philippe — coming soon</p>
-    </main>
+    <>
+      {/* Scope scroll-snap to home page only */}
+      <style>{`html { scroll-snap-type: y mandatory; }`}</style>
+      <main>
+        <HomeSwiper />
+      </main>
+    </>
   );
 }

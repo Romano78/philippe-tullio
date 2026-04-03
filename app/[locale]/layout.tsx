@@ -3,6 +3,7 @@ import { Inter, Alfa_Slab_One, Space_Grotesk } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/config/theme-provider";
+import Nav from "@/components/nav";
 import "../globals.css";
 
 const inter = Inter({
@@ -45,6 +46,7 @@ export default async function LocaleLayout({
             defaultTheme="dark"
             enableSystem={false}
           >
+            <Nav />
             {children}
           </ThemeProvider>
         </NextIntlClientProvider>
