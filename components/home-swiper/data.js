@@ -1,15 +1,11 @@
-import { cldImage } from '@/lib/cloudinary';
-
 export const projects = [
   {
     id: 'project-1',
-    slug: 'project-1',
-    brand: 'Nike',
-    title: 'Just Do It',
-    category: 'Publicité',
+    slug: 'jaya',
+    brand: 'Philippe Tullio',
+    title: 'Jaya',
+    category: 'Film',
     year: '2024',
-    image: cldImage('main-sample'),
-    thumb: cldImage('main-sample', 'f_auto,q_auto,w_160,h_90,c_fill'),
   },
   {
     id: 'project-2',

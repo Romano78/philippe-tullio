@@ -2,6 +2,12 @@
 
 This file provides guidance to Claude Code when working with this repository.
 
+## Working Style
+- **Never rush from planning to coding.** Use judgement — if the task involves architecture, folder structure, multi-file changes, or anything that requires discussion, that's planning mode. Quick isolated fixes (e.g. swap a class name, fix a typo) can be done directly. When in planning mode: present the full plan, then stop and explicitly ask "Ready to move to the coding step?" — do NOT write a single line of code until the user confirms. If mid-task you realise you're about to write code during a planning discussion, stop and ask first.
+- **Never assume. Never fake confidence.** If unsure about something, say so explicitly. "I'm not sure" is always better than a confident wrong answer that wastes time with back-and-forth corrections.
+- **Web searches: max 10 sources**, most relevant only. Share the doc link so the user can verify manually — never present search results as ground truth.
+- When in doubt about scope or approach, ask — don't assume.
+
 ## About This Project
 Portfolio site for **Tullio Philippe** — a film director (réalisateur).
 High-end, immersive cinematic experience showcasing his work (films, commercials, music videos).
@@ -33,12 +39,13 @@ npx shadcn@latest add <component-name>
 Single-page portfolio site built with:
 - Next.js 16 + React 19 + TypeScript + Tailwind CSS v4
 - Framer Motion — UI animations
-- GSAP — scroll-triggered cinematic animations
-- Lenis — smooth scrolling (immersive cinematic feel)
+- GSAP + `@gsap/react` — scroll-triggered cinematic animations
+- CSS `scroll-snap-type: y mandatory` — native scroll snap (Lenis removed — conflicts with CSS snap)
 - next-intl — FR/EN i18n (locale routing via `app/[locale]/`)
 - next-themes — dark/light mode (dark by default)
 - shadcn/ui (Radix UI primitives)
-- Cloudinary — image and video hosting/streaming
+- Cloudinary Node SDK — server-side asset fetching (`lib/cloudinary.ts`)
+- Custom URL builders — `lib/cloudinary-url.ts` for client-safe CDN URLs
 - split-type — text splitting for animations
 - lucide-react — icons
 

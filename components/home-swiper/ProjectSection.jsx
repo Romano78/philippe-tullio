@@ -109,15 +109,27 @@ export default function ProjectSection({
       className='relative w-full overflow-hidden'
       style={{ height: '100svh', scrollSnapAlign: 'start' }}
     >
-      {/* Image — receives parallax */}
+      {/* Image/Video — receives parallax */}
       <div ref={innerRef} className='absolute inset-0'>
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          className='object-cover'
-          priority={index === 0}
-        />
+        {project.video ? (
+          <video
+            src={project.video}
+            poster={project.videoPoster ?? project.image}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className='absolute inset-0 w-full h-full object-cover'
+          />
+        ) : (
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className='object-cover'
+            priority={index === 0}
+          />
+        )}
 
         {/* Cinematic gradient */}
         <div

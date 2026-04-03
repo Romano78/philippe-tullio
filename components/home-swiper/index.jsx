@@ -1,11 +1,10 @@
-"use client";
+'use client';
 
-import { useState, useRef, useEffect } from "react";
-import { projects } from "./data";
-import ProjectSection from "./ProjectSection";
-import ThumbnailStrip from "./ThumbnailStrip";
+import { useState, useRef, useEffect } from 'react';
+import ProjectSection from './ProjectSection';
+import ThumbnailStrip from './ThumbnailStrip';
 
-export default function HomeSwiper() {
+export default function HomeSwiper({ projects }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const sectionRefs = useRef([]);
 
@@ -17,7 +16,7 @@ export default function HomeSwiper() {
         ([entry]) => {
           if (entry.isIntersecting) setActiveIndex(i);
         },
-        { threshold: 0.5 }
+        { threshold: 0.5 },
       );
 
       observer.observe(ref);
@@ -28,7 +27,7 @@ export default function HomeSwiper() {
   }, []);
 
   const handleThumbClick = (index) => {
-    sectionRefs.current[index]?.scrollIntoView({ behavior: "smooth" });
+    sectionRefs.current[index]?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
