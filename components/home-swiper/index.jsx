@@ -10,7 +10,6 @@ export default function HomeSwiper({ projects }) {
   const sectionRefs = useRef([]);
   const lenisRef = useLenis();
   const isSnapping = useRef(false);
-  const pendingSnap = useRef(false);
 
   // IntersectionObserver — tracks active section for thumbnail strip
   useEffect(() => {
@@ -29,56 +28,57 @@ export default function HomeSwiper({ projects }) {
   }, [projects]);
 
   useEffect(() => {
-    const lenis = lenisRef?.current;
-    if (!lenis) return;
-
     let wheelTimeout = null;
 
-    // Step 1 — user stops the wheel → mark that a snap is wanted
     const onWheel = () => {
-      if (isSnapping.current) return;
-      pendingSnap.current = false;
       clearTimeout(wheelTimeout);
+      const lenis = lenisRef?.current;
+      if (!lenis || isSnapping.current) return;
       wheelTimeout = setTimeout(() => {
-        pendingSnap.current = true;
-      }, 150);
-    };
+        const lenis = lenisRef?.current;
+        if (!lenis || isSnapping.current) return;
 
-    // Step 2 — Lenis scroll tick: once pendingSnap is set AND velocity is low, fire the snap
-    const onScroll = ({ velocity }) => {
-      if (!pendingSnap.current || isSnapping.current) return;
-      if (Math.abs(velocity) > 0.2) return;
+        const windowH = window.innerHeight;
+        // Use targetScroll (where Lenis is heading) not current position
+        const destScroll = lenis.targetScroll ?? lenis.scroll;
+        let target = null;
 
-      pendingSnap.current = false;
+        for (let i = 0; i < sectionRefs.current.length; i++) {
+          const ref = sectionRefs.current[i];
+          if (!ref) continue;
+          // Project where section will be when Lenis finishes
+          const absTop = ref.getBoundingClientRect().top + lenis.scroll;
+          const projTop = absTop - destScroll;
+          if (projTop > 0) continue;
 
-      let closest = null;
-      let closestDist = Infinity;
-
-      sectionRefs.current.forEach((ref) => {
-        if (!ref) return;
-        const dist = Math.abs(ref.getBoundingClientRect().top);
-        if (dist < closestDist) {
-          closestDist = dist;
-          closest = ref;
+          const next = sectionRefs.current[i + 1];
+          if (next) {
+            const nextAbsTop = next.getBoundingClientRect().top + lenis.scroll;
+            const nextProjTop = nextAbsTop - destScroll;
+            if (nextProjTop > 0 && nextProjTop < windowH) {
+              // 10% leniency around 50%: advance if next section will be > 50% visible
+              target = nextProjTop < windowH * 0.5 ? next : ref;
+              break;
+            }
+          }
+          if (Math.abs(projTop) > 16) target = ref;
         }
-      });
 
-      if (closest && closestDist > 8) {
-        isSnapping.current = true;
-        lenis.scrollTo(closest, {
-          duration: 1,
-          onComplete: () => { isSnapping.current = false; },
-        });
-        setTimeout(() => { isSnapping.current = false; }, 1600);
-      }
+        if (target) {
+          isSnapping.current = true;
+          lenis.scrollTo(target, {
+            duration: 1,
+            onComplete: () => { isSnapping.current = false; },
+          });
+          setTimeout(() => { isSnapping.current = false; }, 1600);
+        }
+      }, 500);
     };
 
     window.addEventListener('wheel', onWheel, { passive: true });
-    lenis.on('scroll', onScroll);
 
     return () => {
       window.removeEventListener('wheel', onWheel);
-      lenis.off('scroll', onScroll);
       clearTimeout(wheelTimeout);
     };
   }, [lenisRef, projects]);
