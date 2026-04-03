@@ -39,7 +39,17 @@ body {
   color: var(--foreground);
 }
 
+body.project-page {
+  background: transparent;
+}
+
 @layer components {
+  .section-padding {
+    @apply px-8 md:px-32 py-16 md:py-20;
+  }
+  .section-gap {
+    @apply mb-16 md:mb-20;
+  }
   .h1 {
     @apply text-5xl font-light tracking-tight leading-none;
   }

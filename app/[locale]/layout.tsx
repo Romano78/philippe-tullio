@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/config/theme-provider";
 import Nav from "@/components/nav";
+import SmoothScroll from "@/components/SmoothScroll";
 import "../globals.css";
 
 const inter = Inter({
@@ -46,8 +47,10 @@ export default async function LocaleLayout({
             defaultTheme="dark"
             enableSystem={false}
           >
-            <Nav />
-            {children}
+            <SmoothScroll>
+              <Nav />
+              {children}
+            </SmoothScroll>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

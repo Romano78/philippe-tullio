@@ -7,13 +7,13 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 
 ## Pages
 
-| Page | Route | Status | Description |
-|---|---|---|---|
-| Home | `/` | 🟡 In progress | Full-screen project navigator. Vertical scroll-snap — each project takes full screen. Thumbnail strip synced to scroll. Desktop: vertical strip left. Mobile: horizontal strip bottom. |
-| Project | `/work/[slug]` | ⬜ Not started | Individual project detail page. Video, stills, metadata. |
-| About | `/about` | ⬜ Not started | Bio + `<Contact />` component at bottom. |
-| Gallery | `/gallery` | ⬜ Not started | BTS gallery — masonry grid, click to open lightbox. |
-| Contact | `/contact` | ⬜ Not started | Standalone contact page (SEO). Uses `<Contact />` component. |
+| Page | Route | Status |
+|---|---|---|
+| Home | `/` | 🟡 In progress |
+| Project | `/work/[slug]` | 🟡 In progress |
+| About | `/about` | ⬜ Not started |
+| Gallery | `/gallery` | ⬜ Not started |
+| Contact | `/contact` | ⬜ Not started |
 
 ---
 
@@ -24,22 +24,35 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 - [ ] `<Footer />` — minimal
 
 ### Phase 2 — Home
-- [x] `<HomeSwiper />` — full-screen scroll-snap sections
-  - [x] GSAP cinematic tilt animation (rotation + scale + yPercent scrub)
-  - [x] Content reveal animation (title slide-up, meta fade-in)
-  - [x] Thumbnail strip (left, synced via IntersectionObserver)
-  - [x] CSS `scroll-snap-type: y mandatory` (native, no Lenis)
-  - [x] Cloudinary connected — first real project (JAYA) loading from Cloudinary
-  - [x] Data architecture: metadata in `data.js`, assets fetched server-side and merged in `page.tsx`
-  - [ ] Video autoplay on desktop, disabled on mobile
-  - [ ] Intro animation (content slides up on first load)
-  - [ ] Fill remaining projects with real data
+- [x] `<HomeSwiper />` — full-screen sections, GSAP tilt + content reveal
+- [x] Lenis smooth scroll + wheel-driven snap
+- [x] Thumbnail strip — IntersectionObserver synced
+- [x] Cloudinary connected — JAYA loading from Cloudinary
+- [x] Data architecture — metadata in `data.js`, assets merged in `page.tsx`
+- [x] Hydration fix — `gsap.set()` inside `useGSAP`, no inline styles
+- [ ] Video autoplay disabled on mobile
+- [ ] Intro animation (first load slide-up)
+- [ ] Fill remaining projects with real data
 
 ### Phase 3 — Project Page
-- [ ] `/work/[slug]` route
-- [ ] `<ProjectHero />` — full-screen 16:9 video or still
-- [ ] `<ProjectInfo />` — title, role, year, description, credits
-- [ ] `<ProjectGallery />` — stills grid
+- [x] Route `app/[locale]/work/[slug]/page.tsx`
+- [x] Server component fetches Cloudinary assets, passes to client
+- [x] `<ProjectHero />` — full-bleed 16:9 static image (work thumb), max 75vh
+- [x] `<ProjectInfo />` — title, description, credits
+- [x] `<ProjectGallery />` — grid/carousel toggle, empty state with movie pun
+- [x] `<ProjectVideoPlayer />` — Netflix-style lightbox, Escape to close
+- [x] `<StormBackground />` — WebGL FBM shader, cursor-reactive, project pages only
+- [x] `<ScrollProgressButton />` — scroll progress ring, centered
+- [ ] **NEXT: Refactor project page** (see below)
+
+### Phase 3 Refactor — Project Page (next up)
+- [ ] Global spacing classes in `globals.css` (`.section-padding`, `.section-gap`)
+- [ ] Delete `ProjectCard.jsx`
+- [ ] `ProjectInfo.jsx` → two-column layout: info left + preview right (desktop), stacked on mobile
+- [ ] `ProjectPreview.jsx` (new) — autoplay muted `featured.video`, "Watch full film" button overlay → lightbox
+- [ ] `ProjectHero.jsx` — remove margin hack, full bleed edge to edge
+- [ ] `ProjectPageClient.tsx` — simplify, remove card logic
+- [ ] All sections use `section-padding` class
 
 ### Phase 4 — About
 - [ ] `<AboutHero />`
@@ -51,12 +64,34 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 - [ ] `/contact` page
 
 ### Phase 6 — Polish
-- [ ] GSAP scroll-triggered animations across all pages
+- [ ] GSAP scroll animations across all pages
 - [ ] Page transitions
 - [ ] Mobile QA
 - [ ] Performance audit (Cloudinary, lazy loading, bundle)
 - [ ] SEO (metadata, OG tags, sitemap)
 - [ ] FR/EN translations complete
+- [ ] Lighthouse audit
+
+---
+
+## Project Page Layout (post-refactor)
+
+```
+┌─────────────────────────────────────────┐
+│  Hero — full-bleed 16:9 work/thumb      │
+├─────────────────────────────────────────┤
+│  Left col (60%)    │  Right col (40%)   │
+│  Label + Title     │  Autoplay preview  │
+│  Description       │  (featured/video)  │
+│  Credits grid      │  Watch full film ↗ │
+├─────────────────────────────────────────┤
+│  Gallery — Behind the scenes            │
+│  Grid / Carousel toggle                 │
+└─────────────────────────────────────────┘
+Mobile: all stacked, single column
+```
+
+Full film (lightbox) only shown when `work/video` exists on Cloudinary.
 
 ---
 
@@ -64,11 +99,11 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 
 | Item | Status |
 |---|---|
-| JAYA — featured thumb | ✅ on Cloudinary |
-| JAYA — featured video | ✅ on Cloudinary |
-| JAYA — work thumb | ⬜ |
-| JAYA — work video | ⬜ |
-| JAYA — gallery stills | ⬜ |
+| JAYA — featured thumb | ✅ |
+| JAYA — featured video (teaser) | ✅ |
+| JAYA — work thumb | ✅ |
+| JAYA — work video (full film) | ⬜ upload to `work/jaya/work/video/` |
+| JAYA — gallery stills | ⬜ upload to `work/jaya/work/gallery/` (01_*, 02_*…) |
 | Other projects | ⬜ placeholder data only |
 | Bio text (FR + EN) | ⬜ |
 | Showreel video | ⬜ |
@@ -83,12 +118,12 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 work/
   [slug]/
     featured/
-      thumb/    → homepage section image / video poster (image)
-      video/    → homepage autoplay background video (video)
+      thumb/    → homepage still / video poster (image)
+      video/    → homepage autoplay teaser + project page preview (video)
     work/
-      thumb/    → project detail page image / video poster (image)
-      video/    → project detail full video with controls (video)
-      gallery/  → stills, named 01_*, 02_*, 03_* (images, sorted by name)
+      thumb/    → project page hero image (image)
+      video/    → full film — lightbox player (video)
+      gallery/  → BTS stills, named 01_*, 02_*, 03_* (images)
 about/
   portrait/
   bts/
@@ -96,24 +131,23 @@ showreel/
 ```
 
 ### Data flow
-1. `lib/cloudinary.ts` (server-only) — fetches asset public IDs via Cloudinary Search API
-2. `lib/cloudinary-url.ts` (client-safe) — builds Cloudinary CDN URLs (`f_auto,q_auto`)
-3. `app/[locale]/page.tsx` — server component, fetches all project assets, merges with `data.js` metadata
-4. Props flow down to `<HomeSwiper>` → `<ProjectSection>`
-5. Metadata (title, brand, year, category, slug) stays in `components/home-swiper/data.js`
+1. `lib/cloudinary.ts` (server-only) — Cloudinary Search API
+2. `lib/cloudinary-url.ts` (client-safe) — CDN URL builders
+3. `app/[locale]/page.tsx` — home, fetches all slugs, merges with `data.js`
+4. `app/[locale]/work/[slug]/page.tsx` — project, fetches single slug
+5. Metadata (title, brand, year, category, description, credits) in `data.js`
 
 ---
 
-## Asset Conventions
+## Global Spacing (to implement)
 
-### Aspect Ratios
-- **Featured video / work video** → 16:9 (production standard)
-- **Featured thumb / work thumb** → 16:9 (still from 16:9 footage)
-- **Gallery stills** → variable (BTS, on-set photography)
+```css
+/* globals.css */
+.section-padding { @apply px-8 md:px-32 py-16 md:py-20; }
+.section-gap     { @apply mb-16 md:mb-20; }
+```
 
-### On the homepage
-- Sections are `100svh` with `object-cover` — 16:9 video/image fills the viewport and crops on tall screens. This is intentional (cinematic crop).
-- On the project page (`/work/[slug]`), the hero video should be displayed at native 16:9 ratio (not full-screen cropped) — design TBD.
+All project page sections use `.section-padding`. Change once → applies everywhere.
 
 ---
 
@@ -121,10 +155,11 @@ showreel/
 
 | Decision | Choice | Notes |
 |---|---|---|
-| Video/Image hosting | Cloudinary | `f_auto,q_auto`, CDN streaming |
-| Scroll | CSS `scroll-snap-type: y mandatory` | Lenis removed — conflicts with CSS snap |
-| Animations | GSAP + `@gsap/react` | `useGSAP()` hook, ScrollTrigger |
+| Video/Image hosting | Cloudinary | `f_auto,q_auto` CDN |
+| Scroll | Lenis + wheel-driven snap | `lenis.scrollTo()`, IntersectionObserver |
+| Animations | GSAP + `@gsap/react` | `useGSAP()`, ScrollTrigger |
+| Background FX | WebGL canvas (StormBackground) | FBM shader, cursor-reactive, project pages only |
 | Fonts | Alfa Slab One · Inter · Space Grotesk | Display · Body · Meta |
-| i18n | next-intl | FR default / EN secondary |
+| i18n | next-intl | FR default / EN |
 | Deployment | Vercel | |
 | UI components | shadcn/ui | |

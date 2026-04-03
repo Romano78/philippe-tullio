@@ -26,12 +26,8 @@ export default async function Home() {
 
 
   return (
-    <>
-      {/* Scope scroll-snap to home page only */}
-      <style>{`html { scroll-snap-type: y mandatory; }`}</style>
-      <main>
-        <HomeSwiper projects={projects} />
-      </main>
-    </>
+    <main>
+      <HomeSwiper projects={projects} />
+    </main>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useCallback, useLayoutEffect } from 'react';
+import { useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { gsap } from 'gsap';
@@ -32,18 +32,16 @@ export default function ProjectSection({
     [externalRef],
   );
 
-  // Set initial content positions before paint
-  useLayoutEffect(() => {
-    gsap.set(titleRef.current, { yPercent: 110 });
-    gsap.set([directorRef.current, metaRef.current, ctaRef.current], {
-      opacity: 0,
-      y: 10,
-    });
-  }, []);
-
   useGSAP(
     () => {
       if (!sectionRef.current || !innerRef.current) return;
+
+      // Set initial hidden state client-side (avoids hydration mismatch)
+      gsap.set(titleRef.current, { yPercent: 110 });
+      gsap.set([directorRef.current, metaRef.current, ctaRef.current], {
+        opacity: 0,
+        y: 10,
+      });
 
       // Image cinematic tilt — enter tilted, straighten, exit opposite
       const tl = gsap.timeline({
@@ -107,7 +105,7 @@ export default function ProjectSection({
       ref={setRef}
       id={project.id}
       className='relative w-full overflow-hidden'
-      style={{ height: '100svh', scrollSnapAlign: 'start' }}
+      style={{ height: '100svh' }}
     >
       {/* Image/Video — receives parallax */}
       <div ref={innerRef} className='absolute inset-0'>
