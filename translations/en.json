@@ -13,6 +13,47 @@
     "cinematography": "Cinematography",
     "music": "Music"
   },
+  "contact": {
+    "overline": "Contact",
+    "heading": "Let's work\ntogether",
+    "emailLabel": "Send an email"
+  },
+  "galleryPage": {
+    "overline": "Gallery",
+    "heading": "Behind\nthe scenes",
+    "loadMore": "Load more",
+    "empty": "— coming soon —"
+  },
+  "aboutPage": {
+    "overline": "Director",
+    "heading": "Tullio\nPhilippe",
+    "intro": "Born in Paris, Philippe Tullio discovered his passion for filmmaking through acting — a dual training that shaped a singular approach to direction.",
+    "actingEyebrow": "2006 — Los Angeles",
+    "actingHeading": "Joanne Baron\nStudio",
+    "actingBody": "He moved to Los Angeles to study the Meisner and Stanislavski methods under Joanne Baron, one of Hollywood's most respected acting coaches — whose clients include Halle Berry and Leslie Mann. This immersion in performance shaped an intimate understanding of actor direction.",
+    "filmschoolEyebrow": "2007 — London",
+    "filmschoolHeading": "London Film\nAcademy",
+    "filmschoolBody1": "Tullio's passion for film led him to join the London Film Academy in 2007, where he honed his skills in directing.",
+    "filmschoolBody2": "At the Academy, he met Lincoln Ascott, a teacher who inspired him and convinced him to work as an actor and assistant director on three short films.",
+    "kcitizenBlock": "At the age of 25, Tullio produced and directed his first medium-length film, \"K-CITIZEN,\" which tackled the excesses of the American dream. He followed this with a satirical comedy titled \"Jesus is Back and He's Not Happy.\"",
+    "featureFilmsOverline": "Feature films",
+    "scarfaceTitle": "The Scarface Generation",
+    "scarfaceDesc": "A drama based on real-life events, which tells the story of an Afghan multimillionaire living in Los Angeles who squanders his 8-figure fortune in just six months.",
+    "jayaTitle": "JAYA",
+    "jayaDesc": "An action film co-written with Jeremy Minuit. Teaser and mood board available.",
+    "crakoTitle": "CRAKO",
+    "crakoDesc": "A horror and parkour movie featuring David Belle, the founder of parkour. Currently in development.",
+    "otherWorkOverline": "Other work",
+    "covidTitle": "OFF-SIDE",
+    "covidDesc": "During the COVID-19 lockdown, Tullio wrote \"OFF-SIDE,\" an offbeat series about a modern soccer anti-hero.",
+    "commercialTitle": "ABACO Paris",
+    "commercialDesc": "Tullio produced and shot a commercial for the fashion brand ABACO Paris, featuring actor and ex-professional boxer Stéphane Ferrara.",
+    "labelScript": "Script",
+    "labelSeries": "Script — Series",
+    "labelInDevelopment": "In development",
+    "labelCommercial": "Commercial",
+    "cta": "Work together"
+  },
   "project": {
     "watchFullFilm": "Watch full film",
     "workTogether": "Work together",

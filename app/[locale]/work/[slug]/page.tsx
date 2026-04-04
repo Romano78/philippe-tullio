@@ -18,9 +18,9 @@ export default async function ProjectPage({
     ...meta,
     // Hero — work thumb (project detail still)
     image: assets?.work.thumb ?? assets?.featured.thumb ?? meta.image,
-    // Preview — featured teaser autoplay
-    video: assets?.featured.video,
-    videoPoster: assets?.featured.videoPoster ?? assets?.featured.thumb,
+    // Preview — dedicated previewvid, fallback to featured teaser
+    video: assets?.work.previewVid ?? assets?.featured.video,
+    videoPoster: assets?.work.previewVidPoster ?? assets?.featured.videoPoster ?? assets?.featured.thumb,
     // Full film lightbox
     workVideo: assets?.work.video,
     workVideoPoster: assets?.work.thumb ?? assets?.featured.thumb,

@@ -1,11 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import ProjectHero from '@/components/project/ProjectHero';
 import ProjectInfo from '@/components/project/ProjectInfo';
 import ProjectVideoPlayer from '@/components/project/ProjectVideoPlayer';
 import ProjectGallery from '@/components/project/ProjectGallery';
 import StormBackground from '@/components/project/StormBackground';
+import Contact from '@/components/contact';
 import { ScrollProgressButton } from '@/components/scroll-progress-button';
 
 export default function ProjectPageClient({ project }: { project: any }) {
@@ -24,15 +26,19 @@ export default function ProjectPageClient({ project }: { project: any }) {
 
       <ProjectInfo project={project} onWatch={() => setPlayerOpen(true)} />
 
-      <ProjectGallery images={project.gallery ?? []} />
+      <ProjectGallery images={project.gallery ?? []} title={project.title} />
 
-      {playerOpen && (
-        <ProjectVideoPlayer
-          src={project.workVideo}
-          poster={project.workVideoPoster ?? project.image}
-          onClose={() => setPlayerOpen(false)}
-        />
-      )}
+      <Contact />
+
+      <AnimatePresence>
+        {playerOpen && (
+          <ProjectVideoPlayer
+            src={project.workVideo}
+            poster={project.workVideoPoster ?? project.image}
+            onClose={() => setPlayerOpen(false)}
+          />
+        )}
+      </AnimatePresence>
 
       <ScrollProgressButton position='center' />
     </>

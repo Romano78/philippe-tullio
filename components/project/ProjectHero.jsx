@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import LinkCta from '@/components/LinkCta';
 import PillCta from '@/components/PillCta';
@@ -17,7 +18,14 @@ export default function ProjectHero({ title, image, category, year, duration, wo
   return (
     <div className='relative z-10 w-full' style={{ aspectRatio: '16/9', maxHeight: '65vh' }}>
       {image && (
-        <img src={image} alt={title} className='absolute inset-0 w-full h-full object-cover' />
+        <Image
+          src={image}
+          alt={title}
+          fill
+          priority
+          sizes='100vw'
+          className='object-cover'
+        />
       )}
 
       <div

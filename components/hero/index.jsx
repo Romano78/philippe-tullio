@@ -8,7 +8,7 @@ export default function Hero() {
       {/* Placeholder — replace with Cloudinary video later */}
       <Image
         src="https://picsum.photos/id/1018/1920/1080"
-        alt=""
+        alt="Tullio Philippe — réalisateur"
         fill
         priority
         className="object-cover"

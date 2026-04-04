@@ -34,7 +34,9 @@ export interface WorkAssets {
   // project/ — /work/[slug] detail page
   work: {
     thumb: string; // video poster / placeholder image
-    video?: string; // full video with controls
+    previewVid?: string; // autoplay muted preview on project page
+    previewVidPoster?: string;
+    video?: string; // full film — lightbox player
     videoPoster?: string;
     gallery: string[]; // stills — named 01_*, 02_*, 03_*
   };
@@ -50,6 +52,7 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
       featuredThumbRes,
       featuredVideoRes,
       projectThumbRes,
+      projectPreviewVidRes,
       projectVideoRes,
       projectGalleryImgRes,
     ] = await Promise.allSettled([
@@ -67,6 +70,10 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
         .execute(),
       cloudinary.search
         .expression(`asset_folder="${base}/work/thumb" AND resource_type=image`)
+        .max_results(5)
+        .execute(),
+      cloudinary.search
+        .expression(`asset_folder="${base}/work/previewvid" AND resource_type=video`)
         .max_results(5)
         .execute(),
       cloudinary.search
@@ -96,6 +103,11 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
         ? projectThumbRes.value.resources
         : [];
 
+    const projectPreviewVids: CloudinaryResource[] =
+      projectPreviewVidRes.status === 'fulfilled'
+        ? projectPreviewVidRes.value.resources
+        : [];
+
     const projectVideos: CloudinaryResource[] =
       projectVideoRes.status === 'fulfilled'
         ? projectVideoRes.value.resources
@@ -109,6 +121,7 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
     const featuredThumb = featuredThumbImage[0];
     const featuredVideo = featuredVideos[0];
     const projectThumb = projectImages[0];
+    const projectPreviewVid = projectPreviewVids[0];
     const projectVideo = projectVideos[0];
 
     const projectGallery = projectGalleryImages
@@ -128,6 +141,10 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
         thumb: projectThumb
           ? cldImage(`${projectThumb.public_id}.${projectThumb.format}`)
           : cldVideoPoster(featuredThumb.public_id),
+        ...(projectPreviewVid && {
+          previewVid: cldVideo(`${projectPreviewVid.public_id}.${projectPreviewVid.format}`),
+          previewVidPoster: cldVideoPoster(projectPreviewVid.public_id),
+        }),
         ...(projectVideo && {
           video: cldVideo(`${projectVideo.public_id}.${projectVideo.format}`),
           videoPoster: cldVideoPoster(projectVideo.public_id),
@@ -147,5 +164,26 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
 export const getWorkAssets = unstable_cache(
   _getWorkAssets,
   ['cloudinary-work-assets'],
+  { revalidate: 3600 },
+);
+
+// ─── All gallery images ───────────────────────────────────────────────────────
+
+async function _getAllGalleryImages(): Promise<string[]> {
+  const { projects } = await import('@/components/home-swiper/data');
+  const results = await Promise.allSettled(
+    projects.map(async (p: { slug: string }) => {
+      const assets = await getWorkAssets(p.slug);
+      return assets?.work.gallery ?? [];
+    })
+  );
+  return results
+    .filter((r) => r.status === 'fulfilled')
+    .flatMap((r) => (r as PromiseFulfilledResult<string[]>).value);
+}
+
+export const getAllGalleryImages = unstable_cache(
+  _getAllGalleryImages,
+  ['all-gallery-images'],
   { revalidate: 3600 },
 );

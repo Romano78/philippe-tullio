@@ -62,7 +62,7 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 - [ ] Mobile QA pass (project page + home)
 - [ ] Performance audit (Cloudinary, lazy loading, bundle)
 - [ ] SEO (metadata, OG tags, sitemap)
-- [ ] FR/EN translations complete
+- [x] FR/EN translations complete — nav, project CTAs, credits, gallery labels; lang toggle fixed via next-intl navigation
 - [ ] Lighthouse audit
 
 ---
@@ -70,7 +70,7 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 ## Next Session — Start Here
 
 ### 1. Contact section (reusable)
-Build `<Contact />` as a standalone section component usable on every page (project, home, about). Anchor `#contact`. Simple: email CTA + socials.
+Build `<Contact />` as a standalone section component usable on every page (project, home, about). Anchor `#contact`. Simple: email CTA + socials. Needs from client: email address + social links.
 
 ### 2. Fill remaining projects
 Upload real Cloudinary assets for remaining slugs + fill `data.js` metadata.

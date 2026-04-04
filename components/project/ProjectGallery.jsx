@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 
-export default function ProjectGallery({ images }) {
+export default function ProjectGallery({ images, title = '' }) {
   const t = useTranslations('project');
 
   if (!images || images.length === 0) return null;
@@ -19,11 +19,11 @@ export default function ProjectGallery({ images }) {
 
         <div className='columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4'>
           {images.map((src, i) => (
-            <div key={i} className='break-inside-avoid'>
+            <div key={src} className='break-inside-avoid overflow-hidden group'>
               <img
                 src={src}
-                alt=''
-                className='w-full object-cover rounded-sm'
+                alt={`${title} — behind the scenes ${i + 1}`}
+                className='w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105'
                 loading='lazy'
               />
             </div>

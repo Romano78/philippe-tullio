@@ -61,6 +61,7 @@ export default function ProjectInfo({ project, onWatch }) {
               video={project.video}
               poster={project.videoPoster ?? project.image}
               onWatch={project.workVideo ? onWatch : null}
+              title={title}
             />
           </div>
 
