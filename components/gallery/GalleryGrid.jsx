@@ -3,8 +3,10 @@
 import { useState, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
+import PillCta from '@/components/PillCta';
+import { routes } from '@/config/routes';
 
-const PAGE_SIZE = 24;
+const PAGE_SIZE = 18;
 
 function altFromUrl(url, index) {
   try {
@@ -54,11 +56,21 @@ export default function GalleryGrid({ images }) {
         </div>
 
         {/* Heading */}
-        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl uppercase text-white leading-none mb-16 md:mb-24">
+        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl uppercase text-white leading-none mb-6">
           {heading.map((line, i) => (
             <span key={i} className="block">{line}</span>
           ))}
         </h1>
+
+        {/* Intro + CTA */}
+        <div className="flex flex-col gap-6 mb-16 md:mb-24">
+          <p className="font-sans text-base text-white/50 leading-relaxed max-w-2xl">
+            {t('intro')}
+          </p>
+          <PillCta href={routes.contact} icon="→" className="self-start shrink-0">
+            {t('cta')}
+          </PillCta>
+        </div>
 
         {/* Empty state */}
         {images.length === 0 ? (

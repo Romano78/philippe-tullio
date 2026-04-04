@@ -167,19 +167,85 @@ export const getWorkAssets = unstable_cache(
   { revalidate: 3600 },
 );
 
+// ─── About page assets ───────────────────────────────────────────────────────
+
+export interface AboutAssets {
+  portrait:     string[];   // about/portrait/      — single hero portrait
+  acting:       string[];   // about/acting/        — upload order = display order
+  lfaHero:      string[];   // about/lfa/hero/      — single image
+  lfaLogo:      string[];   // about/lfa/logo/      — single image
+  kcitizen:     string[];   // about/kcitizen/      — gallery (4)
+  scarface:     string[];   // about/scarface/      — single poster
+  jaya:         string[];   // about/jaya/          — gallery (4)
+  crako:        string[];   // about/crako/         — gallery (4)
+  offside:      string[];   // about/offside/       — single image
+  abaco:        string[];   // about/abaco/         — gallery (4)
+  jesusIsBack:  string[];   // about/jesus-is-back/ — gallery
+}
+
+const ABOUT_FOLDERS: Array<[keyof AboutAssets, string]> = [
+  ['portrait', 'about/portrait'],
+  ['acting',   'about/acting'],
+  ['lfaHero',  'about/lfa/hero'],
+  ['lfaLogo',  'about/lfa/logo'],
+  ['kcitizen', 'about/kcitizen'],
+  ['scarface', 'about/scarface'],
+  ['jaya',     'about/jaya'],
+  ['crako',    'about/crako'],
+  ['offside',      'about/offside'],
+  ['abaco',        'about/abaco'],
+  ['jesusIsBack',  'about/jesus-is-back'],
+];
+
+async function _getAboutAssets(): Promise<AboutAssets> {
+  const results = await Promise.allSettled(
+    ABOUT_FOLDERS.map(([, folder]) =>
+      cloudinary.search
+        .expression(`asset_folder="${folder}" AND resource_type=image`)
+        .max_results(20)
+        .execute()
+    )
+  );
+
+  const assets = {} as AboutAssets;
+  ABOUT_FOLDERS.forEach(([key], i) => {
+    const result = results[i];
+    if (result.status !== 'fulfilled') { assets[key] = []; return; }
+    const resources: CloudinaryResource[] = result.value.resources;
+    // Sort by created_at ascending so upload order = display order
+    resources.sort(
+      (a: any, b: any) =>
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    );
+    // Sort alphabetically by public_id so 01_, 02_, 03_ prefixes control order
+    resources.sort((a: any, b: any) => a.public_id.localeCompare(b.public_id));
+    assets[key] = resources.map((r) => cldImage(`${r.public_id}.${r.format}`));
+  });
+
+  return assets;
+}
+
+export const getAboutAssets = unstable_cache(
+  _getAboutAssets,
+  ['about-assets'],
+  { revalidate: 3600 }
+);
+
 // ─── All gallery images ───────────────────────────────────────────────────────
 
 async function _getAllGalleryImages(): Promise<string[]> {
-  const { projects } = await import('@/components/home-swiper/data');
-  const results = await Promise.allSettled(
-    projects.map(async (p: { slug: string }) => {
-      const assets = await getWorkAssets(p.slug);
-      return assets?.work.gallery ?? [];
-    })
-  );
-  return results
-    .filter((r) => r.status === 'fulfilled')
-    .flatMap((r) => (r as PromiseFulfilledResult<string[]>).value);
+  try {
+    const result = await cloudinary.search
+      .expression(`asset_folder="gallery" AND resource_type=image`)
+      .max_results(100)
+      .execute();
+    const resources: CloudinaryResource[] = result.resources;
+    resources.sort((a, b) => a.public_id.localeCompare(b.public_id));
+    return resources.map((r) => cldImage(`${r.public_id}.${r.format}`));
+  } catch (err) {
+    console.error('[cloudinary] getAllGalleryImages failed:', err);
+    return [];
+  }
 }
 
 export const getAllGalleryImages = unstable_cache(

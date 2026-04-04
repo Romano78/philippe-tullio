@@ -142,7 +142,7 @@ export default function ProjectSection({
       </div>
 
       {/* Content — bound to this section */}
-      <div className='absolute bottom-16 left-8 md:left-32 z-10 max-w-[46rem] '>
+      <div className='absolute bottom-16 left-8 md:left-32 z-10 max-w-[64rem]'>
         {/* Director */}
         <p
           ref={directorRef}
@@ -155,9 +155,11 @@ export default function ProjectSection({
         <div className='overflow-hidden mb-6'>
           <h1
             ref={titleRef}
-            className='font-display text-7xl md:text-9xl uppercase text-white leading-none'
+            className='font-display text-6xl md:text-8xl uppercase text-white leading-none'
           >
-            {project.title}
+            {project.title.split('\n').map((line, i) => (
+              <span key={i} className="block">{line}</span>
+            ))}
           </h1>
         </div>
 
