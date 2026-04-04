@@ -1,15 +1,17 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import LangToggle from "./LangToggle";
 import NavLink from "./NavLink";
 import { routes } from "@/config/routes";
 
-const links = [
-  { label: "About", href: routes.about },
-  { label: "Gallery", href: routes.gallery },
-  { label: "Contact", href: routes.contact },
-];
+export default async function DesktopNav() {
+  const t = await getTranslations("nav");
 
-export default function DesktopNav() {
+  const links = [
+    { label: t("about"), href: routes.about },
+    { label: t("gallery"), href: routes.gallery },
+    { label: t("contact"), href: routes.contact },
+  ];
   return (
     <div className="site-px w-full hidden md:block py-4">
       <div className="site-max flex items-center justify-between">

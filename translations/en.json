@@ -2,6 +2,21 @@
   "nav": {
     "work": "Work",
     "about": "About",
-    "contact": "Contact"
+    "contact": "Contact",
+    "gallery": "Gallery",
+    "menuClose": "Close"
+  },
+  "credits": {
+    "direction": "Direction",
+    "screenplay": "Screenplay",
+    "cast": "Cast",
+    "cinematography": "Cinematography",
+    "music": "Music"
+  },
+  "project": {
+    "watchFullFilm": "Watch full film",
+    "workTogether": "Work together",
+    "behindTheScenes": "Behind the scenes",
+    "gallery": "Gallery"
   }
 }

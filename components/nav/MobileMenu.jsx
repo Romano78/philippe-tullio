@@ -4,17 +4,19 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { routes } from "@/config/routes";
 import LangToggle from "./LangToggle";
 import NavLink from "./NavLink";
 
-const links = [
-  { label: "About", href: routes.about },
-  { label: "Gallery", href: routes.gallery },
-  { label: "Contact", href: routes.contact },
-];
-
 export default function MobileMenu({ isOpen, onClose }) {
+  const t = useTranslations("nav");
+
+  const links = [
+    { label: t("about"), href: routes.about },
+    { label: t("gallery"), href: routes.gallery },
+    { label: t("contact"), href: routes.contact },
+  ];
   // Lock scroll when open
   useEffect(() => {
     if (isOpen) {
@@ -49,7 +51,7 @@ export default function MobileMenu({ isOpen, onClose }) {
                 border: "1px solid rgba(255,255,255,0.1)",
               }}
             >
-              Close <X size={14} />
+              {t("menuClose")} <X size={14} />
             </button>
           </div>
 

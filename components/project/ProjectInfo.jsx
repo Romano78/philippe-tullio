@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations, useLocale } from 'next-intl';
 import ProjectPreview from './ProjectPreview';
 import LinkCta from '@/components/LinkCta';
 import PillCta from '@/components/PillCta';
@@ -11,6 +12,9 @@ const PlayIcon = () => (
 );
 
 export default function ProjectInfo({ project, onWatch }) {
+  const t = useTranslations('project');
+  const tCredits = useTranslations('credits');
+  const locale = useLocale();
   const { title, brand, category, year, duration, description, credits } = project;
   const meta = [category, year, duration].filter(Boolean).join(' — ');
 
@@ -33,7 +37,7 @@ export default function ProjectInfo({ project, onWatch }) {
 
             {description && (
               <p className='font-sans text-base md:text-lg text-white/70 leading-relaxed max-w-2xl mb-12'>
-                {description.fr}
+                {description[locale] ?? description.fr}
               </p>
             )}
 
@@ -42,7 +46,7 @@ export default function ProjectInfo({ project, onWatch }) {
                 {credits.map((c) => (
                   <div key={c.role}>
                     <p className='font-meta text-[10px] tracking-widest uppercase text-white/30 mb-1'>
-                      {c.role}
+                      {tCredits.has(c.role) ? tCredits(c.role) : c.role}
                     </p>
                     <p className='font-meta text-sm text-white/80'>{c.name}</p>
                   </div>
@@ -64,9 +68,9 @@ export default function ProjectInfo({ project, onWatch }) {
 
         {/* Mobile CTAs — below the preview */}
         <div className='flex md:hidden items-center gap-6 mt-8'>
-          <PillCta href='#contact' icon={<span className='text-accent'>↓</span>}>Work together</PillCta>
+          <PillCta href='#contact' icon={<span className='text-accent'>↓</span>}>{t('workTogether')}</PillCta>
           {project.workVideo && (
-            <LinkCta onClick={onWatch} icon={<PlayIcon />}>Watch full film</LinkCta>
+            <LinkCta onClick={onWatch} icon={<PlayIcon />}>{t('watchFullFilm')}</LinkCta>
           )}
         </div>
       </div>

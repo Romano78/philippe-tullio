@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import LinkCta from '@/components/LinkCta';
 import PillCta from '@/components/PillCta';
 
@@ -10,6 +11,7 @@ const PlayIcon = () => (
 );
 
 export default function ProjectHero({ title, image, category, year, duration, workVideo, onWatch }) {
+  const t = useTranslations('project');
   const meta = [category, year, duration].filter(Boolean).join(' — ');
 
   return (
@@ -34,7 +36,7 @@ export default function ProjectHero({ title, image, category, year, duration, wo
           )}
           {workVideo && onWatch && (
             <div className='md:hidden'>
-              <LinkCta onClick={onWatch} icon={<PlayIcon />}>Watch full film</LinkCta>
+              <LinkCta onClick={onWatch} icon={<PlayIcon />}>{t('watchFullFilm')}</LinkCta>
             </div>
           )}
         </div>
@@ -43,11 +45,11 @@ export default function ProjectHero({ title, image, category, year, duration, wo
         <div className='flex items-end gap-5 shrink-0'>
           {workVideo && onWatch && (
             <div className='hidden md:block'>
-              <LinkCta onClick={onWatch} icon={<PlayIcon />}>Watch full film</LinkCta>
+              <LinkCta onClick={onWatch} icon={<PlayIcon />}>{t('watchFullFilm')}</LinkCta>
             </div>
           )}
           <PillCta href='#contact' icon={<span className='text-accent'>↓</span>}>
-            Work together
+            {t('workTogether')}
           </PillCta>
         </div>
 

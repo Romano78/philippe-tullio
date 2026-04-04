@@ -1,7 +1,22 @@
 {
   "nav": {
-    "work": "Travaux",
+    "work": "Films",
     "about": "À propos",
-    "contact": "Contact"
+    "contact": "Contact",
+    "gallery": "Galerie",
+    "menuClose": "Fermer"
+  },
+  "credits": {
+    "direction": "Réalisation",
+    "screenplay": "Scénario",
+    "cast": "Casting",
+    "cinematography": "Image",
+    "music": "Musique"
+  },
+  "project": {
+    "watchFullFilm": "Voir le film",
+    "workTogether": "Travaillons ensemble",
+    "behindTheScenes": "Dans les coulisses",
+    "gallery": "Galerie"
   }
 }

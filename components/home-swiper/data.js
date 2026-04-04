@@ -12,11 +12,11 @@ export const projects = [
       en: "Semerkhet, a cruel and seemingly unchallengeable master, reigns as King over the Three Kingdoms. But when his little brother Jaya learns that Semerkhet has forced princess Cassiopeia into marriage and that she is still alive, he makes it his mission to escape the prison his brother put him in and return balance to the kingdoms.",
     },
     credits: [
-      { role: 'Réalisation', name: 'Tullio Philippe' },
-      { role: 'Scénario', name: 'Tullio Philippe, Jérémy Minui' },
-      { role: 'Casting', name: 'David Belle, Darren Shahlavi, Sarah Alami' },
-      { role: 'Image', name: 'Ben Hardwicke' },
-      { role: 'Musique', name: 'Ludovic Bource' },
+      { role: 'direction', name: 'Tullio Philippe' },
+      { role: 'screenplay', name: 'Tullio Philippe, Jérémy Minui' },
+      { role: 'cast', name: 'David Belle, Darren Shahlavi, Sarah Alami' },
+      { role: 'cinematography', name: 'Ben Hardwicke' },
+      { role: 'music', name: 'Ludovic Bource' },
     ],
   },
   {
