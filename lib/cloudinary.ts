@@ -112,7 +112,6 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
     const projectVideo = projectVideos[0];
 
     const projectGallery = projectGalleryImages
-      .filter((r) => r.public_id.match(/gallery\/\d{2}_/))
       .sort((a, b) => a.public_id.localeCompare(b.public_id));
 
     if (!featuredThumb) return null;

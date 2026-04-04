@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import ProjectHero from '@/components/project/ProjectHero';
 import ProjectInfo from '@/components/project/ProjectInfo';
-import ProjectCard from '@/components/project/ProjectCard';
 import ProjectVideoPlayer from '@/components/project/ProjectVideoPlayer';
 import ProjectGallery from '@/components/project/ProjectGallery';
 import StormBackground from '@/components/project/StormBackground';
@@ -11,7 +10,6 @@ import { ScrollProgressButton } from '@/components/scroll-progress-button';
 
 export default function ProjectPageClient({ project }: { project: any }) {
   const [playerOpen, setPlayerOpen] = useState(false);
-
 
   useEffect(() => {
     document.body.classList.add('project-page');
@@ -22,18 +20,9 @@ export default function ProjectPageClient({ project }: { project: any }) {
     <>
       <StormBackground />
 
-      <ProjectHero
-        title={project.title}
-        image={project.image}
-      />
+      <ProjectHero title={project.title} image={project.image} category={project.category} year={project.year} duration={project.duration} workVideo={project.workVideo} onWatch={() => setPlayerOpen(true)} />
 
-      <ProjectInfo project={project} />
-
-      <ProjectCard
-        title={project.title}
-        poster={project.workVideoPoster ?? project.image}
-        onClick={project.workVideo ? () => setPlayerOpen(true) : null}
-      />
+      <ProjectInfo project={project} onWatch={() => setPlayerOpen(true)} />
 
       <ProjectGallery images={project.gallery ?? []} />
 

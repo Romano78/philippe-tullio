@@ -15,6 +15,7 @@
   --border: rgba(255, 255, 255, 0.15);
 }
 
+
 @theme inline {
   --color-background: var(--background);
   --color-surface-lowest: var(--surface-lowest);
@@ -43,13 +44,34 @@ body.project-page {
   background: transparent;
 }
 
+/* Horizontal padding only — vertical is always Tailwind utilities */
+.site-max {
+  max-width: 1800px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.site-px,
+.section-padding {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 640px) {
+  .site-px, .section-padding { padding-left: 1.5rem; padding-right: 1.5rem; }
+}
+@media (min-width: 1200px) {
+  .site-px, .section-padding { padding-left: 3rem; padding-right: 3rem; }
+}
+@media (min-width: 1600px) {
+  .site-px, .section-padding { padding-left: 4rem; padding-right: 4rem; }
+}
+
 @layer components {
-  .section-padding {
-    @apply px-8 md:px-32 py-16 md:py-20;
-  }
   .section-gap {
     @apply mb-16 md:mb-20;
   }
+
   .h1 {
     @apply text-5xl font-light tracking-tight leading-none;
   }

@@ -11,7 +11,8 @@ const links = [
 
 export default function DesktopNav() {
   return (
-    <div className="hidden md:flex items-center justify-between w-full px-6 py-4">
+    <div className="site-px w-full hidden md:block py-4">
+      <div className="site-max flex items-center justify-between">
       {/* Logo */}
       <Link href="/" className="font-display text-white text-lg leading-none tracking-tight uppercase flex flex-col">
         <span>Tullio</span>
@@ -37,6 +38,7 @@ export default function DesktopNav() {
 
       {/* Language toggle */}
       <LangToggle />
+      </div>
     </div>
   );
 }

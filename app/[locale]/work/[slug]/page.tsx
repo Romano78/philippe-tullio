@@ -18,7 +18,10 @@ export default async function ProjectPage({
     ...meta,
     // Hero — work thumb (project detail still)
     image: assets?.work.thumb ?? assets?.featured.thumb ?? meta.image,
-    // Video card poster — work thumb
+    // Preview — featured teaser autoplay
+    video: assets?.featured.video,
+    videoPoster: assets?.featured.videoPoster ?? assets?.featured.thumb,
+    // Full film lightbox
     workVideo: assets?.work.video,
     workVideoPoster: assets?.work.thumb ?? assets?.featured.thumb,
     // Gallery

@@ -25,34 +25,27 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 
 ### Phase 2 — Home
 - [x] `<HomeSwiper />` — full-screen sections, GSAP tilt + content reveal
-- [x] Lenis smooth scroll + wheel-driven snap
+- [x] Lenis smooth scroll + wheel-driven snap (proximity snap on stop, 500ms debounce)
 - [x] Thumbnail strip — IntersectionObserver synced
-- [x] Cloudinary connected — JAYA loading from Cloudinary
+- [x] Cloudinary connected — assets served via Search API + `unstable_cache` (1hr)
 - [x] Data architecture — metadata in `data.js`, assets merged in `page.tsx`
 - [x] Hydration fix — `gsap.set()` inside `useGSAP`, no inline styles
 - [ ] Video autoplay disabled on mobile
 - [ ] Intro animation (first load slide-up)
-- [ ] Fill remaining projects with real data
+- [ ] Fill remaining projects with real Cloudinary data
 
-### Phase 3 — Project Page
+### Phase 3 — Project Page ✅ Refactored
 - [x] Route `app/[locale]/work/[slug]/page.tsx`
-- [x] Server component fetches Cloudinary assets, passes to client
-- [x] `<ProjectHero />` — full-bleed 16:9 static image (work thumb), max 75vh
-- [x] `<ProjectInfo />` — title, description, credits
-- [x] `<ProjectGallery />` — grid/carousel toggle, empty state with movie pun
+- [x] `<ProjectHero />` — full-bleed, max 65vh, gradient overlay, meta bottom-left (desktop), Watch + Work Together CTAs bottom-right (desktop), mobile: watch left / pill right
+- [x] `<ProjectInfo />` — two-column (info left, preview right), mobile stacked; mobile CTAs below preview
+- [x] `<ProjectPreview />` — autoplay muted teaser, Watch full film overlay → lightbox
+- [x] `<ProjectGallery />` — masonry-only (`columns-1 sm:columns-2 lg:columns-3`), no toggle
 - [x] `<ProjectVideoPlayer />` — Netflix-style lightbox, Escape to close
 - [x] `<StormBackground />` — WebGL FBM shader, cursor-reactive, project pages only
 - [x] `<ScrollProgressButton />` — scroll progress ring, centered
-- [ ] **NEXT: Refactor project page** (see below)
-
-### Phase 3 Refactor — Project Page (next up)
-- [ ] Global spacing classes in `globals.css` (`.section-padding`, `.section-gap`)
-- [ ] Delete `ProjectCard.jsx`
-- [ ] `ProjectInfo.jsx` → two-column layout: info left + preview right (desktop), stacked on mobile
-- [ ] `ProjectPreview.jsx` (new) — autoplay muted `featured.video`, "Watch full film" button overlay → lightbox
-- [ ] `ProjectHero.jsx` — remove margin hack, full bleed edge to edge
-- [ ] `ProjectPageClient.tsx` — simplify, remove card logic
-- [ ] All sections use `section-padding` class
+- [x] `<LinkCta />` — reusable nav-style underline link (icon right, accent hover)
+- [x] `<PillCta />` — reusable rounded pill button/link, standardised across site
+- [x] Spacing fixed: `site-px` / `section-padding` = horizontal only, vertical via Tailwind utilities
 
 ### Phase 4 — About
 - [ ] `<AboutHero />`
@@ -60,13 +53,13 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 - [ ] `<BtsGallery />`
 
 ### Phase 5 — Contact
-- [ ] `<Contact />` reusable component
+- [ ] `<Contact />` reusable component (also used as section on home/project)
 - [ ] `/contact` page
 
 ### Phase 6 — Polish
 - [ ] GSAP scroll animations across all pages
 - [ ] Page transitions
-- [ ] Mobile QA
+- [ ] Mobile QA pass (project page + home)
 - [ ] Performance audit (Cloudinary, lazy loading, bundle)
 - [ ] SEO (metadata, OG tags, sitemap)
 - [ ] FR/EN translations complete
@@ -74,24 +67,69 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 
 ---
 
-## Project Page Layout (post-refactor)
+## Next Session — Start Here
+
+### 1. Contact section (reusable)
+Build `<Contact />` as a standalone section component usable on every page (project, home, about). Anchor `#contact`. Simple: email CTA + socials.
+
+### 2. Fill remaining projects
+Upload real Cloudinary assets for remaining slugs + fill `data.js` metadata.
+
+### 3. About page
+`<AboutHero />`, `<Bio />`, `<BtsGallery />` — needs real content from client.
+
+### 4. Mobile QA pass
+Go through project page and home on mobile: spacing, CTAs, video behaviour.
+
+### 5. Home — remaining
+- Video autoplay disabled on mobile
+- Intro animation (first load)
+
+---
+
+## Project Page Layout (current)
 
 ```
-┌─────────────────────────────────────────┐
-│  Hero — full-bleed 16:9 work/thumb      │
-├─────────────────────────────────────────┤
-│  Left col (60%)    │  Right col (40%)   │
-│  Label + Title     │  Autoplay preview  │
-│  Description       │  (featured/video)  │
-│  Credits grid      │  Watch full film ↗ │
-├─────────────────────────────────────────┤
-│  Gallery — Behind the scenes            │
-│  Grid / Carousel toggle                 │
-└─────────────────────────────────────────┘
-Mobile: all stacked, single column
+┌─────────────────────────────────────────────┐
+│  Hero — full-bleed, max 65vh                │
+│  meta (desktop BL) | Watch + Work (BR)      │
+│  mobile: Watch (left) | Work (right)        │
+├─────────────────────────────────────────────┤
+│  Left col (58%)      │  Right col (42%)     │
+│  meta (mobile only)  │  Autoplay preview    │
+│  Title               │  (featured/video)    │
+│  Brand               │  Watch full film     │
+│  Description         │                      │
+│  Credits grid        │                      │
+│  ── mobile CTAs below preview ──            │
+│  [Work together ↓]  [Watch full film ▶]    │
+├─────────────────────────────────────────────┤
+│  Gallery — masonry columns                  │
+│  "Behind the scenes" heading                │
+└─────────────────────────────────────────────┘
 ```
 
-Full film (lightbox) only shown when `work/video` exists on Cloudinary.
+---
+
+## Global Spacing System (implemented)
+
+```css
+/* globals.css — HORIZONTAL ONLY, plain CSS outside layers */
+.site-px, .section-padding {
+  padding-left: 1rem;        /* < 640px  = 16px  */
+}
+/* 640px+  → 1.5rem (24px) */
+/* 1200px+ → 3rem   (48px) */
+/* 1600px+ → 4rem   (64px) */
+
+.site-max { max-width: 1800px; margin: 0 auto; }
+
+/* VERTICAL — always Tailwind utilities directly on the element */
+/* Standard section: py-16 md:py-20  (4rem / 5rem) */
+/* Custom:  pt-8 md:pt-12 pb-16 md:pb-20 lg:pb-[7.5rem] etc. */
+```
+
+**Rule: never try to override `site-px`/`section-padding` vertical with Tailwind — they have no vertical, so there's nothing to conflict.**
 
 ---
 
@@ -103,7 +141,7 @@ Full film (lightbox) only shown when `work/video` exists on Cloudinary.
 | JAYA — featured video (teaser) | ✅ |
 | JAYA — work thumb | ✅ |
 | JAYA — work video (full film) | ⬜ upload to `work/jaya/work/video/` |
-| JAYA — gallery stills | ⬜ upload to `work/jaya/work/gallery/` (01_*, 02_*…) |
+| JAYA — gallery stills | ⬜ upload to `work/jaya/work/gallery/` |
 | Other projects | ⬜ placeholder data only |
 | Bio text (FR + EN) | ⬜ |
 | Showreel video | ⬜ |
@@ -118,36 +156,17 @@ Full film (lightbox) only shown when `work/video` exists on Cloudinary.
 work/
   [slug]/
     featured/
-      thumb/    → homepage still / video poster (image)
-      video/    → homepage autoplay teaser + project page preview (video)
+      thumb/    → homepage still / video poster
+      video/    → homepage autoplay teaser + project page preview
     work/
-      thumb/    → project page hero image (image)
-      video/    → full film — lightbox player (video)
-      gallery/  → BTS stills, named 01_*, 02_*, 03_* (images)
+      thumb/    → project page hero image
+      video/    → full film — lightbox player
+      gallery/  → BTS stills (images, any naming)
 about/
   portrait/
   bts/
 showreel/
 ```
-
-### Data flow
-1. `lib/cloudinary.ts` (server-only) — Cloudinary Search API
-2. `lib/cloudinary-url.ts` (client-safe) — CDN URL builders
-3. `app/[locale]/page.tsx` — home, fetches all slugs, merges with `data.js`
-4. `app/[locale]/work/[slug]/page.tsx` — project, fetches single slug
-5. Metadata (title, brand, year, category, description, credits) in `data.js`
-
----
-
-## Global Spacing (to implement)
-
-```css
-/* globals.css */
-.section-padding { @apply px-8 md:px-32 py-16 md:py-20; }
-.section-gap     { @apply mb-16 md:mb-20; }
-```
-
-All project page sections use `.section-padding`. Change once → applies everywhere.
 
 ---
 
@@ -155,11 +174,11 @@ All project page sections use `.section-padding`. Change once → applies everyw
 
 | Decision | Choice | Notes |
 |---|---|---|
-| Video/Image hosting | Cloudinary | `f_auto,q_auto` CDN |
-| Scroll | Lenis + wheel-driven snap | `lenis.scrollTo()`, IntersectionObserver |
+| Video/Image hosting | Cloudinary | `f_auto,q_auto` CDN, `unstable_cache` 1hr |
+| Scroll | Lenis + wheel-driven snap | `lenis.targetScroll` projected position, 500ms debounce |
 | Animations | GSAP + `@gsap/react` | `useGSAP()`, ScrollTrigger |
 | Background FX | WebGL canvas (StormBackground) | FBM shader, cursor-reactive, project pages only |
 | Fonts | Alfa Slab One · Inter · Space Grotesk | Display · Body · Meta |
 | i18n | next-intl | FR default / EN |
 | Deployment | Vercel | |
-| UI components | shadcn/ui | |
+| UI components | shadcn/ui + custom LinkCta/PillCta | |
