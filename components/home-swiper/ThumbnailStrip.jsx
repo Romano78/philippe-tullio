@@ -29,13 +29,17 @@ export default function ThumbnailStrip({ projects, activeIndex, onThumbClick }) 
               outlineOffset: "2px",
             }}
           >
-            <Image
-              src={project.thumb}
-              alt={project.title}
-              width={80}
-              height={45}
-              className="object-cover w-full"
-            />
+            {project.thumb ? (
+              <Image
+                src={project.thumb}
+                alt={project.title}
+                width={80}
+                height={45}
+                className="object-cover w-full"
+              />
+            ) : (
+              <div className="w-20 bg-white/10" style={{ height: 45 }} />
+            )}
           </button>
         ))}
       </div>
@@ -60,13 +64,17 @@ export default function ThumbnailStrip({ projects, activeIndex, onThumbClick }) 
                   outlineOffset: "2px",
                 }}
               >
-                <Image
-                  src={project.thumb}
-                  alt={project.title}
-                  width={80}
-                  height={45}
-                  className="object-cover w-full"
-                />
+                {project.thumb ? (
+                  <Image
+                    src={project.thumb}
+                    alt={project.title}
+                    width={80}
+                    height={45}
+                    className="object-cover w-full"
+                  />
+                ) : (
+                  <div className="w-full bg-white/10" style={{ height: 45 }} />
+                )}
               </button>
             </SwiperSlide>
           ))}

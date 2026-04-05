@@ -9,21 +9,21 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 
 | Page | Route | Status |
 |---|---|---|
-| Home | `/` | 🟡 In progress |
-| Project | `/work/[slug]` | 🟡 In progress |
-| About | `/about` | ⬜ Not started |
+| Home | `/` | 🟡 Polish |
+| Project | `/work/[slug]` | 🟡 Polish |
+| About | `/about` | 🟡 Polish |
 | Gallery | `/gallery` | ⬜ Not started |
-| Contact | `/contact` | ⬜ Not started |
+| Contact | `/contact` | ✅ Done |
 
 ---
 
 ## Build Order
 
-### Phase 1 — Foundation
+### Phase 1 — Foundation ✅
 - [x] `<Nav />` — glassmorphism pill, FR/EN toggle
-- [ ] `<Footer />` — minimal
+- [x] `<Footer />` — minimal
 
-### Phase 2 — Home
+### Phase 2 — Home ✅ (pending content + polish)
 - [x] `<HomeSwiper />` — full-screen sections, GSAP tilt + content reveal
 - [x] Lenis smooth scroll + wheel-driven snap (proximity snap on stop, 500ms debounce)
 - [x] Thumbnail strip — IntersectionObserver synced
@@ -34,7 +34,7 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 - [ ] Intro animation (first load slide-up)
 - [ ] Fill remaining projects with real Cloudinary data
 
-### Phase 3 — Project Page ✅ Refactored
+### Phase 3 — Project Page ✅
 - [x] Route `app/[locale]/work/[slug]/page.tsx`
 - [x] `<ProjectHero />` — full-bleed, max 65vh, gradient overlay, meta bottom-left (desktop), Watch + Work Together CTAs bottom-right (desktop), mobile: watch left / pill right
 - [x] `<ProjectInfo />` — two-column (info left, preview right), mobile stacked; mobile CTAs below preview
@@ -47,43 +47,46 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 - [x] `<PillCta />` — reusable rounded pill button/link, standardised across site
 - [x] Spacing fixed: `site-px` / `section-padding` = horizontal only, vertical via Tailwind utilities
 
-### Phase 4 — About
-- [ ] `<AboutHero />`
-- [ ] `<Bio />`
-- [ ] `<BtsGallery />`
+### Phase 4 — About ✅ (needs polish)
+- [x] `<AboutHero />`
+- [x] `<Bio />`
+- [x] `<BtsGallery />`
 
-### Phase 5 — Contact
-- [ ] `<Contact />` reusable component (also used as section on home/project)
-- [ ] `/contact` page
+### Phase 5 — Contact ✅
+- [x] `<Contact />` reusable component
+- [x] `/contact` page
 
-### Phase 6 — Polish
+### Phase 6 — Polish & QA 🟡 CURRENT FOCUS
+- [ ] Fill remaining projects with real Cloudinary assets + `data.js` metadata
 - [ ] GSAP scroll animations across all pages
 - [ ] Page transitions
-- [ ] Mobile QA pass (project page + home)
+- [ ] Video autoplay disabled on mobile
+- [ ] Intro animation (first load)
+- [ ] Mobile QA pass (all pages)
 - [ ] Performance audit (Cloudinary, lazy loading, bundle)
 - [ ] SEO (metadata, OG tags, sitemap)
-- [x] FR/EN translations complete — nav, project CTAs, credits, gallery labels; lang toggle fixed via next-intl navigation
 - [ ] Lighthouse audit
+- [x] FR/EN translations complete — nav, project CTAs, credits, gallery labels; lang toggle fixed via next-intl navigation
 
 ---
 
 ## Next Session — Start Here
 
-### 1. Contact section (reusable)
-Build `<Contact />` as a standalone section component usable on every page (project, home, about). Anchor `#contact`. Simple: email CTA + socials. Needs from client: email address + social links.
+### 1. Fill remaining projects
+Upload real Cloudinary assets for all non-JAYA slugs + fill `data.js` metadata.
+Slugs: `k-citizen`, `jesus-is-back`, `crako`, `abaco`
 
-### 2. Fill remaining projects
-Upload real Cloudinary assets for remaining slugs + fill `data.js` metadata.
+### 2. Polish — About page
+Review current state, identify what needs refinement.
 
-### 3. About page
-`<AboutHero />`, `<Bio />`, `<BtsGallery />` — needs real content from client.
+### 3. Polish — Home + Project page
+GSAP scroll animations, page transitions, intro animation.
 
 ### 4. Mobile QA pass
-Go through project page and home on mobile: spacing, CTAs, video behaviour.
+Go through all pages on mobile: spacing, CTAs, video behaviour, autoplay disabled.
 
-### 5. Home — remaining
-- Video autoplay disabled on mobile
-- Intro animation (first load)
+### 5. Performance + SEO
+Metadata, OG tags, sitemap, Lighthouse audit.
 
 ---
 
@@ -142,11 +145,11 @@ Go through project page and home on mobile: spacing, CTAs, video behaviour.
 | JAYA — work thumb | ✅ |
 | JAYA — work video (full film) | ⬜ upload to `work/jaya/work/video/` |
 | JAYA — gallery stills | ⬜ upload to `work/jaya/work/gallery/` |
-| Other projects | ⬜ placeholder data only |
-| Bio text (FR + EN) | ⬜ |
-| Showreel video | ⬜ |
-| Profile photo | ⬜ |
-| Contact email / socials | ⬜ |
+| Other projects (k-citizen, jesus-is-back, crako, abaco) | ⬜ placeholder data only |
+| Bio text (FR + EN) | ⬜ needs client |
+| Showreel video | ⬜ needs client |
+| Profile photo | ⬜ needs client |
+| Contact email / socials | ⬜ needs client |
 
 ---
 
