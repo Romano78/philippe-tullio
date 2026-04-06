@@ -1,7 +1,7 @@
 export const projects = [
   {
-    id: 'showreal',
-    slug: 'showreal',
+    id: 'showreel',
+    slug: 'showreel',
     brand: 'ShowReal',
     title: 'TULLIO philippe',
     category: 'Presentation',
@@ -12,10 +12,13 @@ export const projects = [
     },
     credits: [{ role: '', name: '' }],
     enableCTA: false,
+    ctaHref: '/about#showreel',
+    noPage: true,
   },
   {
     id: 'k-citizen',
     slug: 'k-citizen',
+    videoUrl: 'https://www.youtube.com/watch?v=LTgAH78aKxg',
     brand: 'Philippe Tullio',
     title: 'K-Citizen',
     category: 'Moyen métrage',
@@ -46,6 +49,7 @@ export const projects = [
   {
     id: 'jaya',
     slug: 'jaya',
+    videoUrl: 'https://www.youtube.com/watch?v=tdYosTyxzw0&t=15s',
     brand: 'Philippe Tullio',
     title: 'Jaya',
     category: 'Film',
@@ -66,6 +70,7 @@ export const projects = [
   {
     id: 'crako',
     slug: 'crako',
+    videoUrl: 'https://vimeo.com/722961162',
     brand: 'Philippe Tullio',
     title: 'Crako',
     category: 'Film',
@@ -79,6 +84,7 @@ export const projects = [
   {
     id: 'jesus-is-back',
     slug: 'jesus-is-back',
+    videoUrl: 'https://www.youtube.com/watch?v=LTgAH78aKxg',
     brand: 'Philippe Tullio',
     title: 'Jesus Is\nBack',
     category: 'Comédie',

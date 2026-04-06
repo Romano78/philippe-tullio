@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useCallback } from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import Image from 'next/image';
 import Link from 'next/link';
 import { gsap } from 'gsap';
@@ -17,6 +18,8 @@ export default function ProjectSection({
   total,
   sectionRef: externalRef,
 }) {
+  const isMobile = useIsMobile();
+
   const sectionRef = useRef(null);
   const innerRef = useRef(null);
   const directorRef = useRef(null);
@@ -97,7 +100,7 @@ export default function ProjectSection({
           '-=0.3',
         );
     },
-    { scope: sectionRef },
+    { scope: sectionRef, dependencies: [index] },
   );
 
   return (
@@ -109,9 +112,9 @@ export default function ProjectSection({
     >
       {/* Image/Video — receives parallax */}
       <div ref={innerRef} className='absolute inset-0'>
-        {project.video ? (
+        {(project.video || project.videoMobile) ? (
           <video
-            src={project.video}
+            src={isMobile && project.videoMobile ? project.videoMobile : project.video}
             poster={project.videoPoster ?? project.image}
             autoPlay
             muted

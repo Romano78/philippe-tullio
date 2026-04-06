@@ -6,8 +6,9 @@ export default function HeroSection({ portrait, t }) {
   const heading = t('heading').split('\n');
   return (
     <section className='relative z-10 overflow-hidden'>
-      <div className='grid grid-cols-1 lg:grid-cols-[3fr_2fr] lg:min-h-[85svh]'>
-        <div className='flex flex-col site-px pt-24 md:pt-36 pb-12 md:pb-16 lg:min-h-[85svh]'>
+      <div className='site-px'>
+      <div className='site-max grid grid-cols-1 lg:grid-cols-[3fr_2fr] lg:min-h-[85svh]'>
+        <div className='flex flex-col pt-24 md:pt-36 pb-12 md:pb-16 lg:min-h-[85svh]'>
           <div>
             <p className='font-meta text-xs tracking-widest uppercase text-white/30 mb-8'>
               {t('overline')}
@@ -41,6 +42,7 @@ export default function HeroSection({ portrait, t }) {
             <div className='w-full h-full' style={DARK_BG} />
           )}
         </div>
+      </div>
       </div>
     </section>
   );

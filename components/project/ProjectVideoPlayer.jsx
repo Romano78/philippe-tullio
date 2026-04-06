@@ -4,14 +4,37 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 
+function toEmbedUrl(src) {
+  try {
+    const url = new URL(src);
+    // YouTube
+    if (url.hostname.includes('youtube.com') || url.hostname.includes('youtu.be')) {
+      const id = url.hostname.includes('youtu.be')
+        ? url.pathname.slice(1)
+        : url.searchParams.get('v');
+      const start = url.searchParams.get('t')?.replace('s', '') ?? null;
+      return `https://www.youtube.com/embed/${id}?autoplay=1&rel=0${start ? `&start=${start}` : ''}`;
+    }
+    // Vimeo
+    if (url.hostname.includes('vimeo.com')) {
+      const id = url.pathname.split('/').filter(Boolean)[0];
+      return `https://player.vimeo.com/video/${id}?autoplay=1`;
+    }
+  } catch {}
+  return null;
+}
+
 export default function ProjectVideoPlayer({ src, poster, onClose }) {
   const videoRef = useRef(null);
   const overlayRef = useRef(null);
+  const embedUrl = toEmbedUrl(src);
 
   useEffect(() => {
-    videoRef.current?.play();
-    return () => videoRef.current?.pause();
-  }, []);
+    if (!embedUrl && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+    return () => { if (!embedUrl) videoRef.current?.pause(); };
+  }, [embedUrl]);
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
@@ -42,14 +65,24 @@ export default function ProjectVideoPlayer({ src, poster, onClose }) {
         <X size={24} />
       </button>
 
-      <video
-        ref={videoRef}
-        src={src}
-        poster={poster}
-        controls
-        className='w-full max-w-6xl max-h-[85vh] aspect-video'
-        style={{ outline: 'none' }}
-      />
+      {embedUrl ? (
+        <iframe
+          src={embedUrl}
+          className='w-full max-w-6xl max-h-[85vh] aspect-video'
+          allow='autoplay; fullscreen; picture-in-picture'
+          allowFullScreen
+          style={{ border: 'none' }}
+        />
+      ) : (
+        <video
+          ref={videoRef}
+          src={src}
+          poster={poster}
+          controls
+          className='w-full max-w-6xl max-h-[85vh] aspect-video'
+          style={{ outline: 'none' }}
+        />
+      )}
     </motion.div>
   );
 }

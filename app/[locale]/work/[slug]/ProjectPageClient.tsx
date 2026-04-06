@@ -22,7 +22,7 @@ export default function ProjectPageClient({ project }: { project: any }) {
     <>
       <StormBackground />
 
-      <ProjectHero title={project.title} image={project.image} category={project.category} year={project.year} duration={project.duration} workVideo={project.workVideo} onWatch={() => setPlayerOpen(true)} />
+      <ProjectHero title={project.title} image={project.image} category={project.category} year={project.year} duration={project.duration} workVideo={project.workVideo || project.videoUrl} onWatch={() => setPlayerOpen(true)} />
 
       <ProjectInfo project={project} onWatch={() => setPlayerOpen(true)} />
 
@@ -33,7 +33,7 @@ export default function ProjectPageClient({ project }: { project: any }) {
       <AnimatePresence>
         {playerOpen && (
           <ProjectVideoPlayer
-            src={project.workVideo}
+            src={project.videoUrl ?? project.workVideo}
             poster={project.workVideoPoster ?? project.image}
             onClose={() => setPlayerOpen(false)}
           />

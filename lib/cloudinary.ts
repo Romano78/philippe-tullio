@@ -45,6 +45,7 @@ export interface WorkAssets {
 // ─── Work assets ─────────────────────────────────────────────────────────
 
 async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
+  if (process.env.NODE_ENV === 'development') return null;
   try {
     // ✅ PER-SLUG CACHE CHECK
     if (workCache.has(slug)) {
@@ -199,7 +200,7 @@ export const getWorkAssets = unstable_cache(
 
 // ─── About page assets ───────────────────────────────────────────────────
 
-export interface AboutAssets {
+export interface AboutImageAssets {
   portrait: string[];
   acting: string[];
   lfaHero: string[];
@@ -213,7 +214,13 @@ export interface AboutAssets {
   jesusIsBack: string[];
 }
 
-const ABOUT_FOLDERS: Array<[keyof AboutAssets, string]> = [
+export interface AboutAssets extends AboutImageAssets {
+  showreel: string | null;
+  showreelPoster: string | null;
+  showreelPreview: string | null;
+}
+
+const ABOUT_FOLDERS: Array<[keyof AboutImageAssets, string]> = [
   ['portrait', 'about/portrait'],
   ['acting', 'about/acting'],
   ['lfaHero', 'about/lfa/hero'],
@@ -228,19 +235,39 @@ const ABOUT_FOLDERS: Array<[keyof AboutAssets, string]> = [
 ];
 
 async function _getAboutAssets(): Promise<AboutAssets> {
-  const results = await Promise.allSettled(
-    ABOUT_FOLDERS.map(([, folder]) =>
-      cloudinary.search
-        .expression(`asset_folder="${folder}" AND resource_type=image`)
-        .max_results(20)
-        .execute(),
+  if (process.env.NODE_ENV === 'development') {
+    return { portrait: [], acting: [], lfaHero: [], lfaLogo: [], kcitizen: [], scarface: [], jaya: [], crako: [], offside: [], abaco: [], jesusIsBack: [], showreel: null, showreelPoster: null, showreelPreview: null };
+  }
+  const [imageResults, showreelVideoResult, showreelPosterResult, showreelPreviewResult] = await Promise.all([
+    Promise.allSettled(
+      ABOUT_FOLDERS.map(([, folder]) =>
+        cloudinary.search
+          .expression(`asset_folder="${folder}" AND resource_type=image`)
+          .max_results(20)
+          .execute(),
+      ),
     ),
-  );
+    cloudinary.search
+      .expression(`asset_folder="about/showreel/video" AND resource_type=video`)
+      .max_results(1)
+      .execute()
+      .catch(() => null),
+    cloudinary.search
+      .expression(`asset_folder="about/showreel/thumb" AND resource_type=image`)
+      .max_results(1)
+      .execute()
+      .catch(() => null),
+    cloudinary.search
+      .expression(`asset_folder="about/showreel/previewvid" AND resource_type=video`)
+      .max_results(1)
+      .execute()
+      .catch(() => null),
+  ]);
 
   const assets = {} as AboutAssets;
 
   ABOUT_FOLDERS.forEach(([key], i) => {
-    const result = results[i];
+    const result = imageResults[i];
     if (result.status !== 'fulfilled') {
       assets[key] = [];
       return;
@@ -258,6 +285,19 @@ async function _getAboutAssets(): Promise<AboutAssets> {
     assets[key] = resources.map((r) => cldImage(`${r.public_id}.${r.format}`));
   });
 
+  const showreelVideo = showreelVideoResult?.resources?.[0];
+  const showreelPoster = showreelPosterResult?.resources?.[0];
+  const showreelPreview = showreelPreviewResult?.resources?.[0];
+  assets.showreel = showreelVideo
+    ? cldVideo(`${showreelVideo.public_id}.${showreelVideo.format}`)
+    : null;
+  assets.showreelPoster = showreelPoster
+    ? cldImage(`${showreelPoster.public_id}.${showreelPoster.format}`)
+    : null;
+  assets.showreelPreview = showreelPreview
+    ? cldVideo(`${showreelPreview.public_id}.${showreelPreview.format}`)
+    : null;
+
   return assets;
 }
 
@@ -270,6 +310,7 @@ export const getAboutAssets = unstable_cache(
 // ─── All gallery images ────────────────────────────────────────────────
 
 async function _getAllGalleryImages(): Promise<string[]> {
+  if (process.env.NODE_ENV === 'development') return [];
   try {
     const result = await cloudinary.search
       .expression(`asset_folder="gallery" AND resource_type=image`)

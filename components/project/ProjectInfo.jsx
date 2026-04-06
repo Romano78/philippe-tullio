@@ -60,7 +60,7 @@ export default function ProjectInfo({ project, onWatch }) {
             <ProjectPreview
               video={project.video}
               poster={project.videoPoster ?? project.image}
-              onWatch={project.workVideo ? onWatch : null}
+              onWatch={project.workVideo || project.videoUrl ? onWatch : null}
               title={title}
             />
           </div>
@@ -70,7 +70,7 @@ export default function ProjectInfo({ project, onWatch }) {
         {/* Mobile CTAs — below the preview */}
         <div className='flex md:hidden items-center gap-6 mt-8'>
           <PillCta href='#contact' icon={<span className='text-accent'>↓</span>}>{t('workTogether')}</PillCta>
-          {project.workVideo && (
+          {(project.workVideo || project.videoUrl) && (
             <LinkCta onClick={onWatch} icon={<PlayIcon />}>{t('watchFullFilm')}</LinkCta>
           )}
         </div>

@@ -1,3 +1,4 @@
+import { AnimateIn, AnimateHeading } from '../AnimateIn';
 import { DARK_BG } from '../primitives';
 
 export default function ActingSection({ acting, t, noPb }) {
@@ -7,11 +8,13 @@ export default function ActingSection({ acting, t, noPb }) {
       <div className="site-max">
         <div className="grid grid-cols-1 md:grid-cols-[45fr_55fr] gap-8 md:gap-16 items-start">
           <div className="md:sticky md:top-28">
-            <p className="font-meta text-xs tracking-widest uppercase text-accent mb-4">{t('actingEyebrow')}</p>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl uppercase text-white leading-none mb-6">
-              {actingLines.map((line, i) => <span key={i} className="block">{line}</span>)}
-            </h2>
-            <p className="font-sans text-base md:text-lg text-white/60 leading-relaxed">{t('actingBody')}</p>
+            <AnimateIn><p className="font-meta text-xs tracking-widest uppercase text-accent mb-4">{t('actingEyebrow')}</p></AnimateIn>
+            <AnimateHeading className="mb-6">
+              <h2 className="font-display text-3xl md:text-4xl lg:text-5xl uppercase text-white leading-none">
+                {actingLines.map((line, i) => <span key={i} className="block">{line}</span>)}
+              </h2>
+            </AnimateHeading>
+            <AnimateIn delay={0.15}><p className="font-sans text-base md:text-lg text-white/60 leading-relaxed">{t('actingBody')}</p></AnimateIn>
           </div>
           <div className="flex flex-col gap-2">
             <div className="overflow-hidden">

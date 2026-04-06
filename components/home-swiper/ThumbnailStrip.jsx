@@ -35,7 +35,8 @@ export default function ThumbnailStrip({ projects, activeIndex, onThumbClick }) 
                 alt={project.title}
                 width={80}
                 height={45}
-                className="object-cover w-full"
+                className="object-cover"
+                style={{ width: '100%', height: 'auto' }}
               />
             ) : (
               <div className="w-20 bg-white/10" style={{ height: 45 }} />

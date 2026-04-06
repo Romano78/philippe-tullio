@@ -12,6 +12,7 @@ import JesusIsBackSection from './sections/JesusIsBackSection';
 import JayaSection from './sections/JayaSection';
 import CrakoSection from './sections/CrakoSection';
 import ScriptsSection from './sections/ScriptsSection';
+import ShowreelSection from './sections/ShowreelSection';
 
 export default function AboutContent({ assets }) {
   const t = useTranslations('aboutPage');
@@ -30,11 +31,15 @@ export default function AboutContent({ assets }) {
     offside     = [],
     abaco       = [],
     jesusIsBack = [],
+    showreel        = null,
+    showreelPoster  = null,
+    showreelPreview = null,
   } = assets ?? {};
 
   return (
     <>
       <HeroSection portrait={portrait} t={t} />
+      <ShowreelSection src={showreel} poster={showreelPoster} preview={showreelPreview} />
       <ActingSection acting={acting} t={t} />
       <FilmSchoolSection lfaHero={lfaHero} lfaLogo={lfaLogo} t={t} />
       <KCitizenSection kcitizen={kcitizen} locale={locale} t={t} tProject={tProject} noPb />
