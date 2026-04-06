@@ -1,5 +1,5 @@
 import { AnimateIn, AnimateHeading } from '../AnimateIn';
-import { DARK_BG } from '../primitives';
+import { Gallery } from '../primitives';
 
 export default function ActingSection({ acting, t, noPb }) {
   const actingLines = t('actingHeading').split('\n');
@@ -16,24 +16,7 @@ export default function ActingSection({ acting, t, noPb }) {
             </AnimateHeading>
             <AnimateIn delay={0.15}><p className="font-sans text-base md:text-lg text-white/60 leading-relaxed">{t('actingBody')}</p></AnimateIn>
           </div>
-          <div className="flex flex-col gap-2">
-            <div className="overflow-hidden">
-              {acting[0]
-                ? <img src={acting[0]} alt="Joanne Baron Studio — Los Angeles" className="w-full object-cover" style={{ aspectRatio: '16 / 9' }} loading="lazy" />
-                : <div style={{ ...DARK_BG, aspectRatio: '16 / 9' }} className="w-full" />
-              }
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {[acting[1], acting[2]].map((src, i) => (
-                <div key={i} className="overflow-hidden">
-                  {src
-                    ? <img src={src} alt="" className="w-full object-cover" style={{ aspectRatio: '1 / 1' }} loading="lazy" />
-                    : <div style={{ ...DARK_BG, aspectRatio: '1 / 1' }} className="w-full" />
-                  }
-                </div>
-              ))}
-            </div>
-          </div>
+          <Gallery images={acting} count={3} aspect="16 / 9" rowAspect="1 / 1" />
         </div>
       </div>
     </section>
