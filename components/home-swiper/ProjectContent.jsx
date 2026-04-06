@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useLayoutEffect } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -89,7 +89,7 @@ export default function ProjectContent({ project, index, total }) {
         {/* CTA */}
         <div ref={ctaRef} className="pointer-events-auto">
           <Link
-            href={`/work/${project.slug}`}
+            href={project.ctaHref ?? `/work/${project.slug}`}
             className="inline-flex items-center gap-3 px-6 py-3 rounded-full font-meta text-xs tracking-widest uppercase text-white/80 border border-border transition-colors hover:bg-white/10 hover:text-white"
           >
             Watch Project

@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useCallback } from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import Image from 'next/image';
 import Link from 'next/link';
 import { gsap } from 'gsap';
@@ -17,6 +18,8 @@ export default function ProjectSection({
   total,
   sectionRef: externalRef,
 }) {
+  const isMobile = useIsMobile();
+
   const sectionRef = useRef(null);
   const innerRef = useRef(null);
   const directorRef = useRef(null);
@@ -97,7 +100,7 @@ export default function ProjectSection({
           '-=0.3',
         );
     },
-    { scope: sectionRef },
+    { scope: sectionRef, dependencies: [index] },
   );
 
   return (
@@ -109,9 +112,9 @@ export default function ProjectSection({
     >
       {/* Image/Video — receives parallax */}
       <div ref={innerRef} className='absolute inset-0'>
-        {project.video ? (
+        {(project.video || project.videoMobile) ? (
           <video
-            src={project.video}
+            src={isMobile && project.videoMobile ? project.videoMobile : project.video}
             poster={project.videoPoster ?? project.image}
             autoPlay
             muted
@@ -142,7 +145,7 @@ export default function ProjectSection({
       </div>
 
       {/* Content — bound to this section */}
-      <div className='absolute bottom-16 left-8 md:left-32 z-10 max-w-[46rem] '>
+      <div className='absolute bottom-16 left-8 md:left-32 lg:left-48 z-10 max-w-5xl'>
         {/* Director */}
         <p
           ref={directorRef}
@@ -155,9 +158,11 @@ export default function ProjectSection({
         <div className='overflow-hidden mb-6'>
           <h1
             ref={titleRef}
-            className='font-display text-7xl md:text-9xl uppercase text-white leading-none'
+            className='font-display text-6xl md:text-8xl uppercase text-white leading-none'
           >
-            {project.title}
+            {project.title.split('\n').map((line, i) => (
+              <span key={i} className="block">{line}</span>
+            ))}
           </h1>
         </div>
 

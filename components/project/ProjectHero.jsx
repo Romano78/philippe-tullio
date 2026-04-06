@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import LinkCta from '@/components/LinkCta';
 import PillCta from '@/components/PillCta';
 
@@ -10,12 +12,20 @@ const PlayIcon = () => (
 );
 
 export default function ProjectHero({ title, image, category, year, duration, workVideo, onWatch }) {
+  const t = useTranslations('project');
   const meta = [category, year, duration].filter(Boolean).join(' — ');
 
   return (
     <div className='relative z-10 w-full' style={{ aspectRatio: '16/9', maxHeight: '65vh' }}>
       {image && (
-        <img src={image} alt={title} className='absolute inset-0 w-full h-full object-cover' />
+        <Image
+          src={image}
+          alt={title}
+          fill
+          priority
+          sizes='100vw'
+          className='object-cover'
+        />
       )}
 
       <div
@@ -34,7 +44,7 @@ export default function ProjectHero({ title, image, category, year, duration, wo
           )}
           {workVideo && onWatch && (
             <div className='md:hidden'>
-              <LinkCta onClick={onWatch} icon={<PlayIcon />}>Watch full film</LinkCta>
+              <LinkCta onClick={onWatch} icon={<PlayIcon />}>{t('watchFullFilm')}</LinkCta>
             </div>
           )}
         </div>
@@ -43,11 +53,11 @@ export default function ProjectHero({ title, image, category, year, duration, wo
         <div className='flex items-end gap-5 shrink-0'>
           {workVideo && onWatch && (
             <div className='hidden md:block'>
-              <LinkCta onClick={onWatch} icon={<PlayIcon />}>Watch full film</LinkCta>
+              <LinkCta onClick={onWatch} icon={<PlayIcon />}>{t('watchFullFilm')}</LinkCta>
             </div>
           )}
           <PillCta href='#contact' icon={<span className='text-accent'>↓</span>}>
-            Work together
+            {t('workTogether')}
           </PillCta>
         </div>
 

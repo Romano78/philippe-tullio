@@ -5,6 +5,7 @@ import { getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/config/theme-provider";
 import Nav from "@/components/nav";
 import SmoothScroll from "@/components/SmoothScroll";
+import NextTopLoader from "nextjs-toploader";
 import "../globals.css";
 
 const inter = Inter({
@@ -48,6 +49,7 @@ export default async function LocaleLayout({
             enableSystem={false}
           >
             <SmoothScroll>
+              <NextTopLoader color="#B8FF00" height={2} showSpinner={false} />
               <Nav />
               {children}
             </SmoothScroll>

@@ -96,11 +96,13 @@ export default function HomeSwiper({ projects }) {
 
   return (
     <>
-      <ThumbnailStrip
-        projects={projects}
-        activeIndex={activeIndex}
-        onThumbClick={handleThumbClick}
-      />
+      <div className="hidden md:block">
+        <ThumbnailStrip
+          projects={projects}
+          activeIndex={activeIndex}
+          onThumbClick={handleThumbClick}
+        />
+      </div>
 
       <div>
         {projects.map((project, i) => (
@@ -109,9 +111,7 @@ export default function HomeSwiper({ projects }) {
             project={project}
             index={i}
             total={projects.length}
-            sectionRef={(el) => {
-              sectionRefs.current[i] = el;
-            }}
+            sectionRef={(el) => { sectionRefs.current[i] = el; }}
           />
         ))}
       </div>

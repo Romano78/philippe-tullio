@@ -1,57 +1,88 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
+
+function toEmbedUrl(src) {
+  try {
+    const url = new URL(src);
+    // YouTube
+    if (url.hostname.includes('youtube.com') || url.hostname.includes('youtu.be')) {
+      const id = url.hostname.includes('youtu.be')
+        ? url.pathname.slice(1)
+        : url.searchParams.get('v');
+      const start = url.searchParams.get('t')?.replace('s', '') ?? null;
+      return `https://www.youtube.com/embed/${id}?autoplay=1&rel=0${start ? `&start=${start}` : ''}`;
+    }
+    // Vimeo
+    if (url.hostname.includes('vimeo.com')) {
+      const id = url.pathname.split('/').filter(Boolean)[0];
+      return `https://player.vimeo.com/video/${id}?autoplay=1`;
+    }
+  } catch {}
+  return null;
+}
 
 export default function ProjectVideoPlayer({ src, poster, onClose }) {
   const videoRef = useRef(null);
   const overlayRef = useRef(null);
+  const embedUrl = toEmbedUrl(src);
 
-  // Play on open, pause on close
   useEffect(() => {
-    videoRef.current?.play();
-    return () => videoRef.current?.pause();
-  }, []);
+    if (!embedUrl && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+    return () => { if (!embedUrl) videoRef.current?.pause(); };
+  }, [embedUrl]);
 
-  // Close on Escape
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  // Lock body scroll
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
   }, []);
 
   return (
-    <div
+    <motion.div
       ref={overlayRef}
       className='fixed inset-0 z-[100] flex items-center justify-center bg-black/95'
-      style={{ animation: 'fadeIn 0.4s ease' }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.35, ease: [0.43, 0.13, 0.23, 0.96] }}
       onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
     >
-      <style>{`@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }`}</style>
-
-      {/* Close */}
       <button
         onClick={onClose}
-        className='absolute top-6 right-6 z-10 p-2 text-white/50 hover:text-white transition-colors'
+        aria-label='Close video'
+        className='absolute top-6 right-6 z-10 p-2 text-white/50 hover:text-white transition-colors duration-200'
       >
         <X size={24} />
       </button>
 
-      {/* Video */}
-      <video
-        ref={videoRef}
-        src={src}
-        poster={poster}
-        controls
-        className='w-full max-w-6xl max-h-[85vh] aspect-video'
-        style={{ outline: 'none' }}
-      />
-    </div>
+      {embedUrl ? (
+        <iframe
+          src={embedUrl}
+          className='w-full max-w-6xl max-h-[85vh] aspect-video'
+          allow='autoplay; fullscreen; picture-in-picture'
+          allowFullScreen
+          style={{ border: 'none' }}
+        />
+      ) : (
+        <video
+          ref={videoRef}
+          src={src}
+          poster={poster}
+          controls
+          className='w-full max-w-6xl max-h-[85vh] aspect-video'
+          style={{ outline: 'none' }}
+        />
+      )}
+    </motion.div>
   );
 }

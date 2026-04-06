@@ -1,7 +1,71 @@
 {
   "nav": {
-    "work": "Travaux",
+    "work": "Films",
     "about": "À propos",
-    "contact": "Contact"
+    "contact": "Contact",
+    "gallery": "Galerie",
+    "menuClose": "Fermer"
+  },
+  "credits": {
+    "direction": "Réalisation",
+    "screenplay": "Scénario",
+    "cast": "Casting",
+    "cinematography": "Image",
+    "music": "Musique"
+  },
+  "contact": {
+    "overline": "Contact",
+    "heading": "Travaillons\nensemble",
+    "emailLabel": "Envoyer un email"
+  },
+  "galleryPage": {
+    "overline": "Galerie",
+    "heading": "Dans les\ncoulisses",
+    "intro": "Tout ce qui ne finit pas dans le montage final. Les matins sur les plateaux, les décisions prises à la dernière minute, les voyages qui précèdent les tournages. La partie du métier qu'on ne montre jamais vraiment — et pourtant c'est souvent là que tout se joue.",
+    "cta": "Travaillons ensemble",
+    "loadMore": "Voir plus",
+    "empty": "— bientôt disponible —"
+  },
+  "aboutPage": {
+    "overline": "Réalisateur",
+    "heading": "Tullio\nPhilippe",
+    "intro": "Né à Paris, Philippe Tullio découvre sa passion pour la mise en scène à travers le jeu d'acteur — une double formation qui forge un regard singulier sur la direction.",
+    "actingEyebrow": "2006 — Los Angeles",
+    "actingHeading": "Joanne Baron\nStudio",
+    "actingBody": "Il s'installe à Los Angeles pour étudier les méthodes Meisner et Stanislavski auprès de Joanne Baron, l'une des coaches les plus reconnues d'Hollywood — dont les élèves incluent Halle Berry et Leslie Mann. Cette immersion dans le jeu d'acteur forge une compréhension intime de la direction.",
+    "filmschoolEyebrow": "2007 — Londres",
+    "filmschoolHeading": "London Film\nAcademy",
+    "filmschoolBody1": "Passionné par le cinéma, Tullio rejoint la London Film Academy en 2007 pour perfectionner son art de la mise en scène.",
+    "filmschoolBody2": "Il y rencontre Lincoln Ascott, un professeur qui l'inspire et le convainc de travailler comme acteur et assistant réalisateur sur trois courts métrages.",
+    "kcitizenTitle": "K-CITIZEN",
+    "kcitizenDesc": "Drame | 29 min | 2010\n\nCharles Taylor, âgé de 65 ans, est l'un des hommes les plus riches et les plus puissants du monde aujourd'hui. Il est à la tête d'un empire médiatique, à travers lequel il contrôle et manipule des milliards d'esprits. Une nuit, il rencontre Mindy, âgée de 24 ans, qui bouleverse son monde. Sa relation avec l'homme le plus influent au monde pousse Charles dans le terrier du lapin, dans un voyage cathartique d'introspection profonde avec son moi plus jeune en 1969. Ici, il découvre qu'il est un produit de son environnement, comme tout autre homme : un produit façonné par son père.\n\nSi vous aviez l'opportunité de retourner dans le temps, que vous diriez-vous ?",
+    "kcitizenBlock": "À 25 ans, Tullio produit et réalise son premier moyen métrage, « K-CITIZEN », qui traite des travers et excès de l'American dream. Il enchaîne avec une comédie satirique, « Jesus is Back and He's Not Happy ».",
+    "jesusTitle": "Jesus Is Back",
+    "jesusDesc": "Une comédie satirique sur le retour de Jésus dans le monde moderne.",
+    "featureFilmsOverline": "Scripts",
+    "inDevelopmentOverline": "En développement",
+    "scarfaceTitle": "The Scarface Generation",
+    "scarfaceDesc": "Drame inspiré de faits réels, « Scarface Generation » retrace la vie d'un multimillionnaire afghan vivant à Los Angeles qui dilapide ses 100 millions de dollars en 6 mois.",
+    "jayaTitle": "JAYA",
+    "jayaDesc": "Un film d'action co-écrit avec Jeremy Minuit. Teaser et mood board disponibles.",
+    "crakoTitle": "CRAKO",
+    "crakoDesc": "Un film d'horreur et de parkour avec David Belle, fondateur du parkour. Actuellement en développement.",
+    "otherWorkOverline": "Production & Réalisation",
+    "covidTitle": "HORS-JEU",
+    "covidDesc": "Durant le confinement Covid-19, Tullio écrit « HORS-JEU », une série décalée sur un anti-héros du football moderne.",
+    "commercialTitle": "ABACO Paris",
+    "commercialDesc": "En parallèle de ses travaux d'écriture, Tullio produit et tourne une publicité pour la marque ABACO Paris avec l'acteur et ex-boxeur professionnel Stéphane Ferrara.",
+    "labelShortFilm": "Moyen métrage",
+    "labelScript": "Script",
+    "labelSeries": "Script — Série",
+    "labelInDevelopment": "En développement",
+    "labelCommercial": "Commercial",
+    "cta": "Travaillons ensemble"
+  },
+  "project": {
+    "watchFullFilm": "Voir le film",
+    "workTogether": "Travaillons ensemble",
+    "behindTheScenes": "Dans les coulisses",
+    "gallery": "Galerie"
   }
 }
