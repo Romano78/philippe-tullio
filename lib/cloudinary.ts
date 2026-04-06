@@ -163,10 +163,9 @@ const ABOUT_FOLDERS: Array<[keyof AboutImageAssets, string]> = [
 ];
 
 const EMPTY_ABOUT_ASSETS: AboutAssets = {
-  ...(Object.fromEntries(ABOUT_FOLDERS.map(([key]) => [key, []])) as AboutImageAssets),
-  showreel: null,
-  showreelPoster: null,
-  showreelPreview: null,
+  portrait: [], acting: [], lfaHero: [], lfaLogo: [], kcitizen: [],
+  scarface: [], jaya: [], crako: [], offside: [], abaco: [], jesusIsBack: [],
+  showreel: null, showreelPoster: null, showreelPreview: null,
 };
 
 async function _getAboutAssets(): Promise<AboutAssets> {
@@ -188,17 +187,15 @@ async function _getAboutAssets(): Promise<AboutAssets> {
       search(`asset_folder="about/showreel/previewvid" AND resource_type=video`).catch(() => null),
     ]);
 
-    const imageAssets = Object.fromEntries(
-      ABOUT_FOLDERS.map(([key], i) => {
-        const result = imageResults[i];
-        if (result.status !== 'fulfilled') return [key, []];
-        const resources: CloudinaryResource[] = result.value.resources;
-        return [key, resources
-          .sort((a, b) => a.public_id.localeCompare(b.public_id))
-          .map((r) => cldImage(toPath(r))),
-        ];
-      }),
-    ) as AboutImageAssets;
+    const imageAssets = ABOUT_FOLDERS.reduce<AboutImageAssets>((acc, [key], i) => {
+      const result = imageResults[i];
+      if (result.status !== 'fulfilled') { acc[key] = []; return acc; }
+      const resources: CloudinaryResource[] = result.value.resources;
+      acc[key] = resources
+        .sort((a, b) => a.public_id.localeCompare(b.public_id))
+        .map((r) => cldImage(toPath(r)));
+      return acc;
+    }, { ...EMPTY_ABOUT_ASSETS });
 
     const showreelVideo = showreelVideoResult?.resources?.[0];
     const showreelPoster = showreelPosterResult?.resources?.[0];
