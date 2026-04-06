@@ -14,9 +14,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// ─── In-memory per-slug cache (SAFE FIX) ────────────────────────────────
-const workCache = new Map<string, WorkAssets | null>();
-
 // ─── Types ───────────────────────────────────────────────────────────────
 
 interface CloudinaryResource {
@@ -42,16 +39,23 @@ export interface WorkAssets {
   };
 }
 
+// ─── Helpers ─────────────────────────────────────────────────────────────
+
+const toPath = (r: CloudinaryResource) => `${r.public_id}.${r.format}`;
+
+function search(expression: string, max = 1) {
+  return cloudinary.search.expression(expression).max_results(max).execute();
+}
+
+function getResources(res: PromiseSettledResult<any>): CloudinaryResource[] {
+  return res.status === 'fulfilled' ? res.value.resources : [];
+}
+
 // ─── Work assets ─────────────────────────────────────────────────────────
 
 async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
   if (process.env.NODE_ENV === 'development') return null;
   try {
-    // ✅ PER-SLUG CACHE CHECK
-    if (workCache.has(slug)) {
-      return workCache.get(slug)!;
-    }
-
     const base = `work/${slug}`;
 
     const [
@@ -63,135 +67,59 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
       projectGalleryImgRes,
       projectHeroRes,
     ] = await Promise.allSettled([
-      cloudinary.search
-        .expression(
-          `asset_folder="${base}/featured/thumb" AND resource_type=image`,
-        )
-        .max_results(5)
-        .execute(),
-      cloudinary.search
-        .expression(
-          `asset_folder="${base}/featured/video" AND resource_type=video`,
-        )
-        .max_results(5)
-        .execute(),
-      cloudinary.search
-        .expression(`asset_folder="${base}/work/thumb" AND resource_type=image`)
-        .max_results(5)
-        .execute(),
-      cloudinary.search
-        .expression(
-          `asset_folder="${base}/work/previewvid" AND resource_type=video`,
-        )
-        .max_results(5)
-        .execute(),
-      cloudinary.search
-        .expression(`asset_folder="${base}/work/video" AND resource_type=video`)
-        .max_results(5)
-        .execute(),
-      cloudinary.search
-        .expression(
-          `asset_folder="${base}/work/gallery" AND resource_type=image`,
-        )
-        .max_results(50)
-        .execute(),
-      cloudinary.search
-        .expression(`asset_folder="${base}/work/hero" AND resource_type=image`)
-        .max_results(50)
-        .execute(),
+      search(`asset_folder="${base}/featured/thumb" AND resource_type=image`),
+      search(`asset_folder="${base}/featured/video" AND resource_type=video`),
+      search(`asset_folder="${base}/work/thumb" AND resource_type=image`),
+      search(`asset_folder="${base}/work/previewvid" AND resource_type=video`),
+      search(`asset_folder="${base}/work/video" AND resource_type=video`),
+      search(`asset_folder="${base}/work/gallery" AND resource_type=image`, 50),
+      search(`asset_folder="${base}/work/hero" AND resource_type=image`),
     ]);
 
-    const featuredThumbImage: CloudinaryResource[] =
-      featuredThumbRes.status === 'fulfilled'
-        ? featuredThumbRes.value.resources
-        : [];
-
-    const featuredVideos: CloudinaryResource[] =
-      featuredVideoRes.status === 'fulfilled'
-        ? featuredVideoRes.value.resources
-        : [];
-
-    const projectImages: CloudinaryResource[] =
-      projectThumbRes.status === 'fulfilled'
-        ? projectThumbRes.value.resources
-        : [];
-
-    const projectPreviewVids: CloudinaryResource[] =
-      projectPreviewVidRes.status === 'fulfilled'
-        ? projectPreviewVidRes.value.resources
-        : [];
-
-    const projectVideos: CloudinaryResource[] =
-      projectVideoRes.status === 'fulfilled'
-        ? projectVideoRes.value.resources
-        : [];
-
-    const projectHeroImages: CloudinaryResource[] =
-      projectHeroRes.status === 'fulfilled'
-        ? projectHeroRes.value.resources
-        : [];
-
-    const projectGalleryImages: CloudinaryResource[] =
-      projectGalleryImgRes.status === 'fulfilled'
-        ? projectGalleryImgRes.value.resources
-        : [];
-
-    const featuredThumb = featuredThumbImage[0];
-    const featuredVideo = featuredVideos[0];
-    const projectThumb = projectImages[0];
-    const projectPreviewVid = projectPreviewVids[0];
-    const projectVideo = projectVideos[0];
-
-    const projectGallery = projectGalleryImages.sort((a, b) =>
+    const featuredThumb = getResources(featuredThumbRes)[0];
+    const featuredVideo = getResources(featuredVideoRes)[0];
+    const projectThumb = getResources(projectThumbRes)[0];
+    const projectPreviewVid = getResources(projectPreviewVidRes)[0];
+    const projectVideo = getResources(projectVideoRes)[0];
+    const projectHero = getResources(projectHeroRes)[0];
+    const projectGallery = getResources(projectGalleryImgRes).sort((a, b) =>
       a.public_id.localeCompare(b.public_id),
     );
 
     if (!featuredThumb) return null;
 
-    const finalResult: WorkAssets = {
+    return {
       featured: {
-        thumb: cldImage(`${featuredThumb.public_id}.${featuredThumb.format}`),
+        thumb: cldImage(toPath(featuredThumb)),
         ...(featuredVideo && {
-          video: cldVideo(`${featuredVideo.public_id}.${featuredVideo.format}`),
+          video: cldVideo(toPath(featuredVideo)),
           videoPoster: cldVideoPoster(featuredVideo.public_id),
         }),
       },
       work: {
         thumb: projectThumb
-          ? cldImage(`${projectThumb.public_id}.${projectThumb.format}`)
+          ? cldImage(toPath(projectThumb))
           : cldVideoPoster(featuredThumb.public_id),
         ...(projectPreviewVid && {
-          previewVid: cldVideo(
-            `${projectPreviewVid.public_id}.${projectPreviewVid.format}`,
-          ),
+          previewVid: cldVideo(toPath(projectPreviewVid)),
           previewVidPoster: cldVideoPoster(projectPreviewVid.public_id),
         }),
         ...(projectVideo && {
-          video: cldVideo(`${projectVideo.public_id}.${projectVideo.format}`),
+          video: cldVideo(toPath(projectVideo)),
           videoPoster: cldVideoPoster(projectVideo.public_id),
         }),
-        hero: projectHeroImages[0]
-          ? cldImage(
-              `${projectHeroImages[0].public_id}.${projectHeroImages[0].format}`,
-            )
-          : cldImage(`${featuredThumb.public_id}.${featuredThumb.format}`),
-        gallery: projectGallery.map((img) =>
-          cldImage(`${img.public_id}.${img.format}`),
-        ),
+        hero: projectHero
+          ? cldImage(toPath(projectHero))
+          : cldImage(toPath(featuredThumb)),
+        gallery: projectGallery.map((img) => cldImage(toPath(img))),
       },
     };
-
-    // ✅ STORE IN CACHE
-    workCache.set(slug, finalResult);
-
-    return finalResult;
   } catch (err) {
     console.error(`[cloudinary] getWorkAssets(${slug}) failed:`, err);
     return null;
   }
 }
 
-// Cache per slug — 1 hour revalidation
 export const getWorkAssets = unstable_cache(
   _getWorkAssets,
   ['cloudinary-work-assets'],
@@ -234,71 +162,58 @@ const ABOUT_FOLDERS: Array<[keyof AboutImageAssets, string]> = [
   ['jesusIsBack', 'about/jesus-is-back'],
 ];
 
+const EMPTY_ABOUT_ASSETS: AboutAssets = {
+  ...(Object.fromEntries(ABOUT_FOLDERS.map(([key]) => [key, []])) as AboutImageAssets),
+  showreel: null,
+  showreelPoster: null,
+  showreelPreview: null,
+};
+
 async function _getAboutAssets(): Promise<AboutAssets> {
-  if (process.env.NODE_ENV === 'development') {
-    return { portrait: [], acting: [], lfaHero: [], lfaLogo: [], kcitizen: [], scarface: [], jaya: [], crako: [], offside: [], abaco: [], jesusIsBack: [], showreel: null, showreelPoster: null, showreelPreview: null };
-  }
-  const [imageResults, showreelVideoResult, showreelPosterResult, showreelPreviewResult] = await Promise.all([
-    Promise.allSettled(
-      ABOUT_FOLDERS.map(([, folder]) =>
-        cloudinary.search
-          .expression(`asset_folder="${folder}" AND resource_type=image`)
-          .max_results(20)
-          .execute(),
+  if (process.env.NODE_ENV === 'development') return EMPTY_ABOUT_ASSETS;
+  try {
+    const [
+      imageResults,
+      showreelVideoResult,
+      showreelPosterResult,
+      showreelPreviewResult,
+    ] = await Promise.all([
+      Promise.allSettled(
+        ABOUT_FOLDERS.map(([, folder]) =>
+          search(`asset_folder="${folder}" AND resource_type=image`, 20),
+        ),
       ),
-    ),
-    cloudinary.search
-      .expression(`asset_folder="about/showreel/video" AND resource_type=video`)
-      .max_results(1)
-      .execute()
-      .catch(() => null),
-    cloudinary.search
-      .expression(`asset_folder="about/showreel/thumb" AND resource_type=image`)
-      .max_results(1)
-      .execute()
-      .catch(() => null),
-    cloudinary.search
-      .expression(`asset_folder="about/showreel/previewvid" AND resource_type=video`)
-      .max_results(1)
-      .execute()
-      .catch(() => null),
-  ]);
+      search(`asset_folder="about/showreel/video" AND resource_type=video`).catch(() => null),
+      search(`asset_folder="about/showreel/thumb" AND resource_type=image`).catch(() => null),
+      search(`asset_folder="about/showreel/previewvid" AND resource_type=video`).catch(() => null),
+    ]);
 
-  const assets = {} as AboutAssets;
+    const imageAssets = Object.fromEntries(
+      ABOUT_FOLDERS.map(([key], i) => {
+        const result = imageResults[i];
+        if (result.status !== 'fulfilled') return [key, []];
+        const resources: CloudinaryResource[] = result.value.resources;
+        return [key, resources
+          .sort((a, b) => a.public_id.localeCompare(b.public_id))
+          .map((r) => cldImage(toPath(r))),
+        ];
+      }),
+    ) as AboutImageAssets;
 
-  ABOUT_FOLDERS.forEach(([key], i) => {
-    const result = imageResults[i];
-    if (result.status !== 'fulfilled') {
-      assets[key] = [];
-      return;
-    }
+    const showreelVideo = showreelVideoResult?.resources?.[0];
+    const showreelPoster = showreelPosterResult?.resources?.[0];
+    const showreelPreview = showreelPreviewResult?.resources?.[0];
 
-    const resources: CloudinaryResource[] = result.value.resources;
-
-    resources.sort(
-      (a: any, b: any) =>
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
-    );
-
-    resources.sort((a: any, b: any) => a.public_id.localeCompare(b.public_id));
-
-    assets[key] = resources.map((r) => cldImage(`${r.public_id}.${r.format}`));
-  });
-
-  const showreelVideo = showreelVideoResult?.resources?.[0];
-  const showreelPoster = showreelPosterResult?.resources?.[0];
-  const showreelPreview = showreelPreviewResult?.resources?.[0];
-  assets.showreel = showreelVideo
-    ? cldVideo(`${showreelVideo.public_id}.${showreelVideo.format}`)
-    : null;
-  assets.showreelPoster = showreelPoster
-    ? cldImage(`${showreelPoster.public_id}.${showreelPoster.format}`)
-    : null;
-  assets.showreelPreview = showreelPreview
-    ? cldVideo(`${showreelPreview.public_id}.${showreelPreview.format}`)
-    : null;
-
-  return assets;
+    return {
+      ...imageAssets,
+      showreel: showreelVideo ? cldVideo(toPath(showreelVideo)) : null,
+      showreelPoster: showreelPoster ? cldImage(toPath(showreelPoster)) : null,
+      showreelPreview: showreelPreview ? cldVideo(toPath(showreelPreview)) : null,
+    };
+  } catch (err) {
+    console.error('[cloudinary] getAboutAssets failed:', err);
+    return EMPTY_ABOUT_ASSETS;
+  }
 }
 
 export const getAboutAssets = unstable_cache(
@@ -312,14 +227,9 @@ export const getAboutAssets = unstable_cache(
 async function _getAllGalleryImages(): Promise<string[]> {
   if (process.env.NODE_ENV === 'development') return [];
   try {
-    const result = await cloudinary.search
-      .expression(`asset_folder="gallery" AND resource_type=image`)
-      .max_results(100)
-      .execute();
-
+    const result = await search(`asset_folder="gallery" AND resource_type=image`, 100);
     const resources: CloudinaryResource[] = result.resources;
-
-    return resources.map((r) => cldImage(`${r.public_id}.${r.format}`));
+    return resources.map((r) => cldImage(toPath(r)));
   } catch (err) {
     console.error('[cloudinary] getAllGalleryImages failed:', err);
     return [];

@@ -32,8 +32,6 @@ export default function HomeSwiper({ projects }) {
 
     const onWheel = () => {
       clearTimeout(wheelTimeout);
-      const lenis = lenisRef?.current;
-      if (!lenis || isSnapping.current) return;
       wheelTimeout = setTimeout(() => {
         const lenis = lenisRef?.current;
         if (!lenis || isSnapping.current) return;

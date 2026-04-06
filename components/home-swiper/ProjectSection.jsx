@@ -100,7 +100,7 @@ export default function ProjectSection({
           '-=0.3',
         );
     },
-    { scope: sectionRef, dependencies: [index] },
+    { scope: sectionRef, dependencies: [] },
   );
 
   return (

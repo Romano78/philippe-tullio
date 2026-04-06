@@ -36,9 +36,11 @@ export default function ProjectInfo({ project, onWatch }) {
             <p className='font-meta text-xs tracking-widest uppercase text-white/30 mb-10'>{brand}</p>
 
             {description && (
-              <p className='font-sans text-base md:text-lg text-white/70 leading-relaxed max-w-2xl mb-12'>
-                {description[locale] ?? description.fr}
-              </p>
+              <div className='font-sans text-base md:text-lg text-white/70 leading-relaxed max-w-2xl mb-12 space-y-4'>
+                {(description[locale] ?? description.fr).split('\n\n').map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))}
+              </div>
             )}
 
             {credits && credits.length > 0 && (
@@ -55,7 +57,7 @@ export default function ProjectInfo({ project, onWatch }) {
             )}
           </div>
 
-          {/* Right — preview */}
+          {/* Right — preview + festivals */}
           <div className='w-full md:w-[42%] shrink-0 mt-12 md:mt-0'>
             <ProjectPreview
               video={project.video}
@@ -63,6 +65,19 @@ export default function ProjectInfo({ project, onWatch }) {
               onWatch={project.workVideo || project.videoUrl ? onWatch : null}
               title={title}
             />
+
+            {project.festivals?.length > 0 && (
+              <div className='grid grid-cols-3 gap-3 mt-4'>
+                {project.festivals.map((f) => (
+                  <div key={f.name} className='overflow-hidden rounded-sm' style={{ aspectRatio: '2 / 1' }}>
+                    {f.src
+                      ? <img src={f.src} alt={`${f.name} ${f.year}`} className='w-full h-full object-contain' />
+                      : <div className='w-full h-full bg-white/[0.04]' />
+                    }
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
         </div>
