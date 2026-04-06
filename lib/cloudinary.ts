@@ -39,6 +39,7 @@ export interface WorkAssets {
     video?: string; // full film — lightbox player
     videoPoster?: string;
     gallery: string[]; // stills — named 01_*, 02_*, 03_*
+    hero: string; // hero image for project page (same as featured thumb or first gallery image)
   };
 }
 
@@ -55,6 +56,7 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
       projectPreviewVidRes,
       projectVideoRes,
       projectGalleryImgRes,
+      projectHeroRes,
     ] = await Promise.allSettled([
       cloudinary.search
         .expression(
@@ -73,7 +75,9 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
         .max_results(5)
         .execute(),
       cloudinary.search
-        .expression(`asset_folder="${base}/work/previewvid" AND resource_type=video`)
+        .expression(
+          `asset_folder="${base}/work/previewvid" AND resource_type=video`,
+        )
         .max_results(5)
         .execute(),
       cloudinary.search
@@ -84,6 +88,10 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
         .expression(
           `asset_folder="${base}/work/gallery" AND resource_type=image`,
         )
+        .max_results(50)
+        .execute(),
+      cloudinary.search
+        .expression(`asset_folder="${base}/work/hero" AND resource_type=image`)
         .max_results(50)
         .execute(),
     ]);
@@ -113,6 +121,11 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
         ? projectVideoRes.value.resources
         : [];
 
+    const projectHeroImages: CloudinaryResource[] =
+      projectHeroRes.status === 'fulfilled'
+        ? projectHeroRes.value.resources
+        : [];
+
     const projectGalleryImages: CloudinaryResource[] =
       projectGalleryImgRes.status === 'fulfilled'
         ? projectGalleryImgRes.value.resources
@@ -124,8 +137,9 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
     const projectPreviewVid = projectPreviewVids[0];
     const projectVideo = projectVideos[0];
 
-    const projectGallery = projectGalleryImages
-      .sort((a, b) => a.public_id.localeCompare(b.public_id));
+    const projectGallery = projectGalleryImages.sort((a, b) =>
+      a.public_id.localeCompare(b.public_id),
+    );
 
     if (!featuredThumb) return null;
 
@@ -142,12 +156,19 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
           ? cldImage(`${projectThumb.public_id}.${projectThumb.format}`)
           : cldVideoPoster(featuredThumb.public_id),
         ...(projectPreviewVid && {
-          previewVid: cldVideo(`${projectPreviewVid.public_id}.${projectPreviewVid.format}`),
+          previewVid: cldVideo(
+            `${projectPreviewVid.public_id}.${projectPreviewVid.format}`,
+          ),
           previewVidPoster: cldVideoPoster(projectPreviewVid.public_id),
         }),
         ...(projectVideo && {
           video: cldVideo(`${projectVideo.public_id}.${projectVideo.format}`),
           videoPoster: cldVideoPoster(projectVideo.public_id),
+        }),
+        ...(projectHeroImages[0] && {
+          hero: cldImage(
+            `${projectHeroImages[0].public_id}.${projectHeroImages[0].format}`,
+          ),
         }),
         gallery: projectGallery.map((img) =>
           cldImage(`${img.public_id}.${img.format}`),
@@ -170,31 +191,31 @@ export const getWorkAssets = unstable_cache(
 // ─── About page assets ───────────────────────────────────────────────────────
 
 export interface AboutAssets {
-  portrait:     string[];   // about/portrait/      — single hero portrait
-  acting:       string[];   // about/acting/        — upload order = display order
-  lfaHero:      string[];   // about/lfa/hero/      — single image
-  lfaLogo:      string[];   // about/lfa/logo/      — single image
-  kcitizen:     string[];   // about/kcitizen/      — gallery (4)
-  scarface:     string[];   // about/scarface/      — single poster
-  jaya:         string[];   // about/jaya/          — gallery (4)
-  crako:        string[];   // about/crako/         — gallery (4)
-  offside:      string[];   // about/offside/       — single image
-  abaco:        string[];   // about/abaco/         — gallery (4)
-  jesusIsBack:  string[];   // about/jesus-is-back/ — gallery
+  portrait: string[]; // about/portrait/      — single hero portrait
+  acting: string[]; // about/acting/        — upload order = display order
+  lfaHero: string[]; // about/lfa/hero/      — single image
+  lfaLogo: string[]; // about/lfa/logo/      — single image
+  kcitizen: string[]; // about/kcitizen/      — gallery (4)
+  scarface: string[]; // about/scarface/      — single poster
+  jaya: string[]; // about/jaya/          — gallery (4)
+  crako: string[]; // about/crako/         — gallery (4)
+  offside: string[]; // about/offside/       — single image
+  abaco: string[]; // about/abaco/         — gallery (4)
+  jesusIsBack: string[]; // about/jesus-is-back/ — gallery
 }
 
 const ABOUT_FOLDERS: Array<[keyof AboutAssets, string]> = [
   ['portrait', 'about/portrait'],
-  ['acting',   'about/acting'],
-  ['lfaHero',  'about/lfa/hero'],
-  ['lfaLogo',  'about/lfa/logo'],
+  ['acting', 'about/acting'],
+  ['lfaHero', 'about/lfa/hero'],
+  ['lfaLogo', 'about/lfa/logo'],
   ['kcitizen', 'about/kcitizen'],
   ['scarface', 'about/scarface'],
-  ['jaya',     'about/jaya'],
-  ['crako',    'about/crako'],
-  ['offside',      'about/offside'],
-  ['abaco',        'about/abaco'],
-  ['jesusIsBack',  'about/jesus-is-back'],
+  ['jaya', 'about/jaya'],
+  ['crako', 'about/crako'],
+  ['offside', 'about/offside'],
+  ['abaco', 'about/abaco'],
+  ['jesusIsBack', 'about/jesus-is-back'],
 ];
 
 async function _getAboutAssets(): Promise<AboutAssets> {
@@ -203,19 +224,22 @@ async function _getAboutAssets(): Promise<AboutAssets> {
       cloudinary.search
         .expression(`asset_folder="${folder}" AND resource_type=image`)
         .max_results(20)
-        .execute()
-    )
+        .execute(),
+    ),
   );
 
   const assets = {} as AboutAssets;
   ABOUT_FOLDERS.forEach(([key], i) => {
     const result = results[i];
-    if (result.status !== 'fulfilled') { assets[key] = []; return; }
+    if (result.status !== 'fulfilled') {
+      assets[key] = [];
+      return;
+    }
     const resources: CloudinaryResource[] = result.value.resources;
     // Sort by created_at ascending so upload order = display order
     resources.sort(
       (a: any, b: any) =>
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
     );
     // Sort alphabetically by public_id so 01_, 02_, 03_ prefixes control order
     resources.sort((a: any, b: any) => a.public_id.localeCompare(b.public_id));
@@ -228,7 +252,7 @@ async function _getAboutAssets(): Promise<AboutAssets> {
 export const getAboutAssets = unstable_cache(
   _getAboutAssets,
   ['about-assets'],
-  { revalidate: 3600 }
+  { revalidate: 3600 },
 );
 
 // ─── All gallery images ───────────────────────────────────────────────────────

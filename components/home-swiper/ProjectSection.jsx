@@ -142,7 +142,7 @@ export default function ProjectSection({
       </div>
 
       {/* Content — bound to this section */}
-      <div className='absolute bottom-16 left-8 md:left-32 z-10 max-w-[64rem]'>
+      <div className='absolute bottom-16 left-8 md:left-32 lg:left-48 z-10 max-w-5xl'>
         {/* Director */}
         <p
           ref={directorRef}
