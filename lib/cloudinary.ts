@@ -3,8 +3,6 @@ import { v2 as cloudinary } from 'cloudinary';
 import { unstable_cache } from 'next/cache';
 import { cldImage, cldVideo, cldVideoPoster } from './cloudinary-url';
 
-// URL builders are in ./cloudinary-url — import from there in client components
-
 const CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
 if (!CLOUD)
@@ -16,7 +14,10 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// ─── In-memory per-slug cache (SAFE FIX) ────────────────────────────────
+const workCache = new Map<string, WorkAssets | null>();
+
+// ─── Types ───────────────────────────────────────────────────────────────
 
 interface CloudinaryResource {
   public_id: string;
@@ -25,28 +26,31 @@ interface CloudinaryResource {
 }
 
 export interface WorkAssets {
-  // featured/ — homepage section
   featured: {
-    thumb: string; // video poster / placeholder image
-    video?: string; // autoplay muted background video
-    videoPoster?: string; // fallback for unsupported browsers
-  };
-  // project/ — /work/[slug] detail page
-  work: {
-    thumb: string; // video poster / placeholder image
-    previewVid?: string; // autoplay muted preview on project page
-    previewVidPoster?: string;
-    video?: string; // full film — lightbox player
+    thumb: string;
+    video?: string;
     videoPoster?: string;
-    gallery: string[]; // stills — named 01_*, 02_*, 03_*
-    hero: string; // hero image for project page (same as featured thumb or first gallery image)
+  };
+  work: {
+    thumb: string;
+    previewVid?: string;
+    previewVidPoster?: string;
+    video?: string;
+    videoPoster?: string;
+    gallery: string[];
+    hero: string;
   };
 }
 
-// ─── Work assets ──────────────────────────────────────────────────────────────
+// ─── Work assets ─────────────────────────────────────────────────────────
 
 async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
   try {
+    // ✅ PER-SLUG CACHE CHECK
+    if (workCache.has(slug)) {
+      return workCache.get(slug)!;
+    }
+
     const base = `work/${slug}`;
 
     const [
@@ -143,7 +147,7 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
 
     if (!featuredThumb) return null;
 
-    return {
+    const finalResult: WorkAssets = {
       featured: {
         thumb: cldImage(`${featuredThumb.public_id}.${featuredThumb.format}`),
         ...(featuredVideo && {
@@ -165,43 +169,48 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
           video: cldVideo(`${projectVideo.public_id}.${projectVideo.format}`),
           videoPoster: cldVideoPoster(projectVideo.public_id),
         }),
-        ...(projectHeroImages[0] && {
-          hero: cldImage(
-            `${projectHeroImages[0].public_id}.${projectHeroImages[0].format}`,
-          ),
-        }),
+        hero: projectHeroImages[0]
+          ? cldImage(
+              `${projectHeroImages[0].public_id}.${projectHeroImages[0].format}`,
+            )
+          : cldImage(`${featuredThumb.public_id}.${featuredThumb.format}`),
         gallery: projectGallery.map((img) =>
           cldImage(`${img.public_id}.${img.format}`),
         ),
       },
     };
+
+    // ✅ STORE IN CACHE
+    workCache.set(slug, finalResult);
+
+    return finalResult;
   } catch (err) {
     console.error(`[cloudinary] getWorkAssets(${slug}) failed:`, err);
     return null;
   }
 }
 
-// Cache per slug — 1 hour revalidation, avoids hammering the Search API
+// Cache per slug — 1 hour revalidation
 export const getWorkAssets = unstable_cache(
   _getWorkAssets,
   ['cloudinary-work-assets'],
   { revalidate: 3600 },
 );
 
-// ─── About page assets ───────────────────────────────────────────────────────
+// ─── About page assets ───────────────────────────────────────────────────
 
 export interface AboutAssets {
-  portrait: string[]; // about/portrait/      — single hero portrait
-  acting: string[]; // about/acting/        — upload order = display order
-  lfaHero: string[]; // about/lfa/hero/      — single image
-  lfaLogo: string[]; // about/lfa/logo/      — single image
-  kcitizen: string[]; // about/kcitizen/      — gallery (4)
-  scarface: string[]; // about/scarface/      — single poster
-  jaya: string[]; // about/jaya/          — gallery (4)
-  crako: string[]; // about/crako/         — gallery (4)
-  offside: string[]; // about/offside/       — single image
-  abaco: string[]; // about/abaco/         — gallery (4)
-  jesusIsBack: string[]; // about/jesus-is-back/ — gallery
+  portrait: string[];
+  acting: string[];
+  lfaHero: string[];
+  lfaLogo: string[];
+  kcitizen: string[];
+  scarface: string[];
+  jaya: string[];
+  crako: string[];
+  offside: string[];
+  abaco: string[];
+  jesusIsBack: string[];
 }
 
 const ABOUT_FOLDERS: Array<[keyof AboutAssets, string]> = [
@@ -229,20 +238,23 @@ async function _getAboutAssets(): Promise<AboutAssets> {
   );
 
   const assets = {} as AboutAssets;
+
   ABOUT_FOLDERS.forEach(([key], i) => {
     const result = results[i];
     if (result.status !== 'fulfilled') {
       assets[key] = [];
       return;
     }
+
     const resources: CloudinaryResource[] = result.value.resources;
-    // Sort by created_at ascending so upload order = display order
+
     resources.sort(
       (a: any, b: any) =>
         new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
     );
-    // Sort alphabetically by public_id so 01_, 02_, 03_ prefixes control order
+
     resources.sort((a: any, b: any) => a.public_id.localeCompare(b.public_id));
+
     assets[key] = resources.map((r) => cldImage(`${r.public_id}.${r.format}`));
   });
 
@@ -255,7 +267,7 @@ export const getAboutAssets = unstable_cache(
   { revalidate: 3600 },
 );
 
-// ─── All gallery images ───────────────────────────────────────────────────────
+// ─── All gallery images ────────────────────────────────────────────────
 
 async function _getAllGalleryImages(): Promise<string[]> {
   try {
@@ -263,8 +275,9 @@ async function _getAllGalleryImages(): Promise<string[]> {
       .expression(`asset_folder="gallery" AND resource_type=image`)
       .max_results(100)
       .execute();
+
     const resources: CloudinaryResource[] = result.resources;
-    resources.sort((a, b) => a.public_id.localeCompare(b.public_id));
+
     return resources.map((r) => cldImage(`${r.public_id}.${r.format}`));
   } catch (err) {
     console.error('[cloudinary] getAllGalleryImages failed:', err);
