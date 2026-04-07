@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { routes } from "@/config/routes";
+import { ease } from "@/config/cubic-beziers";
 import LangToggle from "./LangToggle";
 import NavLink from "./NavLink";
 
@@ -35,7 +36,7 @@ export default function MobileMenu({ isOpen, onClose }) {
           initial={{ x: "100%" }}
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
-          transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
+          transition={{ duration: 0.5, ease: ease.cinematic }}
         >
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4">
@@ -62,7 +63,7 @@ export default function MobileMenu({ isOpen, onClose }) {
                 key={link.label}
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.4, delay: 0.2 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.4, delay: 0.2 + i * 0.07, ease: ease.out }}
               >
                 <NavLink
                   href={link.href}

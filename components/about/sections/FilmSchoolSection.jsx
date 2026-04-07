@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { AnimateIn, AnimateHeading } from '../AnimateIn';
 import { DARK_BG } from '../primitives';
 
@@ -8,7 +9,9 @@ export default function FilmSchoolSection({ lfaHero, lfaLogo, t, noPb }) {
       {lfaHero[0] && (
         <section className="site-px pt-4 pb-10 md:pb-12 relative z-10">
           <div className="site-max overflow-hidden">
-            <img src={lfaHero[0]} alt="London Film Academy — on set" className="w-full object-cover object-top" style={{ aspectRatio: '21 / 9' }} loading="lazy" />
+            <div className="relative w-full" style={{ aspectRatio: '21 / 9' }}>
+              <Image src={lfaHero[0]} alt="London Film Academy — on set" fill className="object-cover object-top" />
+            </div>
           </div>
         </section>
       )}
@@ -24,10 +27,10 @@ export default function FilmSchoolSection({ lfaHero, lfaLogo, t, noPb }) {
             </AnimateHeading>
             <AnimateIn delay={0.1}><p className="font-sans text-base text-white/60 leading-relaxed mb-3">{t('filmschoolBody1')}</p></AnimateIn>
             <AnimateIn delay={0.15}><p className="font-sans text-base text-white/60 leading-relaxed mb-8">{t('filmschoolBody2')}</p></AnimateIn>
-            <div className="overflow-hidden mb-8">
+            <div className="relative overflow-hidden mb-8" style={{ aspectRatio: '1200 / 799' }}>
               {lfaLogo[0]
-                ? <img src={lfaLogo[0]} alt="London Film Academy" className="w-full object-contain" style={{ aspectRatio: '1200 / 799' }} loading="lazy" />
-                : <div style={{ ...DARK_BG, aspectRatio: '1200 / 799' }} className="w-full" />
+                ? <Image src={lfaLogo[0]} alt="London Film Academy" fill className="object-contain" />
+                : <div style={{ ...DARK_BG }} className="w-full h-full" />
               }
             </div>
             <AnimateIn delay={0.2}><p className="font-sans text-base text-white/70 leading-relaxed">{t('kcitizenBlock')}</p></AnimateIn>
@@ -45,10 +48,10 @@ export default function FilmSchoolSection({ lfaHero, lfaLogo, t, noPb }) {
               <AnimateIn delay={0.15}><p className="font-sans text-lg text-white/60 leading-relaxed mb-4">{t('filmschoolBody2')}</p></AnimateIn>
               <AnimateIn delay={0.2}><p className="font-sans text-lg text-white/60 leading-relaxed">{t('kcitizenBlock')}</p></AnimateIn>
             </div>
-            <div className="overflow-hidden">
+            <div className="relative overflow-hidden" style={{ aspectRatio: '1200 / 799' }}>
               {lfaLogo[0]
-                ? <img src={lfaLogo[0]} alt="London Film Academy" className="w-full object-contain" style={{ aspectRatio: '1200 / 799' }} loading="lazy" />
-                : <div style={{ ...DARK_BG, aspectRatio: '1200 / 799' }} className="w-full" />
+                ? <Image src={lfaLogo[0]} alt="London Film Academy" fill className="object-contain" />
+                : <div style={{ ...DARK_BG }} className="w-full h-full" />
               }
             </div>
           </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { ArrowUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLenis } from '@/components/lenis-context';
 
 interface ScrollProgressButtonProps {
   className?: string;
@@ -21,23 +22,33 @@ export function ScrollProgressButton({
   const displayedRef = useRef(0);
   const targetRef    = useRef(0);
   const rafRef       = useRef<number | null>(null);
+  const lenisRef     = useLenis();
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsMounted(true), 100);
+    const timer = setTimeout(() => setIsMounted(true), 3000);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop    = window.scrollY;
+    const handleScroll = (scrollTop: number) => {
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
       setScrollProgress(scrollHeight > 0 ? scrollTop / scrollHeight : 0);
       setIsScrolledPast300(scrollTop > 300);
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+
+    const lenis = lenisRef?.current;
+    if (lenis) {
+      const onLenisScroll = ({ scroll }: { scroll: number }) => handleScroll(scroll);
+      lenis.on('scroll', onLenisScroll);
+      handleScroll(lenis.scroll ?? 0);
+      return () => lenis.off('scroll', onLenisScroll);
+    }
+
+    const onWindowScroll = () => handleScroll(window.scrollY);
+    window.addEventListener('scroll', onWindowScroll, { passive: true });
+    onWindowScroll();
+    return () => window.removeEventListener('scroll', onWindowScroll);
+  }, [lenisRef]);
 
   useEffect(() => {
     targetRef.current = Math.round(scrollProgress * 100);

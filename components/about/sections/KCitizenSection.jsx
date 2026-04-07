@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import PillCta from '@/components/PillCta';
 import { AnimateIn, AnimateHeading } from '../AnimateIn';
 import { DARK_BG } from '../primitives';
@@ -18,18 +19,18 @@ export default function KCitizenSection({ kcitizen, locale, t, tProject, noPb })
         <AnimateIn delay={0.2}><PillCta href={`/${locale}/work/k-citizen`} icon="→" className="mb-10 md:mb-12">{tProject('watchFullFilm')}</PillCta></AnimateIn>
         {/* Mobile */}
         <div className="flex flex-col gap-2 md:hidden">
-          <div className="overflow-hidden">
+          <div className="relative overflow-hidden" style={{ aspectRatio: '3 / 4' }}>
             {kcitizen[0]
-              ? <img src={kcitizen[0]} alt="K-CITIZEN" className="w-full object-cover" style={{ aspectRatio: '3 / 4' }} loading="lazy" />
-              : <div style={{ ...DARK_BG, aspectRatio: '3 / 4' }} className="w-full" />
+              ? <Image src={kcitizen[0]} alt="K-CITIZEN" fill className="object-cover" />
+              : <div style={{ ...DARK_BG }} className="w-full h-full" />
             }
           </div>
           <div className="grid grid-cols-2 gap-2">
             {[kcitizen[1], kcitizen[2]].map((src, i) => (
-              <div key={i} className="overflow-hidden">
+              <div key={i} className="relative overflow-hidden" style={{ aspectRatio: '16 / 9' }}>
                 {src
-                  ? <img src={src} alt="" className="w-full object-cover" style={{ aspectRatio: '16 / 9' }} loading="lazy" />
-                  : <div style={{ ...DARK_BG, aspectRatio: '16 / 9' }} className="w-full" />
+                  ? <Image src={src} alt="" fill className="object-cover" />
+                  : <div style={{ ...DARK_BG }} className="w-full h-full" />
                 }
               </div>
             ))}
@@ -37,18 +38,18 @@ export default function KCitizenSection({ kcitizen, locale, t, tProject, noPb })
         </div>
         {/* Desktop */}
         <div className="hidden md:grid grid-cols-[2fr_3fr] gap-3">
-          <div className="overflow-hidden">
+          <div className="relative overflow-hidden" style={{ aspectRatio: '3 / 4' }}>
             {kcitizen[0]
-              ? <img src={kcitizen[0]} alt="K-CITIZEN" className="w-full h-full object-cover" loading="lazy" />
-              : <div className="w-full h-full" style={{ ...DARK_BG, aspectRatio: '3 / 4' }} />
+              ? <Image src={kcitizen[0]} alt="K-CITIZEN" fill className="object-cover" />
+              : <div className="w-full h-full" style={{ ...DARK_BG }} />
             }
           </div>
           <div className="flex flex-col gap-3">
             {[kcitizen[1], kcitizen[2]].map((src, i) => (
-              <div key={i} className="overflow-hidden">
+              <div key={i} className="relative overflow-hidden" style={{ aspectRatio: '16 / 9' }}>
                 {src
-                  ? <img src={src} alt="" className="w-full object-cover" style={{ aspectRatio: '16 / 9' }} loading="lazy" />
-                  : <div style={{ ...DARK_BG, aspectRatio: '16 / 9' }} className="w-full" />
+                  ? <Image src={src} alt="" fill className="object-cover" />
+                  : <div style={{ ...DARK_BG }} className="w-full h-full" />
                 }
               </div>
             ))}
