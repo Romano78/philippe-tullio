@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { useTranslations } from 'next-intl';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,6 +20,7 @@ export default function ProjectSection({
   sectionRef: externalRef,
 }) {
   const isMobile = useIsMobile();
+  const t = useTranslations('project');
 
   const sectionRef = useRef(null);
   const innerRef = useRef(null);
@@ -103,6 +105,10 @@ export default function ProjectSection({
     { scope: sectionRef, dependencies: [] },
   );
 
+  const projectDuration = project.duration ? `${project.duration}` : '';
+  const projectCategory = project.category ? `${project.category} — ` : '';
+  const projectYear = project.year ? `${project.year} — ` : '';
+
   return (
     <section
       ref={setRef}
@@ -112,9 +118,13 @@ export default function ProjectSection({
     >
       {/* Image/Video — receives parallax */}
       <div ref={innerRef} className='absolute inset-0'>
-        {(project.video || project.videoMobile) ? (
+        {project.video || project.videoMobile ? (
           <video
-            src={isMobile && project.videoMobile ? project.videoMobile : project.video}
+            src={
+              isMobile && project.videoMobile
+                ? project.videoMobile
+                : project.video
+            }
             poster={project.videoPoster ?? project.image}
             autoPlay
             muted
@@ -134,7 +144,6 @@ export default function ProjectSection({
           <div className='absolute inset-0 bg-surface-lowest' />
         )}
 
-        {/* Cinematic gradient */}
         <div
           className='absolute inset-0'
           style={{
@@ -149,9 +158,9 @@ export default function ProjectSection({
         {/* Director */}
         <p
           ref={directorRef}
-          className='font-meta text-sm tracking-widest uppercase text-white/60 mb-3'
+          className='font-meta text-sm tracking-widest uppercase text-accent mb-3'
         >
-          Un film de Tullio Philippe
+          {project.credits?.find((c) => c.role === 'direction')?.name}
         </p>
 
         {/* Title slide container */}
@@ -160,18 +169,18 @@ export default function ProjectSection({
             ref={titleRef}
             className='font-display text-6xl md:text-8xl uppercase text-white leading-none'
           >
-            {project.title.split('\n').map((line, i) => (
-              <span key={i} className="block">{line}</span>
-            ))}
+            {project.title}
           </h1>
         </div>
 
         {/* Brand — category — year */}
         <p
           ref={metaRef}
-          className='font-meta text-xs tracking-widest uppercase text-white/40 mb-8'
+          className='font-meta text-xs tracking-widest uppercase text-accent mb-8'
         >
-          {project.brand} — {project.category} — {project.year}
+          {projectCategory}
+          {projectYear}
+          {projectDuration}
         </p>
 
         {/* CTA */}
@@ -180,7 +189,7 @@ export default function ProjectSection({
             href={`/work/${project.slug}`}
             className='inline-flex items-center gap-3 px-6 py-3 rounded-full font-meta text-xs tracking-widest uppercase text-white/80 border border-border transition-colors hover:bg-white/10 hover:text-white'
           >
-            Watch Project
+            {t('seeProject')}
             <span className='text-accent'>→</span>
           </Link>
         </div>
