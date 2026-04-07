@@ -22,7 +22,7 @@ export function ScrollProgressButton({
   const displayedRef = useRef(0);
   const targetRef    = useRef(0);
   const rafRef       = useRef<number | null>(null);
-  const lenisRef     = useLenis();
+  const lenisRef     = useLenis() as React.MutableRefObject<any> | null;
 
   useEffect(() => {
     const timer = setTimeout(() => setIsMounted(true), 3000);
