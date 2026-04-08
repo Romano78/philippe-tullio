@@ -37,7 +37,7 @@ export default function Contact() {
         </p>
 
         {/* Heading */}
-        <h2 className="font-display text-6xl md:text-8xl lg:text-[10rem] uppercase text-white leading-none mb-16 md:mb-24">
+        <h2 className="font-display text-6xl md:text-8xl xl:text-[10rem] uppercase text-white leading-none mb-16 md:mb-24">
           {heading.map((line, i) => (
             <span key={i} className="block">{line}</span>
           ))}

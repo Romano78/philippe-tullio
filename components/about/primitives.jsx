@@ -1,10 +1,13 @@
+import Image from 'next/image';
+
 export const DARK_BG = { background: 'rgba(255,255,255,0.04)' };
 
 export function Img({ src, alt, ratio = '4 / 3', eager = false, className = '' }) {
   if (!src) return <div style={{ ...DARK_BG, aspectRatio: ratio }} className={`w-full ${className}`} />;
   return (
-    <img src={src} alt={alt} className={`w-full object-cover ${className}`}
-      style={{ aspectRatio: ratio }} loading={eager ? 'eager' : 'lazy'} />
+    <div className={`relative w-full overflow-hidden ${className}`} style={{ aspectRatio: ratio }}>
+      <Image src={src} alt={alt} fill className="object-cover" priority={eager} />
+    </div>
   );
 }
 
@@ -14,19 +17,19 @@ export function Gallery({ images = [], count = 4, aspect = '16 / 9', rowAspect =
   const restSlots = rest.length ? rest : Array(Math.max(count - 1, 2)).fill(null);
   return (
     <div className="flex flex-col gap-2 md:gap-3">
-      <div className="overflow-hidden">
+      <div className="relative overflow-hidden" style={{ aspectRatio: aspect }}>
         {first
-          ? <img src={first} alt="" className="w-full object-cover" style={{ aspectRatio: aspect }} loading="lazy" />
-          : <div style={{ ...DARK_BG, aspectRatio: aspect }} className="w-full" />
+          ? <Image src={first} alt="" fill className="object-cover" />
+          : <div style={{ ...DARK_BG }} className="w-full h-full" />
         }
       </div>
       {restSlots.length > 0 && (
         <div className="grid gap-2 md:gap-3" style={{ gridTemplateColumns: `repeat(${restSlots.length}, 1fr)` }}>
           {restSlots.map((src, i) => (
-            <div key={i} className="overflow-hidden">
+            <div key={i} className="relative overflow-hidden" style={{ aspectRatio: rowAspect }}>
               {src
-                ? <img src={src} alt="" className="w-full object-cover" style={{ aspectRatio: rowAspect }} loading="lazy" />
-                : <div style={{ ...DARK_BG, aspectRatio: rowAspect }} className="w-full" />
+                ? <Image src={src} alt="" fill className="object-cover" />
+                : <div style={{ ...DARK_BG }} className="w-full h-full" />
               }
             </div>
           ))}

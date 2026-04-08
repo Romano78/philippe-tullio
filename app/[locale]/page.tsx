@@ -1,6 +1,7 @@
 import HomeSwiper from "@/components/home-swiper";
 import { getWorkAssets } from "@/lib/cloudinary";
 import { projects as projectsMeta } from "@/components/home-swiper/data";
+import { ScrollProgressButton } from "@/components/scroll-progress-button";
 
 export default async function Home() {
   const assetsMap: Record<string, Awaited<ReturnType<typeof getWorkAssets>>> = {};
@@ -27,6 +28,7 @@ export default async function Home() {
   return (
     <main>
       <HomeSwiper projects={projects} />
+      <ScrollProgressButton position='center' />
     </main>
   );
 }

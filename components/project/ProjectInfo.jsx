@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
 import ProjectPreview from './ProjectPreview';
 import LinkCta from '@/components/LinkCta';
@@ -69,9 +70,9 @@ export default function ProjectInfo({ project, onWatch }) {
             {project.festivals?.length > 0 && (
               <div className='grid grid-cols-3 gap-3 mt-4'>
                 {project.festivals.map((f) => (
-                  <div key={f.name} className='overflow-hidden rounded-sm' style={{ aspectRatio: '2 / 1' }}>
+                  <div key={f.name} className='relative overflow-hidden rounded-sm' style={{ aspectRatio: '2 / 1' }}>
                     {f.src
-                      ? <img src={f.src} alt={`${f.name} ${f.year}`} className='w-full h-full object-contain' />
+                      ? <Image src={f.src} alt={`${f.name} ${f.year}`} fill className='object-contain' />
                       : <div className='w-full h-full bg-white/[0.04]' />
                     }
                   </div>

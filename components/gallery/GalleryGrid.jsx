@@ -1,10 +1,12 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import PillCta from '@/components/PillCta';
 import { routes } from '@/config/routes';
+import { ease } from '@/config/cubic-beziers';
 
 const PAGE_SIZE = 18;
 
@@ -88,13 +90,15 @@ export default function GalleryGrid({ images }) {
                     className="break-inside-avoid overflow-hidden group"
                     initial={isNew ? { opacity: 0, y: 12 } : false}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: isNew ? (i - prevCount.current) * 0.04 : 0 }}
+                    transition={{ duration: 0.5, ease: ease.out, delay: isNew ? (i - prevCount.current) * 0.04 : 0 }}
                   >
-                    <img
+                    <Image
                       src={src}
                       alt={altFromUrl(src, i)}
+                      width={800}
+                      height={600}
                       className="w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                      loading={i < 6 ? 'eager' : 'lazy'}
+                      priority={i < 6}
                     />
                   </motion.div>
                 );

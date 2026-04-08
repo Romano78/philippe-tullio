@@ -63,9 +63,9 @@ export default function ProjectContent({ project, index, total }) {
         {/* Director credit */}
         <p
           ref={clientRef}
-          className="font-meta text-sm tracking-widest uppercase text-white/60 mb-3"
+          className="font-meta text-sm tracking-widest uppercase text-accent mb-3"
         >
-          Un film de Tullio Philippe
+          {project.credits?.find((c) => c.role === 'direction')?.name}
         </p>
 
         {/* Title — overflow-hidden clips the slide-up */}
@@ -79,11 +79,11 @@ export default function ProjectContent({ project, index, total }) {
         </div>
 
         {/* Brand — category — year */}
-        <p
-          ref={metaRef}
-          className="font-meta text-xs tracking-widest uppercase text-white/40 mb-8"
-        >
-          {project.brand} — {project.category} — {project.year}
+        <p ref={metaRef} className="font-meta text-xs tracking-widest uppercase mb-8">
+          <span className="opacity-40 text-accent">{project.brand}</span>
+          <span className="text-white/40"> — </span>
+          <span className="opacity-40 text-accent">{project.category}</span>
+          <span className="text-white/40"> — {project.year}</span>
         </p>
 
         {/* CTA */}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { ease } from '@/config/cubic-beziers';
 
 export default function NavScroll({ children }) {
   const [visible, setVisible] = useState(true);
@@ -28,7 +29,7 @@ export default function NavScroll({ children }) {
     <motion.header
       className="fixed top-0 left-0 right-0 z-40"
       animate={{ y: visible ? 0 : -100 }}
-      transition={{ duration: 0.35, ease: [0.43, 0.13, 0.23, 0.96] }}
+      transition={{ duration: 0.35, ease: ease.smooth }}
     >
       {children}
     </motion.header>

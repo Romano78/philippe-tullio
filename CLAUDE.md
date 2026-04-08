@@ -40,7 +40,7 @@ Single-page portfolio site built with:
 - Next.js 16 + React 19 + TypeScript + Tailwind CSS v4
 - Framer Motion — UI animations
 - GSAP + `@gsap/react` — scroll-triggered cinematic animations
-- CSS `scroll-snap-type: y mandatory` — native scroll snap (Lenis removed — conflicts with CSS snap)
+- CSS `scroll-snap-type: y mandatory` — native scroll snap (coexists with Lenis — do NOT remove either without understanding the interaction)
 - next-intl — FR/EN i18n (locale routing via `app/[locale]/`)
 - next-themes — dark/light mode (dark by default)
 - shadcn/ui (Radix UI primitives)
@@ -69,15 +69,54 @@ app/
 
 ### Styling
 - Tailwind CSS v4 with CSS variables in `app/globals.css`
-- Dark theme by default: `#0a0a0a` background, `#f0f0f0` text
+- Dark theme by default: `#131313` background, `#f0f0f0` text
 - Light theme: `#f5f5f3` background, `#111111` text
 - Custom typography: `.h1`–`.h3`, `.text-overline` in `@layer components`
-- Single typeface: **Inter** (`--font-inter`)
+- Three typefaces: **Alfa Slab One** (`--font-display`) for display headings, **Inter** (`--font-sans`) for body, **Space Grotesk** (`--font-meta`) for metadata
 
 ### Mixed JS/TS
 - `.tsx` — app-level files (`layout.tsx`, `page.tsx`, `lib/utils.ts`, `components/ui/`)
 - `.jsx` — all other components
 - New page-level files → `.tsx`, new components → `.jsx`
+
+### Component Inventory
+Always check these before writing new JSX:
+
+**Shared / primitives**
+- `components/LinkCta.jsx` — styled anchor CTA
+- `components/PillCta.jsx` — pill-shaped CTA button
+- `components/SmoothScroll.jsx` — Lenis wrapper (root level)
+- `components/lenis-context.jsx` — `useLenis()` hook
+- `components/scroll-progress-button.tsx` — scroll progress indicator
+
+**Nav** (`components/nav/`)
+- `index.jsx`, `DesktopNav.jsx`, `MobileNav.jsx`, `MobileMenu.jsx`, `NavLink.jsx`, `NavScroll.jsx`, `LangToggle.jsx`
+
+**Home** (`components/home-swiper/`)
+- `index.jsx` — main swiper orchestrator
+- `ProjectSection.jsx`, `ProjectContent.jsx`, `ThumbnailStrip.jsx`
+- `data.js` — project metadata
+
+**Gallery** — `components/gallery/GalleryGrid.jsx`
+
+**Project page** (`components/project/`)
+- `ProjectHero.jsx`, `ProjectGallery.jsx`, `ProjectInfo.jsx`, `ProjectPreview.jsx`, `ProjectVideoPlayer.jsx`, `StormBackground.jsx`
+
+**About** (`components/about/`)
+- `AboutContent.jsx` — about page orchestrator
+- `AnimateIn.jsx` — scroll-triggered entrance animation primitive
+- `primitives.jsx` — shared layout primitives for about sections
+- Sections: `HeroSection`, `ShowreelSection`, `FilmSchoolSection`, `ActingSection`, `ScriptsSection`, `AbacoSection`, `CrakoSection`, `JayaSection`, `JesusIsBackSection`, `KCitizenSection`
+
+**Contact** — `components/contact/index.jsx`
+
+---
+
+## Fragile Areas — Do Not Touch Without Care
+
+- **`components/home-swiper/`** — complex scroll + snap interaction, touch carefully
+- **Lenis + CSS scroll-snap coexistence** — the scroll setup is delicate; do not modify `SmoothScroll.jsx`, `globals.css` scroll rules, or HomeSwiper scroll logic without fully understanding how they interact
+- If a change touches either of these areas, flag it explicitly before proceeding
 
 ---
 
@@ -86,16 +125,42 @@ app/
 This is a video-heavy and image-heavy site. Performance is critical.
 
 - **Videos** hosted on Cloudinary (streaming CDN). Never self-host videos.
-- **Images** always use `next/image` with proper `sizes` prop and `priority` only for above-the-fold.
+- **Images** always use `next/image`. Use `fill` with a `relative` positioned wrapper for Cloudinary images. Add `priority` only for above-the-fold images.
 - Lazy load everything below the fold.
 - No autoplay video on mobile.
 - Prefer poster images for video placeholders until user interaction.
 - Code split aggressively — keep page bundle lean.
 
 ### Cloudinary
-- Images: `https://res.cloudinary.com/{cloud_name}/image/upload/{transformations}/{public_id}`
-- Videos: `https://res.cloudinary.com/{cloud_name}/video/upload/{transformations}/{public_id}`
-- Use `f_auto,q_auto` transformations by default.
+- **Never build Cloudinary URLs manually in components.** Always use the helpers from `lib/cloudinary-url.ts`:
+  - `cldImage(publicId)` — images (`f_auto,q_auto` by default)
+  - `cldVideo(publicId)` — videos (`f_auto,q_auto` by default)
+  - `cldVideoPoster(publicId)` — video poster frames (jpg, first frame)
+- `lib/cloudinary.ts` is `server-only` — never import it in client components
+- Asset fetching happens server-side; by the time a URL reaches a component it's already a plain CDN string
+- **Never use a raw `<img>` tag.** All images use `next/image` with the Cloudinary URL as `src`
+- Add custom transformations as the second argument: `cldImage(id, "w_800,f_auto,q_auto")`
+
+---
+
+## Coding Conventions
+
+### No hardcoded values
+- **Easings** — always use `ease` from `config/cubic-beziers.js`. Never write raw cubic-bezier arrays in components
+- **Routes / hrefs** — always use `routes` from `config/routes.js`. Never hardcode `/about`, `/contact`, etc.
+- **Project data** — comes from `components/home-swiper/data.js`. Never duplicate or inline project metadata
+- **Copy / text** — always comes from `translations/fr.json` + `translations/en.json` via next-intl. Never hardcode user-facing strings
+- **If unsure of a value** (animation duration, breakpoint, color, etc.) — ask, don't guess
+
+### Component extraction rule
+- Extract into a component when something is reused across more than one place
+- Follow the About sections pattern: each distinct section is its own component in a `sections/` subfolder
+- Shared layout primitives (wrappers, grids, spacers) go in `primitives.jsx` for that domain
+- Don't inline JSX that belongs in a dedicated component
+
+### Values from props/data, not hardcoded in JSX
+- Component behaviour (animation params, labels, hrefs) should flow in via props or be read from data files
+- If a value is hardcoded in JSX and could vary per instance, it should be a prop
 
 ---
 
@@ -146,18 +211,26 @@ Film industry clients, production companies, brands, and collaborators evaluatin
 ## Key Libraries
 
 ### Lenis — Smooth Scrolling
-- Initialize once at root level in `app/[locale]/layout.tsx`
-- Always `"use client"` for the Lenis wrapper
-- Sync with GSAP ScrollTrigger via `lenis.on('scroll', ScrollTrigger.update)`
+- Initialized once at root level via `components/SmoothScroll.jsx`, wrapped in `app/[locale]/layout.tsx`
+- Exposes lenis instance via `useLenis()` from `components/lenis-context.jsx`
+- Synced with GSAP ScrollTrigger via `lenis.on('scroll', ScrollTrigger.update)`
+- GSAP ticker drives Lenis via `gsap.ticker.add()` — ticker callback stored in a ref for proper cleanup
 - Do NOT use CSS `scroll-behavior: smooth` alongside Lenis
+- Coexists with CSS `scroll-snap-type: y mandatory` — do not remove either
 
 ### GSAP
 - Use `useGSAP()` hook (from `@gsap/react`) instead of `useEffect`
 - Register plugins at top of file: `gsap.registerPlugin(ScrollTrigger)`
-- Use `scrollerProxy` for Lenis + ScrollTrigger compatibility
+- Lenis + ScrollTrigger sync is handled via `gsap.ticker` in `SmoothScroll.jsx` — do not add `scrollerProxy`
 - Scope all selectors to a ref
 
 ### next-intl
 - All copy lives in `translations/fr.json` and `translations/en.json`
 - Server components: `import { getTranslations } from 'next-intl/server'`
 - Client components: `import { useTranslations } from 'next-intl'`
+- The codebase currently uses `next/link` directly in some components (`ProjectSection.jsx`, `DesktopNav.jsx`) — this works but does not handle locale prefixing automatically
+- `localePrefix: "as-needed"` is set in `i18n/routing.ts` — meaning the locale prefix is only added for non-default locales (EN), French gets no prefix
+- **Never hardcode locale prefixes** (`/${locale}/`, `/fr/`, `/en/`) in hrefs — with `as-needed`, this can produce wrong URLs for the default locale
+- `components/about/sections/KCitizenSection.jsx` uses `href={\`/${locale}/work/k-citizen\`}` — tested and works correctly with `as-needed`
+- Anchor hrefs within the page use `config/routes.js` as the single source of truth
+- If unsure about routing, ask — do not guess

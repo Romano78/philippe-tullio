@@ -12,8 +12,8 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 | Home | `/` | 🟡 Content |
 | Project | `/work/[slug]` | 🟡 Content |
 | About | `/about` | 🟡 Content |
+| Gallery | `/gallery` | ✅ Done |
 | Sans Soleil Production | `/sans-soleil-production` | ⬜ To plan |
-| Gallery | `/gallery` | ⬜ Not started |
 | Contact | `/contact` | ✅ Done |
 
 ---
@@ -45,7 +45,7 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 
 ### Phase 4 — About ✅
 - [x] Sections componentised — `components/about/sections/`
-- [x] Section order: Hero → Acting → Film School → K-CITIZEN → ABACO → JESUS IS BACK → In Development → Scripts
+- [x] Section order: Hero → Showreel → Acting → Film School → K-CITIZEN → [Other Work] → ABACO → JESUS IS BACK → [In Development] → JAYA → CRAKO → [Feature Films] → Scripts
 - [x] `noPb` prop on sections — prevents double padding before SectionBreaks
 - [x] Image sizing: Acting `16/9`, LFA hero `21/9` banner, K-CITIZEN original 3-grid layout
 - [x] Project CTAs: K-CITIZEN, ABACO, JESUS IS BACK, JAYA all link to project pages
@@ -58,23 +58,31 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 
 ### Phase 6 — i18n + Locale ✅
 - [x] FR/EN translations complete
-- [x] FR default at `/`, EN at `/en` — `middleware.ts`
+- [x] FR default at `/`, EN at `/en` — handled via `next.config.ts` + `withNextIntl` (no explicit middleware.ts)
+
+### Phase 7 — Gallery ✅
+- [x] Route `app/[locale]/gallery/page.tsx`
+- [x] `<GalleryGrid />` — Cloudinary `getAllGalleryImages()`, full masonry layout
+- [x] `<StormBackground />` + `<Contact />` included
 
 ---
 
 ## 🟡 Current Focus
 
-### Step 1 — Project Content
-Fill in real copy, credits, and metadata for every project page.
+### Step 1 — Client Content
+Fill in real copy, credits, and links provided by the client.
 
-| Project | Copy | Credits | Video URL |
-|---|---|---|---|
-| showreel | ⬜ | — | ⬜ |
-| k-citizen | ⬜ | ⬜ | ⬜ |
-| jaya | ⬜ | ⬜ | ⬜ |
-| abaco | ⬜ | ⬜ | ⬜ |
-| jesus-is-back | ⬜ | ⬜ | ⬜ |
-| crako | ⬜ | ⬜ | ⬜ |
+| Item | Status | Notes |
+|---|---|---|
+| showreel videoUrl | ⬜ needs client | No YouTube/Vimeo link yet |
+| abaco videoUrl | ⬜ needs client | No YouTube/Vimeo link yet |
+| Contact email | ⬜ needs client | Currently `rprdigital.dev@gmail.com` (dev placeholder) |
+| IMDb link | ⬜ needs client | `href="#"` placeholder |
+| LinkedIn link | ⬜ needs client | `href="#"` placeholder |
+| Vimeo link | ⬜ needs client | `href="#"` placeholder |
+| YouTube link | ⬜ needs client | `href="#"` placeholder |
+| Bio text (FR + EN) | ⬜ needs client | |
+| Profile photo | ⬜ needs client | |
 
 ### Step 2 — Sans Soleil Production page
 ⬜ **Needs planning session** — more scope than a standard page.
@@ -153,11 +161,12 @@ about/
 | Item | Status |
 |---|---|
 | All projects — Cloudinary assets | ✅ |
-| Project copy + credits (FR + EN) | ⬜ needs client |
+| Project copy + credits (FR + EN) | ✅ filled in `data.js` |
+| Project videoUrls — k-citizen, jaya, crako, jesus-is-back | ✅ |
+| Project videoUrls — showreel, abaco | ⬜ needs client |
 | Bio text (FR + EN) | ⬜ needs client |
-| Showreel video | ⬜ needs client |
 | Profile photo | ⬜ needs client |
-| Contact email / socials | ⬜ needs client |
+| Contact email / socials | ⬜ needs client (dev placeholders in place) |
 | Sans Soleil Production copy | ⬜ needs client |
 
 ---
@@ -171,7 +180,7 @@ about/
 | Animations | GSAP + Framer Motion | GSAP for Home/Project; Framer Motion for About section reveals |
 | Background FX | WebGL canvas (StormBackground) | FBM shader, cursor-reactive, project pages only |
 | Fonts | Alfa Slab One · Inter · Space Grotesk | Display · Body · Meta |
-| i18n | next-intl | FR default at `/` (no prefix) / EN at `/en` — `middleware.ts` |
+| i18n | next-intl | FR default at `/` (no prefix) / EN at `/en` — via `withNextIntl` in `next.config.ts` |
 | Deployment | Vercel | |
 | UI components | shadcn/ui + custom LinkCta/PillCta | |
 
