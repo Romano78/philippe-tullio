@@ -2,16 +2,18 @@
 
 import { useTranslations } from 'next-intl';
 import { ExternalLink } from 'lucide-react';
+import { SiImdb, SiVimeo, SiYoutube } from 'react-icons/si';
+import { FaLinkedin } from 'react-icons/fa';
 import { Link } from '@/i18n/navigation';
 import { routes } from '@/config/routes';
 
 const EMAIL = 'rprdigital.dev@gmail.com';
 
 const socials = [
-  { label: 'IMDb', href: '#' },
-  { label: 'LinkedIn', href: '#' },
-  { label: 'Vimeo', href: '#' },
-  { label: 'YouTube', href: '#' },
+  { label: 'IMDb', href: '#', icon: SiImdb },
+  { label: 'LinkedIn', href: '#', icon: FaLinkedin },
+  { label: 'Vimeo', href: '#', icon: SiVimeo },
+  { label: 'YouTube', href: '#', icon: SiYoutube },
 ];
 
 export default function Contact() {
@@ -32,7 +34,7 @@ export default function Contact() {
       <div className="site-max">
 
         {/* Overline */}
-        <p className="font-meta text-xs tracking-widest uppercase text-white/30 mb-8">
+        <p className="font-meta text-xs tracking-widest uppercase text-accent mb-8">
           {t('overline')}
         </p>
 
@@ -60,16 +62,21 @@ export default function Contact() {
 
           {/* Socials */}
           <nav className="flex flex-wrap items-center gap-8">
-            {socials.map(({ label, href }) => (
+            {socials.map(({ label, href, icon: Icon }) => (
               <a
                 key={label}
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative font-meta text-xs tracking-widest uppercase text-white/40 hover:text-white transition-colors duration-300"
+                aria-label={label}
+                className="group flex flex-col items-center gap-1.5 text-white/60 hover:text-white transition-colors duration-300"
               >
-                {label}
-                <span className="absolute -bottom-px left-0 h-px bg-accent w-0 group-hover:w-full transition-all duration-300 ease-out" />
+                <span className="transition-transform duration-300 group-hover:scale-110 inline-flex">
+                  <Icon size={22} />
+                </span>
+                <span className="font-meta text-[9px] tracking-widest uppercase text-accent/60 group-hover:text-accent transition-colors duration-300">
+                  {label}
+                </span>
               </a>
             ))}
           </nav>

@@ -1,5 +1,6 @@
 {
   "nav": {
+    "home": "Accueil",
     "work": "Films",
     "about": "À propos",
     "contact": "Contact",
@@ -11,7 +12,8 @@
     "screenplay": "Scénario",
     "cast": "Casting",
     "cinematography": "Image",
-    "music": "Musique"
+    "music": "Musique",
+    "production": "Production"
   },
   "contact": {
     "overline": "Contact",
@@ -61,6 +63,13 @@
     "labelInDevelopment": "En développement",
     "labelCommercial": "Commercial",
     "cta": "Travaillons ensemble"
+  },
+  "soProduction": {
+    "overline": "Sans Oseille Production",
+    "name": "Sans Oseille\nProduction",
+    "tagline": "Une maison de production cinématographique",
+    "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+    "cta": "Voir le travail du réalisateur"
   },
   "project": {
     "watchFullFilm": "Voir le film",

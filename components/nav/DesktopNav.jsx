@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import LangToggle from './LangToggle';
 import NavLink from './NavLink';
+import HomeNavLink from './HomeNavLink';
 import { routes } from '@/config/routes';
 
 export default async function DesktopNav() {
@@ -38,6 +39,7 @@ export default async function DesktopNav() {
             border: '1px solid rgba(255,255,255,0.1)',
           }}
         >
+          <HomeNavLink label={t('home')} />
           {links.map((link) => (
             <NavLink key={link.label} href={link.href}>
               {link.label}

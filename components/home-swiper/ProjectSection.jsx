@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,6 +21,9 @@ export default function ProjectSection({
 }) {
   const isMobile = useIsMobile();
   const t = useTranslations('project');
+  const locale = useLocale();
+  const title = typeof project.title === 'object' ? (project.title[locale] ?? project.title.fr) : project.title;
+  const category = typeof project.category === 'object' ? (project.category[locale] ?? project.category.fr) : project.category;
 
   const sectionRef = useRef(null);
   const innerRef = useRef(null);
@@ -106,7 +109,7 @@ export default function ProjectSection({
   );
 
   const projectDuration = project.duration ? `${project.duration}` : '';
-  const projectCategory = project.category ? `${project.category} — ` : '';
+  const projectCategory = category ? `${category} — ` : '';
   const projectYear = project.year ? `${project.year} — ` : '';
 
   return (
@@ -135,7 +138,7 @@ export default function ProjectSection({
         ) : project.image ? (
           <Image
             src={project.image}
-            alt={project.title}
+            alt={title}
             fill
             className='object-cover'
             priority={index === 0}
@@ -169,7 +172,7 @@ export default function ProjectSection({
             ref={titleRef}
             className='font-display text-6xl md:text-8xl uppercase text-white leading-none'
           >
-            {project.title}
+            {title}
           </h1>
         </div>
 

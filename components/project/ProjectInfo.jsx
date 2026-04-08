@@ -16,11 +16,13 @@ export default function ProjectInfo({ project, onWatch }) {
   const t = useTranslations('project');
   const tCredits = useTranslations('credits');
   const locale = useLocale();
-  const { title, brand, category, year, duration, description, credits } = project;
+  const { brand, year, duration, description, credits } = project;
+  const title = typeof project.title === 'object' ? (project.title[locale] ?? project.title.fr) : project.title;
+  const category = typeof project.category === 'object' ? (project.category[locale] ?? project.category.fr) : project.category;
   const meta = [category, year, duration].filter(Boolean).join(' — ');
 
   return (
-    <section className='site-px pt-8 md:pt-12 pb-16 md:pb-20 lg:pb-[7.5rem] relative z-10'>
+    <section className='site-px pt-8 md:pt-12 pb-16 md:pb-20 lg:pb-30 relative z-10'>
       <div className='site-max'>
         <div className='flex flex-col md:flex-row md:gap-16 lg:gap-24'>
 
@@ -70,11 +72,15 @@ export default function ProjectInfo({ project, onWatch }) {
             {project.festivals?.length > 0 && (
               <div className='grid grid-cols-3 gap-3 mt-4'>
                 {project.festivals.map((f) => (
-                  <div key={f.name} className='relative overflow-hidden rounded-sm' style={{ aspectRatio: '2 / 1' }}>
-                    {f.src
-                      ? <Image src={f.src} alt={`${f.name} ${f.year}`} fill className='object-contain' />
-                      : <div className='w-full h-full bg-white/[0.04]' />
-                    }
+                  <div key={f.name} className='relative overflow-hidden rounded-sm bg-[#0E0E0E] flex items-center justify-center' style={{ aspectRatio: '2 / 1' }}>
+                    {f.src ? (
+                      <Image src={f.src} alt={`${f.name} ${f.year}`} fill className='object-contain p-3' />
+                    ) : (
+                      <div className='flex flex-col items-center justify-center gap-1 px-3 text-center'>
+                        <span className='font-meta text-[9px] tracking-widest uppercase text-white/50 leading-tight'>{f.name}</span>
+                        {f.year && <span className='font-meta text-[8px] tracking-widest text-white/25'>{f.year}</span>}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

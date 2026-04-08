@@ -2,12 +2,17 @@
 
 import { useRef, useLayoutEffect } from "react";
 import { Link } from "@/i18n/navigation";
+import { useLocale } from "next-intl";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
 const pad = (n) => String(n + 1).padStart(2, "0");
 
 export default function ProjectContent({ project, index, total }) {
+  const locale = useLocale();
+  const title = typeof project.title === 'object' ? (project.title[locale] ?? project.title.fr) : project.title;
+  const category = typeof project.category === 'object' ? (project.category[locale] ?? project.category.fr) : project.category;
+
   const wrapperRef = useRef(null);
   const clientRef = useRef(null);
   const titleRef = useRef(null);
@@ -74,7 +79,7 @@ export default function ProjectContent({ project, index, total }) {
             ref={titleRef}
             className="font-display text-7xl md:text-9xl uppercase text-white leading-none"
           >
-            {project.title}
+            {title}
           </h1>
         </div>
 
@@ -82,7 +87,7 @@ export default function ProjectContent({ project, index, total }) {
         <p ref={metaRef} className="font-meta text-xs tracking-widest uppercase mb-8">
           <span className="opacity-40 text-accent">{project.brand}</span>
           <span className="text-white/40"> — </span>
-          <span className="opacity-40 text-accent">{project.category}</span>
+          <span className="opacity-40 text-accent">{category}</span>
           <span className="text-white/40"> — {project.year}</span>
         </p>
 

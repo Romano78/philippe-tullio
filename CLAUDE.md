@@ -8,6 +8,22 @@ This file provides guidance to Claude Code when working with this repository.
 - **Web searches: max 10 sources**, most relevant only. Share the doc link so the user can verify manually — never present search results as ground truth.
 - When in doubt about scope or approach, ask — don't assume.
 
+## Agent Role — Orchestrator Only
+- **Claude Code does not write code directly.** Its role is to plan, review, and orchestrate.
+- All implementation is delegated to subagents (e.g. Senior Developer) via the Agent tool.
+- Claude Code's responsibilities: understand the task, form a complete plan, brief the subagent precisely, review the result, and report back to the user.
+- Never write or edit files directly — spawn a subagent and hand it a full, unambiguous brief.
+
+## Pre-brief Research (mandatory before every agent brief)
+- **Trace every integration to its origin.** If a hook, context, or utility is used, read the file where its value is defined — not just the hook file. Example: `useLenis()` → must read `SmoothScroll.jsx` to know the context value is a ref, not the instance.
+- **Verify third-party API/exports exist in the installed version** before including them in a brief. Check `node_modules` or run a quick node command — never assume an icon name or API method exists.
+- If uncertain about any value, API shape, or contract: read first, then brief.
+
+## Post-agent Review (mandatory after every agent completes)
+- Read all changed files and cross-reference any integrations used against their source files.
+- **Run `npm run build`** to catch compile and runtime errors before reporting to the user.
+- A review that only checks the diff is not a review — it must verify the assumptions behind the code.
+
 ## About This Project
 Portfolio site for **Tullio Philippe** — a film director (réalisateur).
 High-end, immersive cinematic experience showcasing his work (films, commercials, music videos).

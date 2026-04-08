@@ -13,7 +13,7 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 | Project | `/work/[slug]` | 🟡 Content |
 | About | `/about` | 🟡 Content |
 | Gallery | `/gallery` | ✅ Done |
-| Sans Soleil Production | `/sans-soleil-production` | ⬜ To plan |
+| So Productions | `/so-production` | 🟡 Built — domain wiring pending |
 | Contact | `/contact` | ✅ Done |
 
 ---
@@ -84,10 +84,11 @@ Fill in real copy, credits, and links provided by the client.
 | Bio text (FR + EN) | ⬜ needs client | |
 | Profile photo | ⬜ needs client | |
 
-### Step 2 — Sans Soleil Production page
-⬜ **Needs planning session** — more scope than a standard page.
-Route: `/sans-soleil-production`
-See planning notes below.
+### Step 2 — So Productions page
+🟡 **Page built. Domain wiring pending.**
+Route: `/so-production` ✅ live
+Domain: `soproductions.fr` → Vercel (same project) → middleware rewrite to `/so-production` ⬜ pending
+See full plan below.
 
 ### Step 3 — QA
 - [ ] Full site QA pass — all pages, all breakpoints
@@ -104,21 +105,77 @@ See planning notes below.
 
 ---
 
-## Sans Soleil Production — Planning
+## So Productions — Full Plan
 
-> ⚠️ Needs a dedicated planning session before building.
+**Brand:** Sans Oreilles Production (SO Productions)
+**Domain:** `soproductions.fr` → same Vercel project as `philippetullio.com`
+**Route:** `/so-production`
+**Language:** FR/EN (next-intl, same as main site)
 
-**What we know:**
-- Route: `/sans-soleil-production`
-- This is Tullio Philippe's production company
-- More scope than a standard page — TBD
+---
 
-**Questions to answer before building:**
-- What sections does the page need? (about the company, services, roster, contact?)
-- Is there a separate visual identity / brand from Tullio's personal site?
-- Does it need its own nav or share the site nav?
-- Any specific Cloudinary assets needed?
-- FR/EN copy — who provides it?
+### Domain Setup (do when ready)
+1. **OVH DNS** — add A record `@` → `76.76.21.21`, CNAME `www` → `cname.vercel-dns.com`, TTL 300
+2. **Vercel** — Settings → Domains → add `soproductions.fr` + `www.soproductions.fr`
+3. **Middleware** — extend `middleware.ts` to detect `host === 'soproductions.fr'` and `NextResponse.rewrite` to `/so-production`
+
+### Page Status ✅
+- `components/so-production/data.js` — ✅ created (placeholders, fill content when ready)
+- `app/[locale]/so-production/page.tsx` — ✅ live
+- `components/so-production/SoProductionContent.jsx` — ✅
+- `components/so-production/sections/HeroSection.jsx` — ✅
+- `components/so-production/sections/BioSection.jsx` — ✅
+- `components/so-production/sections/CtaSection.jsx` — ✅
+- `translations/fr.json` + `en.json` — ✅ `soProduction` namespace added
+
+### Still needed
+- [ ] Real bio text FR + EN → update `translations/fr.json` + `en.json`
+- [ ] Visual → upload to Cloudinary under `so-production/hero/`, wire via `cldImage()` in `page.tsx`
+- [ ] Real email → update `data.js`
+- [ ] Domain wiring (OVH + Vercel + middleware)
+
+---
+
+### Files to Create
+
+| File | Purpose |
+|---|---|
+| `components/so-production/data.js` | Company data (name, tagline, bio, image, cta) |
+| `app/[locale]/so-production/page.tsx` | Server component — passes data to client |
+| `components/so-production/SoProductionContent.jsx` | Client orchestrator |
+| `components/so-production/sections/HeroSection.jsx` | Name + tagline left, square image right (`lg:grid-cols-[3fr_2fr]`) |
+| `components/so-production/sections/BioSection.jsx` | Bio paragraph, full width |
+| `components/so-production/sections/CtaSection.jsx` | Email + PillCta → `/` (philippetullio.com) |
+
+### Translations
+Add `"soProduction"` namespace to `translations/fr.json` + `translations/en.json`
+
+### Data structure (`data.js`)
+```js
+export const soProduction = {
+  name: { fr: 'Sans Oreilles\nProduction', en: 'Sans Oreilles\nProduction' },
+  tagline: { fr: 'Une maison de production cinématographique', en: 'A cinematic production company' },
+  bio: { fr: '[À remplir]', en: '[To fill]' },
+  email: 'contact@so-production.com', // placeholder
+  image: null, // Cloudinary public ID — to be uploaded
+  cta: { fr: 'Voir le travail du réalisateur', en: "See the director's work" },
+  ctaHref: '/',
+};
+```
+
+### Design
+- Full `100svh` hero — `#131313` bg, same cinematic aesthetic
+- Grid: `lg:grid-cols-[3fr_2fr]` (text left, square image right)
+- Typography: Alfa Slab One display, Inter body, Space Grotesk meta
+- Accent `#B8FF00` on overline
+- Staggered Framer Motion fade-in (same as About sections)
+- Shares existing `<Nav />` and Cloudinary setup
+
+### Content still needed from client
+- [ ] Bio text FR + EN
+- [ ] Company tagline (confirm or replace placeholder)
+- [ ] Contact email
+- [ ] Visual/image → upload to Cloudinary under `so-production/hero/`
 
 ---
 
