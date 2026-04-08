@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { ease } from '@/config/cubic-beziers';
@@ -31,6 +32,9 @@ export default function ProjectVideoPlayer({ src, poster, onClose }) {
   const overlayRef = useRef(null);
   const embedUrl = toEmbedUrl(src);
   const lenis = useLenis();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     if (!embedUrl && videoRef.current) {
@@ -54,7 +58,9 @@ export default function ProjectVideoPlayer({ src, poster, onClose }) {
     };
   }, [lenis]);
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <motion.div
       ref={overlayRef}
       className='fixed inset-0 z-[100] flex items-center justify-center bg-black/95'
@@ -90,6 +96,7 @@ export default function ProjectVideoPlayer({ src, poster, onClose }) {
           style={{ outline: 'none' }}
         />
       )}
-    </motion.div>
+    </motion.div>,
+    document.body
   );
 }
