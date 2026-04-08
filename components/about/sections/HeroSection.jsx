@@ -31,7 +31,7 @@ export default function HeroSection({ portrait, t }) {
               </PillCta>
             </div>
           </div>
-          <div className='relative overflow-hidden w-full h-full min-h-100' style={DARK_BG}>
+          <div className='relative overflow-hidden w-full h-full min-h-100 lg:aspect-[3/9] lg:max-h-[85svh]' style={DARK_BG}>
             {portrait[0] ? (
               <Image
                 src={portrait[0]}
