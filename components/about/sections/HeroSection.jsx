@@ -7,8 +7,8 @@ export default function HeroSection({ portrait, t }) {
   return (
     <section className='relative z-10 overflow-hidden'>
       <div className='site-px'>
-        <div className='site-max grid grid-cols-1 lg:grid-cols-[3fr_2fr] lg:min-h-[85svh]'>
-          <div className='flex flex-col pt-24 md:pt-36 pb-12 md:pb-16 lg:min-h-[85svh]'>
+        <div className='site-max grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-4'>
+          <div className='flex flex-col pt-24 md:pt-36 pb-12 md:pb-16'>
             <div>
               <p className='font-meta text-xs tracking-widest uppercase text-white/30 mb-8'>
                 {t('overline')}
@@ -30,10 +30,7 @@ export default function HeroSection({ portrait, t }) {
               </PillCta>
             </div>
           </div>
-          <div
-            className='overflow-hidden hidden sm:block sm:absolute sm:top-0 sm:right-0 sm:max-w-[40%] sm:w-full sm:h-[85svh] 2xl:relative 2xl:top-auto 2xl:right-auto 2xl:max-w-none 2xl:w-full 2xl:h-full '
-            style={DARK_BG}
-          >
+          <div className='overflow-hidden  w-full h-auto ' style={DARK_BG}>
             {portrait[0] ? (
               <img
                 src={portrait[0]}
