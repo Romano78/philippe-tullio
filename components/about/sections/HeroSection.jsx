@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { routes } from '@/config/routes';
 import PillCta from '@/components/PillCta';
 import { DARK_BG } from '../primitives';
@@ -30,13 +31,14 @@ export default function HeroSection({ portrait, t }) {
               </PillCta>
             </div>
           </div>
-          <div className='overflow-hidden  w-full h-auto ' style={DARK_BG}>
+          <div className='relative overflow-hidden w-full h-full min-h-100' style={DARK_BG}>
             {portrait[0] ? (
-              <img
+              <Image
                 src={portrait[0]}
                 alt='Philippe Tullio — réalisateur'
-                className='w-full h-full object-cover object-center'
-                loading='eager'
+                fill
+                className='object-cover object-center'
+                priority
               />
             ) : (
               <div className='w-full h-full' style={DARK_BG} />

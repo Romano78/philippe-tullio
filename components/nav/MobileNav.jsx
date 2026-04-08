@@ -12,9 +12,8 @@ export default function MobileNav() {
     <>
       <div className="flex md:hidden items-center justify-between w-full px-6 py-4">
         {/* Logo */}
-        <Link href="/" className="font-display text-white text-lg leading-none tracking-tight uppercase flex flex-col">
-          <span>Tullio</span>
-          <span>Philippe</span>
+        <Link href="/" className="flex">
+          <img src='/TP_Seul_Blanc.png' alt='Philippe Tullio Logo' width={40} height={40} />
         </Link>
 
         {/* Menu pill */}

@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { ease } from '@/config/cubic-beziers';
+import { useLenis } from '@/components/lenis-context';
 
 function toEmbedUrl(src) {
   try {
@@ -29,6 +30,7 @@ export default function ProjectVideoPlayer({ src, poster, onClose }) {
   const videoRef = useRef(null);
   const overlayRef = useRef(null);
   const embedUrl = toEmbedUrl(src);
+  const lenis = useLenis();
 
   useEffect(() => {
     if (!embedUrl && videoRef.current) {
@@ -45,8 +47,12 @@ export default function ProjectVideoPlayer({ src, poster, onClose }) {
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = ''; };
-  }, []);
+    lenis?.current?.stop();
+    return () => {
+      document.body.style.overflow = '';
+      lenis?.current?.start();
+    };
+  }, [lenis]);
 
   return (
     <motion.div

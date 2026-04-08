@@ -1,5 +1,6 @@
 {
   "nav": {
+    "home": "Accueil",
     "work": "Films",
     "about": "À propos",
     "contact": "Contact",
@@ -11,7 +12,8 @@
     "screenplay": "Scénario",
     "cast": "Casting",
     "cinematography": "Image",
-    "music": "Musique"
+    "music": "Musique",
+    "production": "Production"
   },
   "contact": {
     "overline": "Contact",

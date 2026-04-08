@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 export default function NavLink({ href, children, className, onClick }) {
   const pathname = usePathname();
-  const isActive = pathname === href || pathname.startsWith(href + "/");
+  const isActive = href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/");
 
   return (
     <Link

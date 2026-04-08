@@ -24,9 +24,9 @@ export default function LangToggle() {
         border: "1px solid rgba(255,255,255,0.1)",
       }}
     >
-      <span className={locale === "fr" ? "text-white" : "text-white/40"}>FR</span>
+      <span className={locale === "fr" ? "opacity-100" : "opacity-30"} style={{ fontSize: '1.1rem', lineHeight: 1 }}>🇫🇷</span>
       <span className="text-white/20">/</span>
-      <span className={locale === "en" ? "text-white" : "text-white/40"}>EN</span>
+      <span className={locale === "en" ? "opacity-100" : "opacity-30"} style={{ fontSize: '1.1rem', lineHeight: 1 }}>🇺🇸</span>
     </button>
   );
 }

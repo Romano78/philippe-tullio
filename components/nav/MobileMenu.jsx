@@ -5,6 +5,7 @@ import Link from "next/link";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { usePathname } from "@/i18n/navigation";
 import { routes } from "@/config/routes";
 import { ease } from "@/config/cubic-beziers";
 import LangToggle from "./LangToggle";
@@ -12,8 +13,10 @@ import NavLink from "./NavLink";
 
 export default function MobileMenu({ isOpen, onClose }) {
   const t = useTranslations("nav");
+  const pathname = usePathname();
 
   const links = [
+    ...(pathname !== "/" ? [{ label: t("home"), href: routes.home }] : []),
     { label: t("about"), href: routes.about },
     { label: t("gallery"), href: routes.gallery },
     { label: t("contact"), href: routes.contact },
@@ -40,9 +43,8 @@ export default function MobileMenu({ isOpen, onClose }) {
         >
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4">
-            <Link href="/" onClick={onClose} className="font-display text-white text-lg leading-none tracking-tight uppercase flex flex-col">
-              <span>Tullio</span>
-              <span>Philippe</span>
+            <Link href="/" onClick={onClose} className="flex">
+              <img src='/TP_Seul_Blanc.png' alt='Philippe Tullio Logo' width={40} height={40} />
             </Link>
             <button
               onClick={onClose}
@@ -68,7 +70,7 @@ export default function MobileMenu({ isOpen, onClose }) {
                 <NavLink
                   href={link.href}
                   onClick={onClose}
-                  className="!text-5xl !tracking-normal font-display"
+                  className="text-5xl! tracking-normal! font-display"
                 >
                   {link.label}
                 </NavLink>

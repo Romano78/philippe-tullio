@@ -7,7 +7,11 @@ export default function ProjectPreview({ video, poster, onWatch, title = '' }) {
   const t = useTranslations('project');
 
   return (
-    <div className='relative w-full rounded-sm overflow-hidden' style={{ aspectRatio: '16/9' }}>
+    <div
+      className='relative w-full rounded-sm overflow-hidden group'
+      style={{ aspectRatio: '16/9', cursor: onWatch ? 'pointer' : 'default' }}
+      onClick={onWatch ?? undefined}
+    >
       {/* Media */}
       {video ? (
         <video
@@ -31,10 +35,7 @@ export default function ProjectPreview({ video, poster, onWatch, title = '' }) {
       {/* Centered CTA */}
       {onWatch && (
         <div className='absolute inset-0 flex items-center justify-center'>
-          <button
-            onClick={onWatch}
-            className='group flex flex-col items-center gap-3'
-          >
+          <div className='flex flex-col items-center gap-3'>
             <div className='flex items-center justify-center w-14 h-14 rounded-full border border-white/40 backdrop-blur-sm transition-all duration-300 group-hover:border-white group-hover:scale-110'>
               <svg viewBox='0 0 24 24' fill='white' className='w-5 h-5 ml-0.5'>
                 <path d='M8 5v14l11-7z' />
@@ -43,7 +44,7 @@ export default function ProjectPreview({ video, poster, onWatch, title = '' }) {
             <span className='font-meta text-xs tracking-widest uppercase text-white/60 group-hover:text-white transition-colors duration-300'>
               {t('watchFullFilm')}
             </span>
-          </button>
+          </div>
         </div>
       )}
     </div>
