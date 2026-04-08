@@ -64,6 +64,13 @@
     "labelCommercial": "Commercial",
     "cta": "Work together"
   },
+  "soProduction": {
+    "overline": "Sans Oseille Production",
+    "name": "Sans Oseille\nProduction",
+    "tagline": "A cinematic production company",
+    "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+    "cta": "See the director's work"
+  },
   "project": {
     "watchFullFilm": "Watch full film",
     "workTogether": "Work together",
