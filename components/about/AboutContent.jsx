@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
+import { projects } from '@/components/home-swiper/data';
 import { SectionBreak } from './primitives';
 import HeroSection from './sections/HeroSection';
 import ActingSection from './sections/ActingSection';
@@ -18,6 +19,7 @@ export default function AboutContent({ assets }) {
   const t = useTranslations('aboutPage');
   const tProject = useTranslations('project');
   const locale = useLocale();
+  const showreelProject = projects.find(p => p.id === 'showreel');
 
   const {
     portrait    = [],
@@ -39,7 +41,7 @@ export default function AboutContent({ assets }) {
   return (
     <>
       <HeroSection portrait={portrait} t={t} />
-      <ShowreelSection src={showreel} poster={showreelPoster} preview={showreelPreview} />
+      <ShowreelSection src={showreel ?? showreelProject?.videoUrl} poster={showreelPoster} preview={showreelPreview} />
       <ActingSection acting={acting} t={t} />
       <FilmSchoolSection lfaHero={lfaHero} lfaLogo={lfaLogo} t={t} />
       <KCitizenSection kcitizen={kcitizen} locale={locale} t={t} tProject={tProject} noPb />

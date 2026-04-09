@@ -2,6 +2,7 @@ export const projects = [
   {
     id: 'showreel',
     slug: 'showreel',
+    videoUrl: 'https://www.youtube.com/watch?v=j5t18TrkiSE',
     brand: 'Philippe Tullio',
     title: { fr: 'Démo', en: 'Showreel' },
     category: { fr: 'Reel', en: 'Reel' },
