@@ -4,7 +4,7 @@ import NavScroll from "./NavScroll";
 
 export default function Nav() {
   return (
-    <NavScroll>
+    <NavScroll hideOnScroll={false}>
       <DesktopNav />
       <MobileNav />
     </NavScroll>

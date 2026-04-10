@@ -8,6 +8,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useTranslations, useLocale } from 'next-intl';
+import { ArrowRight } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,12 +19,19 @@ export default function ProjectSection({
   index,
   total,
   sectionRef: externalRef,
+  centered = true,
 }) {
   const isMobile = useIsMobile();
   const t = useTranslations('project');
   const locale = useLocale();
-  const title = typeof project.title === 'object' ? (project.title[locale] ?? project.title.fr) : project.title;
-  const category = typeof project.category === 'object' ? (project.category[locale] ?? project.category.fr) : project.category;
+  const title =
+    typeof project.title === 'object'
+      ? (project.title[locale] ?? project.title.fr)
+      : project.title;
+  const category =
+    typeof project.category === 'object'
+      ? (project.category[locale] ?? project.category.fr)
+      : project.category;
 
   const sectionRef = useRef(null);
   const innerRef = useRef(null);
@@ -109,8 +117,9 @@ export default function ProjectSection({
   );
 
   const projectDuration = project.duration ? `${project.duration}` : '';
-  const projectCategory = category ? `${category} — ` : '';
-  const projectYear = project.year ? `${project.year} — ` : '';
+  const projectCategory = category ? `${category}  ` : '';
+  const projectYear = project.year ? `${project.year} ` : '';
+  const HeadingTag = index === 0 ? 'h1' : 'h2';
 
   return (
     <section
@@ -157,23 +166,23 @@ export default function ProjectSection({
       </div>
 
       {/* Content — bound to this section */}
-      <div className='absolute bottom-16 left-8 md:left-32 lg:left-48 z-10 max-w-5xl'>
+      <div className={centered ? 'absolute inset-0 z-10 flex flex-col items-center justify-center px-8 text-center' : 'absolute bottom-16 left-8 md:left-32 lg:left-48 z-10 max-w-5xl'}>
         {/* Director */}
         <p
           ref={directorRef}
-          className='font-meta text-sm tracking-widest uppercase text-accent mb-3'
+          className='font-meta text-2xl tracking-widest uppercase text-accent mb-3'
         >
           {project.credits?.find((c) => c.role === 'direction')?.name}
         </p>
 
         {/* Title slide container */}
         <div className='overflow-hidden mb-6'>
-          <h1
+          <HeadingTag
             ref={titleRef}
             className='font-display text-6xl md:text-8xl uppercase text-white leading-none'
           >
             {title}
-          </h1>
+          </HeadingTag>
         </div>
 
         {/* Brand — category — year */}
@@ -193,7 +202,7 @@ export default function ProjectSection({
             className='inline-flex items-center gap-3 px-6 py-3 rounded-full font-meta text-xs tracking-widest uppercase text-white/80 border border-border transition-colors hover:bg-white/10 hover:text-white'
           >
             {t('seeProject')}
-            <span className='text-accent'>→</span>
+            <ArrowRight size={14} className='text-accent' />
           </Link>
         </div>
       </div>

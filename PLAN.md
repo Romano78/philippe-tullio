@@ -76,7 +76,7 @@ Fill in real copy, credits, and links provided by the client.
 |---|---|---|
 | showreel videoUrl | ⬜ needs client | No YouTube/Vimeo link yet |
 | abaco videoUrl | ⬜ needs client | No YouTube/Vimeo link yet |
-| Contact email | ⬜ needs client | Currently `rprdigital.dev@gmail.com` (dev placeholder) |
+| Contact email | ⬜ needs client | Currently `contact@soproductions.fr` (dev placeholder) |
 | IMDb link | ⬜ needs client | `href="#"` placeholder |
 | LinkedIn link | ⬜ needs client | `href="#"` placeholder |
 | Vimeo link | ⬜ needs client | `href="#"` placeholder |
@@ -90,7 +90,11 @@ Route: `/soproductions` ✅ live
 Domain: `soproductions.fr` → Vercel (same project) → middleware rewrite to `/soproductions` ⬜ pending
 See full plan below.
 
-### Step 3 — QA
+### Step 3 — HomeSwiper improvements
+- [ ] `centered` prop on `ProjectSection` — boolean, switches content from left-aligned to centered
+- [ ] SEO fix — only `index === 0` renders `<h1>`, all other slides render `<h2>` with identical styling
+
+### Step 4 — QA
 - [ ] Full site QA pass — all pages, all breakpoints
 - [ ] Mobile QA — spacing, CTAs, video behaviour
 - [ ] Cross-browser check

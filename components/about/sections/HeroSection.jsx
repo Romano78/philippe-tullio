@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { routes } from '@/config/routes';
 import PillCta from '@/components/PillCta';
+import SocialLinks from '@/components/SocialLinks';
 import { DARK_BG } from '../primitives';
 
 export default function HeroSection({ portrait, t }) {
@@ -29,6 +30,9 @@ export default function HeroSection({ portrait, t }) {
               <PillCta href={routes.contact} icon='→'>
                 {t('cta')}
               </PillCta>
+              <div className='mt-6'>
+                <SocialLinks size={24} theme='secondary' />
+              </div>
             </div>
           </div>
           <div className='relative overflow-hidden w-full h-full min-h-100 lg:aspect-3/9 lg:max-h-[85svh]' style={DARK_BG}>

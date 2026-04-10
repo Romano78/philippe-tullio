@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useLayoutEffect } from "react";
+import { ArrowRight } from 'lucide-react';
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { gsap } from "gsap";
@@ -98,7 +99,7 @@ export default function ProjectContent({ project, index, total }) {
             className="inline-flex items-center gap-3 px-6 py-3 rounded-full font-meta text-xs tracking-widest uppercase text-white/80 border border-border transition-colors hover:bg-white/10 hover:text-white"
           >
             Watch Project
-            <span className="text-accent">→</span>
+            <ArrowRight size={14} className="text-accent" />
           </Link>
         </div>
       </div>

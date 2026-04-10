@@ -22,6 +22,7 @@ This file provides guidance to Claude Code when working with this repository.
 
 ## Mistake Protocol (mandatory)
 - **When a mistake is made, always update `CLAUDE.md` immediately** to prevent it from recurring. Never rely on session memory — it resets every conversation. If a wrong assumption caused the mistake, add an explicit rule here so the next session doesn't repeat it.
+- **Never delete logic to disable a feature.** Always use a prop (e.g. `hideOnScroll={false}`) so the behaviour can be toggled without rewriting. Deleting code is irreversible and loses intent.
 
 ## Post-agent Review (mandatory after every agent completes)
 - Read all changed files and cross-reference any integrations used against their source files.
