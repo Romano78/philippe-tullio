@@ -8,19 +8,9 @@ export function proxy(request: NextRequest) {
   const host = request.headers.get('host') ?? '';
 
   if (host === 'soproductions.fr' || host === 'www.soproductions.fr') {
-    const url = request.nextUrl.clone();
-    const pathname = url.pathname;
-
-    if (pathname === '/' || pathname === '') {
-      url.pathname = '/soproductions';
-      return NextResponse.rewrite(url);
-    }
-    if (pathname === '/en' || pathname === '/en/') {
-      url.pathname = '/en/soproductions';
-      return NextResponse.rewrite(url);
-    }
-    // Any other path on soproductions.fr → redirect to main domain
-    return NextResponse.redirect(`https://philippetullio.com${pathname}`);
+    const pathname = request.nextUrl.pathname;
+    const locale = pathname.startsWith('/en') ? '/en' : '';
+    return NextResponse.redirect(`https://philippetullio.com${locale}/soproductions`, { status: 301 });
   }
 
   return intlMiddleware(request);
