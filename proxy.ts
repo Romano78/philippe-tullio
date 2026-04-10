@@ -19,7 +19,8 @@ export function proxy(request: NextRequest) {
       url.pathname = '/en/soproductions';
       return NextResponse.rewrite(url);
     }
-    return NextResponse.next();
+    // Any other path on soproductions.fr → redirect to main domain
+    return NextResponse.redirect(`https://philippetullio.com${pathname}`);
   }
 
   return intlMiddleware(request);
