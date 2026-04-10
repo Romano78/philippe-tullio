@@ -3,9 +3,65 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { ease } from '@/config/cubic-beziers';
+import { Link } from '@/i18n/navigation';
+
+function CardContent({ project, title, meta, director, i, HeadingTag, href, t }) {
+  return (
+    <>
+      {/* 16:9 video */}
+      <div className='relative w-full aspect-video bg-[#0E0E0E]'>
+        {project.video ? (
+          <video
+            src={project.videoMobile ?? project.video}
+            poster={project.videoPoster ?? project.image}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className='absolute inset-0 w-full h-full object-cover'
+          />
+        ) : project.image ? (
+          <Image
+            src={project.image}
+            alt={title}
+            fill
+            className='object-cover'
+            priority={i === 0}
+          />
+        ) : (
+          <div className='absolute inset-0 bg-[#0E0E0E]' />
+        )}
+      </div>
+
+      {/* Content */}
+      <div className='bg-[#0E0E0E] px-5 py-5'>
+        {director && (
+          <p className='font-meta text-xs tracking-widest uppercase text-accent mb-2'>
+            {director}
+          </p>
+        )}
+        <div className='overflow-hidden mb-3 pt-[0.35em]'>
+          <HeadingTag className='font-display text-4xl uppercase text-white leading-none'>
+            {title}
+          </HeadingTag>
+        </div>
+        {meta && (
+          <p className='font-meta text-[10px] tracking-widest uppercase text-accent/70 mb-4'>
+            {meta}
+          </p>
+        )}
+        {href && (
+          <span className='inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-meta text-[10px] tracking-widest uppercase text-white/80 border border-white/15'>
+            {t('seeProject')}
+            <ArrowRight size={12} className='text-accent' />
+          </span>
+        )}
+      </div>
+    </>
+  );
+}
 
 export default function MobileHomeSwiper({ projects }) {
   const locale = useLocale();
@@ -46,58 +102,13 @@ export default function MobileHomeSwiper({ projects }) {
               transition={{ duration: 0.6, ease: ease.smooth }}
               className='relative overflow-hidden rounded-sm w-full'
             >
-              {/* 16:9 video */}
-              <div className='relative w-full aspect-video bg-[#0E0E0E]'>
-                {project.video ? (
-                  <video
-                    src={project.videoMobile ?? project.video}
-                    poster={project.videoPoster ?? project.image}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className='absolute inset-0 w-full h-full object-cover'
-                  />
-                ) : project.image ? (
-                  <Image
-                    src={project.image}
-                    alt={title}
-                    fill
-                    className='object-cover'
-                    priority={i === 0}
-                  />
-                ) : (
-                  <div className='absolute inset-0 bg-[#0E0E0E]' />
-                )}
-              </div>
-
-              {/* Content */}
-              <div className='bg-[#0E0E0E] px-5 py-5'>
-                {director && (
-                  <p className='font-meta text-xs tracking-widest uppercase text-accent mb-2'>
-                    {director}
-                  </p>
-                )}
-                <div className='overflow-hidden mb-3 pt-[0.35em]'>
-                  <HeadingTag className='font-display text-4xl uppercase text-white leading-none'>
-                    {title}
-                  </HeadingTag>
-                </div>
-                {meta && (
-                  <p className='font-meta text-[10px] tracking-widest uppercase text-accent/70 mb-4'>
-                    {meta}
-                  </p>
-                )}
-                {href && (
-                  <Link
-                    href={href}
-                    className='inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-meta text-[10px] tracking-widest uppercase text-white/80 border border-white/15 transition-colors hover:bg-white/10 hover:text-white'
-                  >
-                    {t('seeProject')}
-                    <ArrowRight size={12} className='text-accent' />
-                  </Link>
-                )}
-              </div>
+              {href ? (
+                <Link href={href} className='block'>
+                  <CardContent project={project} title={title} meta={meta} director={director} i={i} HeadingTag={HeadingTag} href={href} t={t} />
+                </Link>
+              ) : (
+                <CardContent project={project} title={title} meta={meta} director={director} i={i} HeadingTag={HeadingTag} href={href} t={t} />
+              )}
             </motion.div>
           </div>
         );
