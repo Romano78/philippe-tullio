@@ -4,12 +4,16 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import ProjectSection from './ProjectSection';
 import ThumbnailStrip from './ThumbnailStrip';
 import { useLenis } from '@/components/lenis-context';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import MobileHomeSwiper from './MobileHomeSwiper';
+import StormBackground from '@/components/project/StormBackground';
 
 export default function HomeSwiper({ projects }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const sectionRefs = useRef([]);
   const lenisRef = useLenis();
   const isSnapping = useRef(false);
+  const isMobile = useIsMobile();
 
   // IntersectionObserver — tracks active section for thumbnail strip
   useEffect(() => {
@@ -103,6 +107,7 @@ export default function HomeSwiper({ projects }) {
 
   return (
     <>
+      {isMobile && <StormBackground />}
       <div className='hidden md:block'>
         <ThumbnailStrip
           projects={projects}
@@ -110,20 +115,23 @@ export default function HomeSwiper({ projects }) {
           onThumbClick={handleThumbClick}
         />
       </div>
-
-      <div>
-        {projects.map((project, i) => (
-          <ProjectSection
-            key={project.id}
-            project={project}
-            index={i}
-            total={projects.length}
-            sectionRef={(el) => {
-              sectionRefs.current[i] = el;
-            }}
-          />
-        ))}
-      </div>
+      {isMobile ? (
+        <MobileHomeSwiper projects={projects} />
+      ) : (
+        <div>
+          {projects.map((project, i) => (
+            <ProjectSection
+              key={project.id}
+              project={project}
+              index={i}
+              total={projects.length}
+              sectionRef={(el) => {
+                sectionRefs.current[i] = el;
+              }}
+            />
+          ))}
+        </div>
+      )}
     </>
   );
 }

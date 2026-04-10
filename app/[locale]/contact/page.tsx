@@ -28,7 +28,7 @@ export default function ContactPage() {
     <>
       <StormBackground />
       <main className="relative z-10 min-h-screen flex flex-col justify-end">
-        <Contact />
+        <Contact asH1 />
       </main>
     </>
   );
