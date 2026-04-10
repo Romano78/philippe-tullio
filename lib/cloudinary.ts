@@ -27,6 +27,7 @@ export interface WorkAssets {
     thumb: string;
     video?: string;
     videoPoster?: string;
+    videoMobile?: string;
   };
   work: {
     thumb: string;
@@ -61,6 +62,7 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
     const [
       featuredThumbRes,
       featuredVideoRes,
+      featuredMobileVideoRes,
       projectThumbRes,
       projectPreviewVidRes,
       projectVideoRes,
@@ -69,6 +71,7 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
     ] = await Promise.allSettled([
       search(`asset_folder="${base}/featured/thumb" AND resource_type=image`),
       search(`asset_folder="${base}/featured/video" AND resource_type=video`),
+      search(`asset_folder="${base}/featured/mobile-video" AND resource_type=video`),
       search(`asset_folder="${base}/work/thumb" AND resource_type=image`),
       search(`asset_folder="${base}/work/previewvid" AND resource_type=video`),
       search(`asset_folder="${base}/work/video" AND resource_type=video`),
@@ -78,6 +81,7 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
 
     const featuredThumb = getResources(featuredThumbRes)[0];
     const featuredVideo = getResources(featuredVideoRes)[0];
+    const featuredMobileVideo = getResources(featuredMobileVideoRes)[0];
     const projectThumb = getResources(projectThumbRes)[0];
     const projectPreviewVid = getResources(projectPreviewVidRes)[0];
     const projectVideo = getResources(projectVideoRes)[0];
@@ -94,6 +98,9 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
         ...(featuredVideo && {
           video: cldVideo(toPath(featuredVideo)),
           videoPoster: cldVideoPoster(featuredVideo.public_id),
+        }),
+        ...(featuredMobileVideo && {
+          videoMobile: cldVideo(toPath(featuredMobileVideo)),
         }),
       },
       work: {

@@ -21,6 +21,7 @@ export default async function Home() {
         thumb: assetsMap[p.slug]!.featured.thumb,
         video: assetsMap[p.slug]!.featured.video,
         videoPoster: assetsMap[p.slug]!.featured.videoPoster,
+        videoMobile: assetsMap[p.slug]!.featured.videoMobile,
       }
       : {}),
   }));
