@@ -18,11 +18,21 @@ This file provides guidance to Claude Code when working with this repository.
 - **Trace every integration to its origin.** If a hook, context, or utility is used, read the file where its value is defined — not just the hook file. Example: `useLenis()` → must read `SmoothScroll.jsx` to know the context value is a ref, not the instance.
 - **Verify third-party API/exports exist in the installed version** before including them in a brief. Check `node_modules` or run a quick node command — never assume an icon name or API method exists.
 - If uncertain about any value, API shape, or contract: read first, then brief.
+- **Next.js 16 uses `proxy.ts` not `middleware.ts`** — always check for `proxy.ts` before writing any proxy/middleware code.
+
+## Mistake Protocol (mandatory)
+- **When a mistake is made, always update `CLAUDE.md` immediately** to prevent it from recurring. Never rely on session memory — it resets every conversation. If a wrong assumption caused the mistake, add an explicit rule here so the next session doesn't repeat it.
+- **Never delete logic to disable a feature.** Always use a prop (e.g. `hideOnScroll={false}`) so the behaviour can be toggled without rewriting. Deleting code is irreversible and loses intent.
 
 ## Post-agent Review (mandatory after every agent completes)
 - Read all changed files and cross-reference any integrations used against their source files.
 - **Run `npm run build`** to catch compile and runtime errors before reporting to the user.
 - A review that only checks the diff is not a review — it must verify the assumptions behind the code.
+
+## Project Roadmap
+`PLAN.md` at the repo root is the single source of truth for page status, current focus, and next steps. Always read it at the start of a conversation.
+
+---
 
 ## About This Project
 Portfolio site for **Tullio Philippe** — a film director (réalisateur).

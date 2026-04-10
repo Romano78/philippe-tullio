@@ -66,9 +66,13 @@ export default function HomeSwiper({ projects }) {
           isSnapping.current = true;
           lenis.scrollTo(target, {
             duration: 1,
-            onComplete: () => { isSnapping.current = false; },
+            onComplete: () => {
+              isSnapping.current = false;
+            },
           });
-          setTimeout(() => { isSnapping.current = false; }, 1600);
+          setTimeout(() => {
+            isSnapping.current = false;
+          }, 1600);
         }
       }, 500);
     };
@@ -81,20 +85,25 @@ export default function HomeSwiper({ projects }) {
     };
   }, [lenisRef, projects]);
 
-  const handleThumbClick = useCallback((index) => {
-    const lenis = lenisRef?.current;
-    const target = sectionRefs.current[index];
-    if (!lenis || !target) return;
-    isSnapping.current = true;
-    lenis.scrollTo(target, {
-      duration: 1.2,
-      onComplete: () => { isSnapping.current = false; },
-    });
-  }, [lenisRef]);
+  const handleThumbClick = useCallback(
+    (index) => {
+      const lenis = lenisRef?.current;
+      const target = sectionRefs.current[index];
+      if (!lenis || !target) return;
+      isSnapping.current = true;
+      lenis.scrollTo(target, {
+        duration: 1.2,
+        onComplete: () => {
+          isSnapping.current = false;
+        },
+      });
+    },
+    [lenisRef],
+  );
 
   return (
     <>
-      <div className="hidden md:block">
+      <div className='hidden md:block'>
         <ThumbnailStrip
           projects={projects}
           activeIndex={activeIndex}
@@ -109,7 +118,9 @@ export default function HomeSwiper({ projects }) {
             project={project}
             index={i}
             total={projects.length}
-            sectionRef={(el) => { sectionRefs.current[i] = el; }}
+            sectionRef={(el) => {
+              sectionRefs.current[i] = el;
+            }}
           />
         ))}
       </div>
