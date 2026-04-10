@@ -19,6 +19,7 @@ This file provides guidance to Claude Code when working with this repository.
 - **Verify third-party API/exports exist in the installed version** before including them in a brief. Check `node_modules` or run a quick node command — never assume an icon name or API method exists.
 - If uncertain about any value, API shape, or contract: read first, then brief.
 - **Next.js 16 uses `proxy.ts` not `middleware.ts`** — always check for `proxy.ts` before writing any proxy/middleware code.
+- **Icon and metadata files (`icon.png`, `apple-icon.png`, `opengraph-image.png`, etc.) must live in `app/` root** — never inside a dynamic route segment like `app/[locale]/` or Next.js will fail to prerender them.
 
 ## Mistake Protocol (mandatory)
 - **When a mistake is made, always update `CLAUDE.md` immediately** to prevent it from recurring. Never rely on session memory — it resets every conversation. If a wrong assumption caused the mistake, add an explicit rule here so the next session doesn't repeat it.

@@ -1,7 +1,29 @@
+import type { Metadata } from 'next';
 import HomeSwiper from "@/components/home-swiper";
 import { getWorkAssets } from "@/lib/cloudinary";
 import { projects as projectsMeta } from "@/components/home-swiper/data";
 import { ScrollProgressButton } from "@/components/scroll-progress-button";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const isFr = locale === 'fr';
+  return {
+    title: isFr ? 'Tullio Philippe — Réalisateur' : 'Tullio Philippe — Director',
+    description: isFr
+      ? 'Réalisateur basé à Paris. Films d\'action, horreur, drame, satire. Découvrez l\'univers cinématographique de Philippe Tullio.'
+      : 'Film director based in Paris. Action, horror, drama, satire. Discover the cinematic world of Philippe Tullio.',
+    keywords: isFr
+      ? ['Philippe Tullio', 'PhilippeTullio', 'Tullio Philippe', 'TullioPhilippe', 'réalisateur', 'réalisateur Paris', 'cinéaste', 'film d\'action', 'horreur', 'drame', 'satire']
+      : ['Philippe Tullio', 'PhilippeTullio', 'Tullio Philippe', 'TullioPhilippe', 'film director', 'Paris director', 'action film', 'horror', 'drama', 'satire'],
+    alternates: {
+      canonical: isFr ? 'https://philippetullio.com' : 'https://philippetullio.com/en',
+      languages: {
+        fr: 'https://philippetullio.com',
+        en: 'https://philippetullio.com/en',
+      },
+    },
+  };
+}
 
 export default async function Home() {
   const assetsMap: Record<string, Awaited<ReturnType<typeof getWorkAssets>>> = {};
@@ -21,6 +43,7 @@ export default async function Home() {
         thumb: assetsMap[p.slug]!.featured.thumb,
         video: assetsMap[p.slug]!.featured.video,
         videoPoster: assetsMap[p.slug]!.featured.videoPoster,
+        videoMobile: assetsMap[p.slug]!.featured.videoMobile,
       }
       : {}),
   }));

@@ -59,28 +59,6 @@ export default function ProjectSection({
         y: 10,
       });
 
-      // Image cinematic tilt — enter tilted, straighten, exit opposite
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
-
-      tl.fromTo(
-        innerRef.current,
-        { rotation: -7, scale: 1.3, yPercent: -20, opacity: 0.5 },
-        { rotation: 0, scale: 1, yPercent: 0, opacity: 1, ease: 'none' },
-      ).to(innerRef.current, {
-        rotation: 7,
-        scale: 1.3,
-        yPercent: 20,
-        opacity: 0.5,
-        ease: 'none',
-      });
-
       // Content reveal — fires as section enters viewport during snap
       const contentTl = gsap.timeline({
         scrollTrigger: {
@@ -176,7 +154,7 @@ export default function ProjectSection({
         </p>
 
         {/* Title slide container */}
-        <div className='overflow-hidden mb-6'>
+        <div className='overflow-hidden mb-6 pt-[0.35em]'>
           <HeadingTag
             ref={titleRef}
             className='font-display text-6xl md:text-8xl uppercase text-white leading-none'
