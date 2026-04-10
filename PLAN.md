@@ -13,7 +13,7 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 | Project | `/work/[slug]` | 🟡 Content |
 | About | `/about` | 🟡 Content |
 | Gallery | `/gallery` | ✅ Done |
-| So Productions | `/so-production` | 🟡 Built — domain wiring pending |
+| So Productions | `/soproductions` | 🟡 Built — domain wiring pending |
 | Contact | `/contact` | ✅ Done |
 
 ---
@@ -86,8 +86,8 @@ Fill in real copy, credits, and links provided by the client.
 
 ### Step 2 — So Productions page
 🟡 **Page built. Domain wiring pending.**
-Route: `/so-production` ✅ live
-Domain: `soproductions.fr` → Vercel (same project) → middleware rewrite to `/so-production` ⬜ pending
+Route: `/soproductions` ✅ live
+Domain: `soproductions.fr` → Vercel (same project) → middleware rewrite to `/soproductions` ⬜ pending
 See full plan below.
 
 ### Step 3 — QA
@@ -109,7 +109,7 @@ See full plan below.
 
 **Brand:** Sans Oreilles Production (SO Productions)
 **Domain:** `soproductions.fr` → same Vercel project as `philippetullio.com`
-**Route:** `/so-production`
+**Route:** `/soproductions`
 **Language:** FR/EN (next-intl, same as main site)
 
 ---
@@ -117,15 +117,15 @@ See full plan below.
 ### Domain Setup (do when ready)
 1. **OVH DNS** — add A record `@` → `76.76.21.21`, CNAME `www` → `cname.vercel-dns.com`, TTL 300
 2. **Vercel** — Settings → Domains → add `soproductions.fr` + `www.soproductions.fr`
-3. **Middleware** — extend `middleware.ts` to detect `host === 'soproductions.fr'` and `NextResponse.rewrite` to `/so-production`
+3. **Middleware** — extend `middleware.ts` to detect `host === 'soproductions.fr'` and `NextResponse.rewrite` to `/soproductions`
 
 ### Page Status ✅
-- `components/so-production/data.js` — ✅ created (placeholders, fill content when ready)
-- `app/[locale]/so-production/page.tsx` — ✅ live
-- `components/so-production/SoProductionContent.jsx` — ✅
-- `components/so-production/sections/HeroSection.jsx` — ✅
-- `components/so-production/sections/BioSection.jsx` — ✅
-- `components/so-production/sections/CtaSection.jsx` — ✅
+- `components/soproductions/data.js` — ✅ created (placeholders, fill content when ready)
+- `app/[locale]/soproductions/page.tsx` — ✅ live
+- `components/soproductions/SoProductionContent.jsx` — ✅
+- `components/soproductions/sections/HeroSection.jsx` — ✅
+- `components/soproductions/sections/BioSection.jsx` — ✅
+- `components/soproductions/sections/CtaSection.jsx` — ✅
 - `translations/fr.json` + `en.json` — ✅ `soProduction` namespace added
 
 ### Still needed
@@ -140,12 +140,12 @@ See full plan below.
 
 | File | Purpose |
 |---|---|
-| `components/so-production/data.js` | Company data (name, tagline, bio, image, cta) |
-| `app/[locale]/so-production/page.tsx` | Server component — passes data to client |
-| `components/so-production/SoProductionContent.jsx` | Client orchestrator |
-| `components/so-production/sections/HeroSection.jsx` | Name + tagline left, square image right (`lg:grid-cols-[3fr_2fr]`) |
-| `components/so-production/sections/BioSection.jsx` | Bio paragraph, full width |
-| `components/so-production/sections/CtaSection.jsx` | Email + PillCta → `/` (philippetullio.com) |
+| `components/soproductions/data.js` | Company data (name, tagline, bio, image, cta) |
+| `app/[locale]/soproductions/page.tsx` | Server component — passes data to client |
+| `components/soproductions/SoProductionContent.jsx` | Client orchestrator |
+| `components/soproductions/sections/HeroSection.jsx` | Name + tagline left, square image right (`lg:grid-cols-[3fr_2fr]`) |
+| `components/soproductions/sections/BioSection.jsx` | Bio paragraph, full width |
+| `components/soproductions/sections/CtaSection.jsx` | Email + PillCta → `/` (philippetullio.com) |
 
 ### Translations
 Add `"soProduction"` namespace to `translations/fr.json` + `translations/en.json`
