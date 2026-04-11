@@ -7,11 +7,13 @@ import { ScrollProgressButton } from "@/components/scroll-progress-button";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const isFr = locale === 'fr';
+  const title = isFr ? 'Tullio Philippe — Réalisateur' : 'Tullio Philippe — Director';
+  const description = isFr
+    ? 'Réalisateur basé à Paris. Films d\'action, horreur, drame, satire. Découvrez l\'univers cinématographique de Philippe Tullio.'
+    : 'Film director based in Paris. Action, horror, drama, satire. Discover the cinematic world of Philippe Tullio.';
   return {
-    title: isFr ? 'Tullio Philippe — Réalisateur' : 'Tullio Philippe — Director',
-    description: isFr
-      ? 'Réalisateur basé à Paris. Films d\'action, horreur, drame, satire. Découvrez l\'univers cinématographique de Philippe Tullio.'
-      : 'Film director based in Paris. Action, horror, drama, satire. Discover the cinematic world of Philippe Tullio.',
+    title,
+    description,
     keywords: isFr
       ? ['Philippe Tullio', 'PhilippeTullio', 'Tullio Philippe', 'TullioPhilippe', 'réalisateur', 'réalisateur Paris', 'cinéaste', 'film d\'action', 'horreur', 'drame', 'satire']
       : ['Philippe Tullio', 'PhilippeTullio', 'Tullio Philippe', 'TullioPhilippe', 'film director', 'Paris director', 'action film', 'horror', 'drama', 'satire'],
@@ -21,6 +23,17 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
         fr: 'https://philippetullio.com',
         en: 'https://philippetullio.com/en',
       },
+    },
+    openGraph: {
+      title,
+      description,
+      url: isFr ? 'https://philippetullio.com' : 'https://philippetullio.com/en',
+      images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      title,
+      description,
+      images: ['/opengraph-image.png'],
     },
   };
 }
