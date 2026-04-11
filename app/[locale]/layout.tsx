@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     images: [
       {
-        url: '/opengraph-image.png?v=1',
+        url: '/opengraph-image.png',
         width: 1200,
         height: 630,
         alt: 'Tullio Philippe — Réalisateur',
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     creator: '@philippetullio',
     title: 'Tullio Philippe — Réalisateur',
     description: DESCRIPTION,
-    images: ['/opengraph-image.png?v=1'],
+    images: ['/opengraph-image.png'],
   },
   robots: {
     index: true,
