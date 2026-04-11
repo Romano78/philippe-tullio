@@ -5,16 +5,20 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 
 ---
 
+## 🟢 V1 LIVE — https://philippetullio.com
+
+---
+
 ## Pages
 
 | Page | Route | Status |
 |---|---|---|
-| Home | `/` | 🟡 Content |
-| Project | `/work/[slug]` | 🟡 Content |
-| About | `/about` | 🟡 Content |
-| Gallery | `/gallery` | ✅ Done |
-| So Productions | `/soproductions` | 🟡 Built — domain wiring pending |
-| Contact | `/contact` | ✅ Done |
+| Home | `/` | ✅ Live |
+| Project | `/work/[slug]` | ✅ Live |
+| About | `/about` | ✅ Live |
+| Gallery | `/gallery` | ✅ Live |
+| So Productions | `/soproductions` | ✅ Live — `soproductions.fr` redirects via `proxy.ts` |
+| Contact | `/contact` | ✅ Live |
 
 ---
 
@@ -67,45 +71,19 @@ High-end cinematic portfolio for Tullio Philippe, film director. Recreate and im
 
 ---
 
-## 🟡 Current Focus
+## 🟡 Post-Launch — Remaining Items
 
-### Step 1 — Client Content
-Fill in real copy, credits, and links provided by the client.
-
+### Content still needed from client
 | Item | Status | Notes |
 |---|---|---|
-| showreel videoUrl | ⬜ needs client | No YouTube/Vimeo link yet |
-| abaco videoUrl | ⬜ needs client | No YouTube/Vimeo link yet |
-| Contact email | ⬜ needs client | Currently `contact@soproductions.fr` (dev placeholder) |
-| IMDb link | ⬜ needs client | `href="#"` placeholder |
-| LinkedIn link | ⬜ needs client | `href="#"` placeholder |
-| Vimeo link | ⬜ needs client | `href="#"` placeholder |
-| YouTube link | ⬜ needs client | `href="#"` placeholder |
-| Bio text (FR + EN) | ⬜ needs client | |
-| Profile photo | ⬜ needs client | |
+| So Productions bio + image | ⬜ needs client | `/soproductions` page |
 
-### Step 2 — So Productions page
-🟡 **Page built. Domain wiring pending.**
-Route: `/soproductions` ✅ live
-Domain: `soproductions.fr` → Vercel (same project) → middleware rewrite to `/soproductions` ⬜ pending
-See full plan below.
-
-### Step 3 — HomeSwiper improvements
-- [ ] `centered` prop on `ProjectSection` — boolean, switches content from left-aligned to centered
-- [ ] SEO fix — only `index === 0` renders `<h1>`, all other slides render `<h2>` with identical styling
-
-### Step 4 — QA
-- [ ] Full site QA pass — all pages, all breakpoints
-- [ ] Mobile QA — spacing, CTAs, video behaviour
-- [ ] Cross-browser check
-- [ ] All links and CTAs working
-- [ ] FR/EN language switch across all pages
-
-### Step 4 — SEO
-- [ ] Metadata + OG tags for all pages
-- [ ] Sitemap
-- [ ] Lighthouse audit
-- [ ] Performance audit (lazy loading, bundle size)
+### Ongoing / Nice to have
+- [x] Submit sitemap to Google Search Console
+- [x] Fix www → non-www redirect in Vercel domain settings (GSC redirect error)
+- [x] Performance audit (lazy loading, bundle size)
+- [x] Mobile video uploads to Cloudinary `featured/mobile-video/`
+- [x] Full QA pass once all client content is in
 
 ---
 
