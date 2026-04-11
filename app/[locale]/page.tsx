@@ -28,12 +28,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       title,
       description,
       url: isFr ? 'https://philippetullio.com' : 'https://philippetullio.com/en',
-      images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: title }],
+      images: [{ url: '/opengraph-image.png?v=1', width: 1200, height: 630, alt: title }],
     },
     twitter: {
       title,
       description,
-      images: ['/opengraph-image.png'],
+      images: ['/opengraph-image.png?v=1'],
     },
   };
 }
