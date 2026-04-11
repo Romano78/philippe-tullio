@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   publisher: 'Philippe Tullio',
   keywords: [
     'Philippe Tullio', 'PhilippeTullio', 'Tullio Philippe', 'TullioPhilippe', 'P. Tullio', 'Tullio réalisateur',
-    'réalisateur', 'réalisateur Paris', 'cinéaste', 'film d\'action', 'clip musical', 'publicité', 'court métrage',
+    'réalisateur', 'réalisateur Paris', 'cinéaste', "film d'action", 'clip musical', 'publicité', 'court métrage',
   ],
   alternates: {
     canonical: BASE_URL,
