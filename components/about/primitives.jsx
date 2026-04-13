@@ -2,11 +2,11 @@ import Image from 'next/image';
 
 export const DARK_BG = { background: 'rgba(255,255,255,0.04)' };
 
-export function Img({ src, alt, ratio = '4 / 3', eager = false, className = '' }) {
+export function Img({ src, alt, ratio = '4 / 3', eager = false, className = '', sizes = '(max-width: 768px) 100vw, 50vw' }) {
   if (!src) return <div style={{ ...DARK_BG, aspectRatio: ratio }} className={`w-full ${className}`} />;
   return (
     <div className={`relative w-full overflow-hidden ${className}`} style={{ aspectRatio: ratio }}>
-      <Image src={src} alt={alt} fill className="object-cover" priority={eager} />
+      <Image src={src} alt={alt} fill sizes={sizes} className="object-cover" priority={eager} />
     </div>
   );
 }
@@ -19,7 +19,7 @@ export function Gallery({ images = [], count = 4, aspect = '16 / 9', rowAspect =
     <div className="flex flex-col gap-2 md:gap-3">
       <div className="relative overflow-hidden" style={{ aspectRatio: aspect }}>
         {first
-          ? <Image src={first} alt="" fill className="object-cover" />
+          ? <Image src={first} alt="" fill sizes="(max-width: 768px) 100vw, 55vw" className="object-cover" />
           : <div style={{ ...DARK_BG }} className="w-full h-full" />
         }
       </div>
@@ -28,7 +28,7 @@ export function Gallery({ images = [], count = 4, aspect = '16 / 9', rowAspect =
           {restSlots.map((src, i) => (
             <div key={i} className="relative overflow-hidden" style={{ aspectRatio: rowAspect }}>
               {src
-                ? <Image src={src} alt="" fill className="object-cover" />
+                ? <Image src={src} alt="" fill sizes={`(max-width: 768px) 100vw, ${Math.round(55 / restSlots.length)}vw`} className="object-cover" />
                 : <div style={{ ...DARK_BG }} className="w-full h-full" />
               }
             </div>

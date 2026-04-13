@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 export default function ProjectGallery({ images, title = '' }) {
@@ -20,9 +21,12 @@ export default function ProjectGallery({ images, title = '' }) {
         <div className='columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4'>
           {images.map((src, i) => (
             <div key={src} className='break-inside-avoid overflow-hidden group'>
-              <img
+              <Image
                 src={src}
                 alt={`${title} — behind the scenes ${i + 1}`}
+                width={800}
+                height={600}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className='w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105'
                 loading='lazy'
               />

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -18,6 +18,7 @@ export default function ProjectSection({
   project,
   index,
   total,
+  isActive = false,
   sectionRef: externalRef,
   centered = true,
 }) {
@@ -35,6 +36,7 @@ export default function ProjectSection({
 
   const sectionRef = useRef(null);
   const innerRef = useRef(null);
+  const videoRef = useRef(null);
   const directorRef = useRef(null);
   const titleRef = useRef(null);
   const metaRef = useRef(null);
@@ -94,6 +96,16 @@ export default function ProjectSection({
     { scope: sectionRef, dependencies: [] },
   );
 
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid) return;
+    if (isActive) {
+      vid.play().catch(() => {});
+    } else {
+      vid.pause();
+    }
+  }, [isActive]);
+
   const projectDuration = project.duration ? `${project.duration}` : '';
   const projectCategory = category ? `${category}  ` : '';
   const projectYear = project.year ? `${project.year} ` : '';
@@ -110,13 +122,10 @@ export default function ProjectSection({
       <div ref={innerRef} className='absolute inset-0'>
         {project.video || project.videoMobile ? (
           <video
-            src={
-              isMobile && project.videoMobile
-                ? project.videoMobile
-                : project.video
-            }
+            ref={videoRef}
+            src={isActive ? (isMobile && project.videoMobile ? project.videoMobile : project.video) : undefined}
             poster={project.videoPoster ?? project.image}
-            autoPlay
+            preload="none"
             muted
             loop
             playsInline

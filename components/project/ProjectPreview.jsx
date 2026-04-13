@@ -1,10 +1,29 @@
 'use client';
 
+import { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 export default function ProjectPreview({ video, poster, onWatch, title = '' }) {
   const t = useTranslations('project');
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid || !video) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          vid.play().catch(() => {});
+        } else {
+          vid.pause();
+        }
+      },
+      { threshold: 0.3 },
+    );
+    observer.observe(vid);
+    return () => observer.disconnect();
+  }, [video]);
 
   return (
     <div
@@ -12,12 +31,12 @@ export default function ProjectPreview({ video, poster, onWatch, title = '' }) {
       style={{ aspectRatio: '16/9', cursor: onWatch ? 'pointer' : 'default' }}
       onClick={onWatch ?? undefined}
     >
-      {/* Media */}
       {video ? (
         <video
+          ref={videoRef}
           src={video}
           poster={poster}
-          autoPlay
+          preload="none"
           muted
           loop
           playsInline
@@ -29,10 +48,8 @@ export default function ProjectPreview({ video, poster, onWatch, title = '' }) {
         <div className='absolute inset-0 bg-surface-low' />
       )}
 
-      {/* Overlay — only when CTA is present */}
       {onWatch && <div className='absolute inset-0 bg-black/30' />}
 
-      {/* Centered CTA */}
       {onWatch && (
         <div className='absolute inset-0 flex items-center justify-center'>
           <div className='flex flex-col items-center gap-3'>
