@@ -41,6 +41,7 @@ export default function HeroSection({ portrait, t }) {
                 src={portrait[0]}
                 alt='Philippe Tullio — réalisateur'
                 fill
+                sizes="(max-width: 1024px) 100vw, 40vw"
                 className='object-cover object-center'
                 priority
               />

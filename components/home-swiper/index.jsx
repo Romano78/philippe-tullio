@@ -125,6 +125,7 @@ export default function HomeSwiper({ projects }) {
               project={project}
               index={i}
               total={projects.length}
+              isActive={i === activeIndex}
               sectionRef={(el) => {
                 sectionRefs.current[i] = el;
               }}

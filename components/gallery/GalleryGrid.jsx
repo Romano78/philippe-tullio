@@ -97,6 +97,7 @@ export default function GalleryGrid({ images }) {
                       alt={altFromUrl(src, i)}
                       width={800}
                       height={600}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                       priority={i < 6}
                     />

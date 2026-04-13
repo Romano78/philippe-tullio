@@ -10,7 +10,7 @@ export default function FilmSchoolSection({ lfaHero, lfaLogo, t, noPb }) {
         <section className="site-px pt-4 pb-10 md:pb-12 relative z-10">
           <div className="site-max overflow-hidden">
             <div className="relative w-full" style={{ aspectRatio: '21 / 9' }}>
-              <Image src={lfaHero[0]} alt="London Film Academy — on set" fill className="object-cover object-top" />
+              <Image src={lfaHero[0]} alt="London Film Academy — on set" fill sizes="100vw" className="object-cover object-top" />
             </div>
           </div>
         </section>
@@ -29,7 +29,7 @@ export default function FilmSchoolSection({ lfaHero, lfaLogo, t, noPb }) {
             <AnimateIn delay={0.15}><p className="font-sans text-base text-white/60 leading-relaxed mb-8">{t('filmschoolBody2')}</p></AnimateIn>
             <div className="relative overflow-hidden mb-8" style={{ aspectRatio: '1200 / 799' }}>
               {lfaLogo[0]
-                ? <Image src={lfaLogo[0]} alt="London Film Academy" fill className="object-contain" />
+                ? <Image src={lfaLogo[0]} alt="London Film Academy" fill sizes="(max-width: 768px) 100vw, 40vw" className="object-contain" />
                 : <div style={{ ...DARK_BG }} className="w-full h-full" />
               }
             </div>
@@ -50,7 +50,7 @@ export default function FilmSchoolSection({ lfaHero, lfaLogo, t, noPb }) {
             </div>
             <div className="relative overflow-hidden" style={{ aspectRatio: '1200 / 799' }}>
               {lfaLogo[0]
-                ? <Image src={lfaLogo[0]} alt="London Film Academy" fill className="object-contain" />
+                ? <Image src={lfaLogo[0]} alt="London Film Academy" fill sizes="(max-width: 768px) 100vw, 40vw" className="object-contain" />
                 : <div style={{ ...DARK_BG }} className="w-full h-full" />
               }
             </div>

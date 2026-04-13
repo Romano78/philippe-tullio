@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef, useEffect } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -7,19 +8,49 @@ import { ArrowRight } from 'lucide-react';
 import { ease } from '@/config/cubic-beziers';
 import { Link } from '@/i18n/navigation';
 
+function VideoCard({ src, poster, className }) {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (!vid.src) vid.src = src;
+          vid.play().catch(() => {});
+        } else {
+          vid.pause();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    observer.observe(vid);
+    return () => observer.disconnect();
+  }, [src]);
+
+  return (
+    <video
+      ref={videoRef}
+      poster={poster}
+      preload="none"
+      muted
+      loop
+      playsInline
+      className={className}
+    />
+  );
+}
+
 function CardContent({ project, title, meta, director, i, HeadingTag, href, t }) {
   return (
     <>
       {/* 16:9 video */}
       <div className='relative w-full aspect-video bg-[#0E0E0E]'>
         {project.video ? (
-          <video
+          <VideoCard
             src={project.videoMobile ?? project.video}
             poster={project.videoPoster ?? project.image}
-            autoPlay
-            muted
-            loop
-            playsInline
             className='absolute inset-0 w-full h-full object-cover'
           />
         ) : project.image ? (
