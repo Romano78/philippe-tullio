@@ -108,7 +108,6 @@ export default function ProjectSection({
 
   const projectDuration = project.duration ? `${project.duration}` : '';
   const projectCategory = category ? `${category}  ` : '';
-  const projectYear = project.year ? `${project.year} ` : '';
   const HeadingTag = index === 0 ? 'h1' : 'h2';
 
   return (
@@ -178,7 +177,6 @@ export default function ProjectSection({
           className='font-meta text-xs tracking-widest uppercase text-accent mb-8'
         >
           {projectCategory}
-          {projectYear}
           {projectDuration}
         </p>
 

@@ -33,7 +33,7 @@ function VideoCard({ src, poster, className }) {
     <video
       ref={videoRef}
       poster={poster}
-      preload="none"
+      preload='none'
       muted
       loop
       playsInline
@@ -42,7 +42,16 @@ function VideoCard({ src, poster, className }) {
   );
 }
 
-function CardContent({ project, title, meta, director, i, HeadingTag, href, t }) {
+function CardContent({
+  project,
+  title,
+  meta,
+  director,
+  i,
+  HeadingTag,
+  href,
+  t,
+}) {
   return (
     <>
       {/* 16:9 video */}
@@ -67,29 +76,47 @@ function CardContent({ project, title, meta, director, i, HeadingTag, href, t })
       </div>
 
       {/* Content */}
-      <div className='bg-[#0E0E0E] px-5 py-5'>
-        {director && (
-          <p className='font-meta text-xs tracking-widest uppercase text-accent mb-2'>
-            {director}
-          </p>
-        )}
-        <div className='overflow-hidden mb-3 pt-[0.35em]'>
-          <HeadingTag className='font-display text-4xl uppercase text-white leading-none'>
-            {title}
-          </HeadingTag>
-        </div>
-        {meta && (
-          <p className='font-meta text-[10px] tracking-widest uppercase text-accent/70 mb-4'>
-            {meta}
-          </p>
-        )}
-        {href && (
+      {href ? (
+        <Link href={href} className='block bg-[#0E0E0E] px-5 py-5'>
+          {director && (
+            <p className='font-meta text-xs tracking-widest uppercase text-accent mb-2'>
+              {director}
+            </p>
+          )}
+          <div className='overflow-hidden mb-3 pt-[0.35em]'>
+            <HeadingTag className='font-display text-4xl uppercase text-white leading-none'>
+              {title}
+            </HeadingTag>
+          </div>
+          {meta && (
+            <p className='font-meta text-[10px] tracking-widest uppercase text-accent/70 mb-4'>
+              {meta}
+            </p>
+          )}
           <span className='inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-meta text-[10px] tracking-widest uppercase text-white/80 border border-white/15'>
             {t('seeProject')}
             <ArrowRight size={12} className='text-accent' />
           </span>
-        )}
-      </div>
+        </Link>
+      ) : (
+        <div className='bg-[#0E0E0E] px-5 py-5'>
+          {director && (
+            <p className='font-meta text-xs tracking-widest uppercase text-accent mb-2'>
+              {director}
+            </p>
+          )}
+          <div className='overflow-hidden mb-3 pt-[0.35em]'>
+            <HeadingTag className='font-display text-4xl uppercase text-white leading-none'>
+              {title}
+            </HeadingTag>
+          </div>
+          {meta && (
+            <p className='font-meta text-[10px] tracking-widest uppercase text-accent/70 mb-4'>
+              {meta}
+            </p>
+          )}
+        </div>
+      )}
     </>
   );
 }
@@ -109,14 +136,20 @@ export default function MobileHomeSwiper({ projects }) {
       }}
     >
       {projects.map((project, i) => {
-        const title = typeof project.title === 'object'
-          ? (project.title[locale] ?? project.title.fr)
-          : project.title;
-        const category = typeof project.category === 'object'
-          ? (project.category[locale] ?? project.category.fr)
-          : project.category;
-        const director = project.credits?.find((c) => c.role === 'direction')?.name;
-        const meta = [category, project.year, project.duration].filter(Boolean).join(' · ');
+        const title =
+          typeof project.title === 'object'
+            ? (project.title[locale] ?? project.title.fr)
+            : project.title;
+        const category =
+          typeof project.category === 'object'
+            ? (project.category[locale] ?? project.category.fr)
+            : project.category;
+        const director = project.credits?.find(
+          (c) => c.role === 'direction',
+        )?.name;
+        const meta = { category, duration: project.duration }.category
+          ? `${category}  ${project.duration ?? ''}`
+          : '';
         const HeadingTag = i === 0 ? 'h1' : 'h2';
         const href = project.noPage ? null : `/work/${project.slug}`;
 
@@ -133,13 +166,16 @@ export default function MobileHomeSwiper({ projects }) {
               transition={{ duration: 0.6, ease: ease.smooth }}
               className='relative overflow-hidden rounded-sm w-full'
             >
-              {href ? (
-                <Link href={href} className='block'>
-                  <CardContent project={project} title={title} meta={meta} director={director} i={i} HeadingTag={HeadingTag} href={href} t={t} />
-                </Link>
-              ) : (
-                <CardContent project={project} title={title} meta={meta} director={director} i={i} HeadingTag={HeadingTag} href={href} t={t} />
-              )}
+              <CardContent
+                project={project}
+                title={title}
+                meta={meta}
+                director={director}
+                i={i}
+                HeadingTag={HeadingTag}
+                href={href}
+                t={t}
+              />
             </motion.div>
           </div>
         );
