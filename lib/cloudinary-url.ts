@@ -1,6 +1,6 @@
 const CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
-export const cldImage = (publicId: string, transformations = "f_auto,q_auto") =>
+export const cldImage = (publicId: string, transformations = "f_auto,q_auto:best") =>
   `https://res.cloudinary.com/${CLOUD}/image/upload/${transformations}/${publicId}`;
 
 export const cldVideo = (publicId: string, transformations = "w_1920,f_auto,q_auto") =>
