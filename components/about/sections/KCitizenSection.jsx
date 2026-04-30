@@ -38,7 +38,7 @@ export default function KCitizenSection({ kcitizen, locale, t, tProject, noPb })
         </div>
         {/* Desktop */}
         <div className="hidden md:grid grid-cols-[2fr_3fr] gap-3">
-          <div className="relative overflow-hidden" style={{ aspectRatio: '3 / 4' }}>
+          <div className="relative overflow-hidden">
             {kcitizen[0]
               ? <Image src={kcitizen[0]} alt="K-CITIZEN" fill sizes="(max-width: 768px) 100vw, 40vw" className="object-cover" />
               : <div className="w-full h-full" style={{ ...DARK_BG }} />
