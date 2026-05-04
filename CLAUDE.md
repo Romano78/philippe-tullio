@@ -168,6 +168,17 @@ This is a video-heavy and image-heavy site. Performance is critical.
 - **Never use a raw `<img>` tag.** All images use `next/image` with the Cloudinary URL as `src`
 - Add custom transformations as the second argument: `cldImage(id, "w_800,f_auto,q_auto")`
 
+### Cloudinary transformation cost — if still high after current fix
+
+Current setup: `next/image` fetches the full Cloudinary URL, then resizes it itself. This causes double processing — Cloudinary generates a transformation, then Next.js also optimizes. The proper fix (not yet implemented) is a Cloudinary custom loader:
+
+1. Add `images.loaderFile: './lib/cloudinary-loader.ts'` to `next.config.ts`
+2. Create `lib/cloudinary-loader.ts` — receives `{ src, width, quality }` and returns `https://res.cloudinary.com/${CLOUD}/image/upload/w_${width},f_auto,q_auto/${src}`
+3. Change `cloudinary.ts` to return `publicId` strings instead of full URLs
+4. Update all `next/image` usages to pass `publicId` as `src`
+
+This delegates resizing to Cloudinary, eliminates double processing, and makes srcset sizes cache perfectly per (image × width).
+
 ---
 
 ## Coding Conventions
