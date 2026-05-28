@@ -7,6 +7,10 @@ const intlMiddleware = createMiddleware(routing);
 export function proxy(request: NextRequest) {
   const host = request.headers.get('host') ?? '';
 
+  if (host.startsWith('www.')) {
+    return NextResponse.redirect(`https://${host.replace('www.', '')}${request.nextUrl.pathname}${request.nextUrl.search}`, { status: 301 });
+  }
+
   if (host === 'soproductions.fr' || host === 'www.soproductions.fr') {
     const pathname = request.nextUrl.pathname;
     const locale = pathname.startsWith('/en') ? '/en' : '';
