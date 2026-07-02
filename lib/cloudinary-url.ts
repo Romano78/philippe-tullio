@@ -7,4 +7,4 @@ export const cldVideo = (publicId: string, transformations = "w_1920,f_auto,q_au
   `https://res.cloudinary.com/${CLOUD}/video/upload/${transformations}/${publicId}`;
 
 export const cldVideoPoster = (publicId: string) =>
-  `https://res.cloudinary.com/${CLOUD}/video/upload/f_jpg,q_auto,so_0/${publicId}`;
+  `https://res.cloudinary.com/${CLOUD}/video/upload/f_auto,q_auto,so_0,w_1280/${publicId}.jpg`;

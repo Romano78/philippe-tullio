@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import ProjectVideoPlayer from '@/components/project/ProjectVideoPlayer';
@@ -9,6 +9,25 @@ import { DARK_BG } from '../primitives';
 export default function ShowreelSection({ src, poster, preview }) {
   const [playerOpen, setPlayerOpen] = useState(false);
   const t = useTranslations('project');
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid || !preview) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (!vid.src) vid.src = preview;
+          vid.play().catch(() => {});
+        } else {
+          vid.pause();
+        }
+      },
+      { threshold: 0.3 },
+    );
+    observer.observe(vid);
+    return () => observer.disconnect();
+  }, [preview]);
 
   return (
     <section id='showreel' className='relative z-10 site-px py-16 md:py-20'>
@@ -22,9 +41,9 @@ export default function ShowreelSection({ src, poster, preview }) {
             {/* Preview video, fallback to poster, fallback to dark bg */}
             {preview ? (
               <video
-                src={preview}
+                ref={videoRef}
                 poster={poster ?? undefined}
-                autoPlay
+                preload='none'
                 muted
                 loop
                 playsInline

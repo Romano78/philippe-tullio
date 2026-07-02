@@ -96,11 +96,11 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
       featured: {
         thumb: cldImage(toPath(featuredThumb)),
         ...(featuredVideo && {
-          video: cldVideo(toPath(featuredVideo)),
+          video: cldVideo(toPath(featuredVideo), 'w_1280,c_limit,f_auto,q_auto:eco'),
           videoPoster: cldVideoPoster(featuredVideo.public_id),
         }),
         ...(featuredMobileVideo && {
-          videoMobile: cldVideo(toPath(featuredMobileVideo)),
+          videoMobile: cldVideo(toPath(featuredMobileVideo), 'w_1280,c_limit,f_auto,q_auto:eco'),
         }),
       },
       work: {
@@ -108,7 +108,7 @@ async function _getWorkAssets(slug: string): Promise<WorkAssets | null> {
           ? cldImage(toPath(projectThumb))
           : cldVideoPoster(featuredThumb.public_id),
         ...(projectPreviewVid && {
-          previewVid: cldVideo(toPath(projectPreviewVid)),
+          previewVid: cldVideo(toPath(projectPreviewVid), 'w_1280,c_limit,f_auto,q_auto:eco'),
           previewVidPoster: cldVideoPoster(projectPreviewVid.public_id),
         }),
         ...(projectVideo && {
@@ -212,7 +212,7 @@ async function _getAboutAssets(): Promise<AboutAssets> {
       ...imageAssets,
       showreel: showreelVideo ? cldVideo(toPath(showreelVideo)) : null,
       showreelPoster: showreelPoster ? cldImage(toPath(showreelPoster)) : null,
-      showreelPreview: showreelPreview ? cldVideo(toPath(showreelPreview)) : null,
+      showreelPreview: showreelPreview ? cldVideo(toPath(showreelPreview), 'w_1280,c_limit,f_auto,q_auto:eco') : null,
     };
   } catch (err) {
     console.error('[cloudinary] getAboutAssets failed:', err);
